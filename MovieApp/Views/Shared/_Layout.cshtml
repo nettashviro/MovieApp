@@ -1,0 +1,110 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Action!</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <!-- Font Awesome icons (free version)-->
+    <script src="https://use.fontawesome.com/releases/v5.13.0/js/all.js" crossorigin="anonymous"></script>
+    <!-- Google fonts-->
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Secular+One&display=swap" rel="stylesheet" />
+    <!-- Core theme CSS-->
+    <link rel="stylesheet" href="~/css/styles.css" />
+</head>
+<body>
+    <div class="wrapper d-flex align-items-stretch">
+        <!-- SideBar -->
+        <nav id="sidebar">
+            <div class="p-4 pt-5">
+                <a href="#"
+                   class="img logo mb-5"
+                   style="background-image: url(../img/logo.png);"></a>
+                <ul class="list-unstyled components mb-5">
+                    <li class="active">
+                        <a href="#homeSubmenu"
+                           data-toggle="collapse"
+                           aria-expanded="false"
+                           class="dropdown-toggle">סרטים</a>
+                        <ul class="collapse list-unstyled" id="homeSubmenu">
+                            <li><a asp-area="" asp-controller="Home" asp-action="Index">חיפוש סרטים</a></li>
+                            <li><a asp-area="" asp-controller="Home" asp-action="Index">הוספת סרט</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#pageSubmenu"
+                           data-toggle="collapse"
+                           aria-expanded="false"
+                           class="dropdown-toggle">במאים</a>
+                        <ul class="collapse list-unstyled" id="pageSubmenu">
+                            <li><a asp-area="" asp-controller="Home" asp-action="Index">חיפוש במאים</a></li>
+                            <li><a asp-area="" asp-controller="Home" asp-action="Index">הוספת במאי</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#">סרטים שראיתי</a></li>
+                    <li> <a href="#">רשימת צפייה</a> </li>
+                </ul>
+
+                <!-- Footer -->
+                <div class="footer">
+                    <p>&copy; 2020 - Action! - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a></p>
+                </div>
+            </div>
+        </nav>
+
+
+        <!-- Page Content  -->
+        <div id="content" class="p-4 p-md-5">
+            <!-- Navbar -->
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <div class="container-fluid">
+                    <button type="button" id="sidebarCollapse" class="btn btn-light">
+                        <i class="fa fa-bars"></i>
+                        <span class="sr-only">Toggle Menu</span>
+                    </button>
+                    <button class="btn btn-dark d-inline-block d-lg-none ml-auto"
+                            type="button"
+                            data-toggle="collapse"
+                            data-target="#navbarSupportedContent"
+                            aria-controls="navbarSupportedContent"
+                            aria-expanded="false"
+                            aria-label="Toggle navigation">
+                        <i class="fa fa-bars"></i>
+                    </button>
+
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="nav navbar-nav ml-auto">
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Login</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Register</a>
+                            </li>
+                            <li class="nav-item active">
+                                <a class="nav-link" href="#{myProfile}">Hello {userName}</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+            <main role="main" class="pb-3">
+                @RenderBody()
+            </main>
+
+            @*     <h2 class="mb-4">{title}</h2>
+                <p>
+                    {Content}
+                </p>*@
+        </div>
+    </div>
+
+
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>
