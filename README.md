@@ -1,4 +1,4 @@
-<h1 align="center"> MovieApp (Action!) </h1>
+ # Movie App 
 
 ![movieapp logo](./logo.png)
 
