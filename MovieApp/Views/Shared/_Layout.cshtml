@@ -19,9 +19,9 @@
         <!-- SideBar -->
         <nav id="sidebar">
             <div class="p-4 pt-5">
-                <a href="#"
+                <a href="/"
                    class="img logo mb-5"
-                   style="background-image: url(../img/logo.png);"></a>
+                   style="background-image: url(/img/logo.png);"></a>
                 <ul class="list-unstyled components mb-5">
                     <li class="active">
                         <a href="#homeSubmenu"
@@ -29,8 +29,8 @@
                            aria-expanded="false"
                            class="dropdown-toggle">סרטים</a>
                         <ul class="collapse list-unstyled" id="homeSubmenu">
-                            <li><a asp-area="" asp-controller="Home" asp-action="Index">חיפוש סרטים</a></li>
-                            <li><a asp-area="" asp-controller="Home" asp-action="Index">הוספת סרט</a></li>
+                            <li><a asp-area="" asp-controller="Movies" asp-action="Index">חיפוש סרטים</a></li>
+                            <li><a asp-area="" asp-controller="Movies" asp-action="Create">הוספת סרט</a></li>
                         </ul>
                     </li>
                     <li>
@@ -39,8 +39,8 @@
                            aria-expanded="false"
                            class="dropdown-toggle">במאים</a>
                         <ul class="collapse list-unstyled" id="pageSubmenu">
-                            <li><a asp-area="" asp-controller="Home" asp-action="Index">חיפוש במאים</a></li>
-                            <li><a asp-area="" asp-controller="Home" asp-action="Index">הוספת במאי</a></li>
+                            <li><a asp-area="" asp-controller="Directors" asp-action="Index">חיפוש במאים</a></li>
+                            <li><a asp-area="" asp-controller="Directors" asp-action="Create">הוספת במאי</a></li>
                         </ul>
                     </li>
                     <li><a href="#">סרטים שראיתי</a></li>

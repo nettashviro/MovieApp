@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -10,7 +11,7 @@ namespace MovieApp.Models
     public class Movie
     {
         public int Id { get; set; }
-        public long Name { get; set; }
+        public string Name { get; set; }
 
         public string Country { get; set; }
 
@@ -21,7 +22,7 @@ namespace MovieApp.Models
 
         public int Duration { get; set; }
 
-        public int TrailerUrl { get; set; }
+        public string TrailerUrl { get; set; }
 
         [Range(0, 5)]
         public float Rating { get; set; }
@@ -30,6 +31,10 @@ namespace MovieApp.Models
         public Director Director { get; set; }
 
         public ICollection<Soundtrack> Soundtracks { get; set; }
+
+        [NotMapped]
+        [Display(Name = "Picture")]
+        public IFormFile Image { get; set; }
 
         public string ImageUrl { get; set; }
     }

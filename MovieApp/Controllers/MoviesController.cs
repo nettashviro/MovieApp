@@ -1,22 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using MovieApp.Models;
 using MovieApp.Data;
+using MovieApp.Models;
 
 namespace MovieApp.Controllers
 {
     public class MoviesController : Controller
     {
         private readonly MovieAppContext _context;
+        private readonly IWebHostEnvironment _hostEnvironment;
 
-        public MoviesController(MovieAppContext context)
+        public MoviesController(MovieAppContext context, IWebHostEnvironment hostEnvironment)
         {
             _context = context;
+            this._hostEnvironment = hostEnvironment;
         }
 
         // GET: Movies
@@ -46,6 +51,12 @@ namespace MovieApp.Controllers
         // GET: Movies/Create
         public IActionResult Create()
         {
+            var countries = new SelectList(CultureHelper.CountryList(), "Key", "Value");
+            ViewBag.Countries = countries.OrderBy(p => p.Text).ToList();
+
+            var languages = new SelectList(CultureHelper.LanguageList(), "Key", "Value");
+            ViewBag.Languages = languages.OrderBy(p => p.Text).ToList();
+
             return View();
         }
 
@@ -54,10 +65,26 @@ namespace MovieApp.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Country,Year,Genre,Duration,TrailerUrl,Rating")] Movie movie)
+        public async Task<IActionResult> Create([Bind("Id,Name,Country,Language,Year,Genre,Duration,TrailerUrl,Rating,Image,ImageUrl")] Movie movie)
         {
             if (ModelState.IsValid)
             {
+                if (movie.Image != null)
+                {
+                    string fileName = Path.GetFileNameWithoutExtension(movie.Image.FileName);
+                    string extension = Path.GetExtension(movie.Image.FileName);
+                    movie.ImageUrl = fileName = fileName + DateTime.Now.ToString("yymmssfff") + extension;
+                    string path = Path.Combine(_hostEnvironment.WebRootPath + "/img/movies/", fileName);
+
+                    using (var fileStream = new FileStream(path, FileMode.Create))
+                    {
+                        await movie.Image.CopyToAsync(fileStream);
+                    }
+                }
+                
+                movie.Country = CultureHelper.GetCountryByIdentifier(movie.Country);
+                movie.Language = CultureHelper.GetLanguageByIdentifier(movie.Language);
+
                 _context.Add(movie);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -78,6 +105,11 @@ namespace MovieApp.Controllers
             {
                 return NotFound();
             }
+            var countries = new SelectList(CultureHelper.CountryList(), "Key", "Value");
+            ViewBag.Countries = countries.OrderBy(p => p.Text).ToList();
+
+            var languages = new SelectList(CultureHelper.LanguageList(), "Key", "Value");
+            ViewBag.Languages = languages.OrderBy(p => p.Text).ToList();
             return View(movie);
         }
 
@@ -86,7 +118,7 @@ namespace MovieApp.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Country,Year,Genre,Duration,TrailerUrl,Rating")] Movie movie)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Country,Language,Year,Genre,Duration,TrailerUrl,Rating,Image,ImageUrl")] Movie movie)
         {
             if (id != movie.Id)
             {
@@ -97,6 +129,36 @@ namespace MovieApp.Controllers
             {
                 try
                 {
+                    var original_data = _context.Movie.AsNoTracking().Where(m => m.Id == id).FirstOrDefault();
+                    if (movie.Image != null)
+                    {
+                        if (original_data.ImageUrl != null)
+                        {
+                            var imagePath = Path.Combine(_hostEnvironment.WebRootPath, "img/movies", original_data.ImageUrl);
+                            if (System.IO.File.Exists(imagePath))
+                            {
+                                System.IO.File.Delete(imagePath);
+                            }
+                        }
+
+                        string fileName = Path.GetFileNameWithoutExtension(movie.Image.FileName);
+                        string extension = Path.GetExtension(movie.Image.FileName);
+                        movie.ImageUrl = fileName = fileName + DateTime.Now.ToString("yymmssfff") + extension;
+                        string path = Path.Combine(_hostEnvironment.WebRootPath + "/img/movies/", fileName);
+
+                        using (var fileStream = new FileStream(path, FileMode.Create))
+                        {
+                            await movie.Image.CopyToAsync(fileStream);
+                        }
+                    }
+                    else
+                    {
+                        movie.ImageUrl = original_data.ImageUrl;
+                    }
+
+                    movie.Country = CultureHelper.GetCountryByIdentifier(movie.Country);
+                    movie.Language = CultureHelper.GetLanguageByIdentifier(movie.Language);
+
                     _context.Update(movie);
                     await _context.SaveChangesAsync();
                 }
@@ -140,6 +202,16 @@ namespace MovieApp.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var movie = await _context.Movie.FindAsync(id);
+
+            if (movie.ImageUrl != null)
+            {
+                var imagePath = Path.Combine(_hostEnvironment.WebRootPath, "img/movies", movie.ImageUrl);
+                if (System.IO.File.Exists(imagePath))
+                {
+                    System.IO.File.Delete(imagePath);
+                }
+            }
+
             _context.Movie.Remove(movie);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
