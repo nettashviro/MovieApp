@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -19,9 +21,14 @@ namespace MovieApp.Models
         public Gender Gender { get; set; }
 
         [Display(Name = "Birth date")]
+        [DataType(DataType.Date)]
         public DateTime Birthdate { get; set; }
 
         public string OriginCountry { get; set; }
+
+        [NotMapped]
+        [Display(Name = "Picture")]
+        public IFormFile Image { get; set; }
 
         public string ImageUrl { get; set; }
     }
