@@ -10,6 +10,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using MovieApp.Data;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Http;
 
 namespace MovieApp
 {
@@ -29,6 +31,15 @@ namespace MovieApp
 
             services.AddDbContext<MovieAppContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("MovieAppContext")));
+
+            // configure basic authentication 
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme,
+              options =>
+                {
+                 options.LoginPath = new PathString("/Account/Login/");
+                 options.AccessDeniedPath = new PathString("/Account/Forbidden/");
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -49,6 +60,7 @@ namespace MovieApp
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

@@ -10,7 +10,7 @@ namespace MovieApp.Models
     public class Movie
     {
         public int Id { get; set; }
-        public long Name { get; set; }
+        public string Name { get; set; }
 
         public string Country { get; set; }
 
@@ -32,15 +32,19 @@ namespace MovieApp.Models
         public ICollection<Soundtrack> Soundtracks { get; set; }
 
         public string ImageUrl { get; set; }
-    }
-}
 
-public enum MovieGenre
-{
-    Horror,
-    Drama,
-    Comedy,
-    Action,
-    Romance,
-    Animation
+
+        public enum MovieGenre
+        {
+            Horror,
+            Drama,
+            Comedy,
+            Action,
+            Romance,
+            Animation
+        }
+
+    }
+
+
 }

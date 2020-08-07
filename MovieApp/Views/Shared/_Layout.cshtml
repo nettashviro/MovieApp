@@ -24,24 +24,34 @@
                    style="background-image: url(../img/logo.png);"></a>
                 <ul class="list-unstyled components mb-5">
                     <li class="active">
-                        <a href="#homeSubmenu"
+                        <a href="#movieMenu"
                            data-toggle="collapse"
                            aria-expanded="false"
                            class="dropdown-toggle">סרטים</a>
-                        <ul class="collapse list-unstyled" id="homeSubmenu">
-                            <li><a asp-area="" asp-controller="Home" asp-action="Index">חיפוש סרטים</a></li>
-                            <li><a asp-area="" asp-controller="Home" asp-action="Index">הוספת סרט</a></li>
+                        <ul class="collapse list-unstyled" id="movieMenu">
+                            <li><a asp-area="" asp-controller="Movies" asp-action="Index">חיפוש סרטים</a></li>
+                            <li><a asp-area="" asp-controller="Movies" asp-action="Create">הוספת סרט</a></li>
                         </ul>
                     </li>
                     <li>
-                        <a href="#pageSubmenu"
+                        <a href="#directorMenu"
                            data-toggle="collapse"
                            aria-expanded="false"
                            class="dropdown-toggle">במאים</a>
-                        <ul class="collapse list-unstyled" id="pageSubmenu">
-                            <li><a asp-area="" asp-controller="Home" asp-action="Index">חיפוש במאים</a></li>
-                            <li><a asp-area="" asp-controller="Home" asp-action="Index">הוספת במאי</a></li>
+                        <ul class="collapse list-unstyled" id="directorMenu">
+                            <li><a asp-area="" asp-controller="Directors" asp-action="Index">חיפוש במאים</a></li>
+                            <li><a asp-area="" asp-controller="Directors" asp-action="Create">הוספת במאי</a></li>
                         </ul>
+                    </li>
+                    <li>
+                    <a href="#soundtrackMenu"
+                       data-toggle="collapse"
+                       aria-expanded="false"
+                       class="dropdown-toggle">פסקול</a>
+                    <ul class="collapse list-unstyled" id="soundtrackMenu">
+                        <li><a asp-area="" asp-controller="Soundtracks" asp-action="Index">חיפוש פסקולים</a></li>
+                        <li><a asp-area="" asp-controller="Soundtracks" asp-action="Create">הוספת פסקול</a></li>
+                    </ul>
                     </li>
                     <li><a href="#">סרטים שראיתי</a></li>
                     <li> <a href="#">רשימת צפייה</a> </li>
@@ -49,7 +59,8 @@
 
                 <!-- Footer -->
                 <div class="footer">
-                    <p>&copy; 2020 - Action! - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a></p>
+                    @*TODO: ADD JQUERY WATCH*@
+                    <p> @DateTime.Now  - Action! </p>
                 </div>
             </div>
         </nav>
