@@ -32,14 +32,13 @@ namespace MovieApp
             services.AddDbContext<MovieAppContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("MovieAppContext")));
 
-            // configure basic authentication 
+            services.AddSession(options => { options.IdleTimeout = TimeSpan.FromMinutes(1); });
+
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-            .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme,
-              options =>
-                {
-                 options.LoginPath = new PathString("/Account/Login/");
-                 options.AccessDeniedPath = new PathString("/Account/Forbidden/");
-                });
+              .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, (options) =>
+              {
+                  options.AccessDeniedPath = new PathString("/Errors/AccessDenied/");
+              });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -52,13 +51,24 @@ namespace MovieApp
             else
             {
                 app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            app.Use(async (context, next) =>
+            {
+                await next();
+                if (context.Response.StatusCode == 404) // Page Not Found
+                {
+                    context.Request.Path = "/Errors/PageNotFound";
+                    await next();
+                }
+            });
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
             app.UseRouting();
+            app.UseSession();
 
             app.UseAuthentication();
             app.UseAuthorization();

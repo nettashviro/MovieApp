@@ -37,6 +37,8 @@
   <ItemGroup>
     <Folder Include="wwwroot\img\directors\" />
     <Folder Include="wwwroot\img\movies\" />
+    <Folder Include="wwwroot\img\movies\" />
+    <Folder Include="wwwroot\img\directors\" />
   </ItemGroup>
 
 </Project>

@@ -44,19 +44,22 @@
                         </ul>
                     </li>
                     <li>
-                    <a href="#soundtrackMenu"
-                       data-toggle="collapse"
-                       aria-expanded="false"
-                       class="dropdown-toggle">פסקול</a>
-                    <ul class="collapse list-unstyled" id="soundtrackMenu">
-                        <li><a asp-area="" asp-controller="Soundtracks" asp-action="Index">חיפוש פסקולים</a></li>
-                        <li><a asp-area="" asp-controller="Soundtracks" asp-action="Create">הוספת פסקול</a></li>
-                    </ul>
+                        <a href="#soundtrackMenu"
+                           data-toggle="collapse"
+                           aria-expanded="false"
+                           class="dropdown-toggle">פסקול</a>
+                        <ul class="collapse list-unstyled" id="soundtrackMenu">
+                            <li><a asp-area="" asp-controller="Soundtracks" asp-action="Index">חיפוש פסקולים</a></li>
+                            <li><a asp-area="" asp-controller="Soundtracks" asp-action="Create">הוספת פסקול</a></li>
+                        </ul>
                     </li>
-                    <li><a href="#">סרטים שראיתי</a></li>
-                    <li> <a href="#">רשימת צפייה</a> </li>
-                </ul>
-
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <li><a href="#">סרטים שראיתי</a></li>
+                        <li> <a href="#">רשימת צפייה</a> </li>
+                    }
+                    </ul>
+                    
                 <!-- Footer -->
                 <div class="footer">
                     @*TODO: ADD JQUERY WATCH*@
@@ -86,16 +89,45 @@
                     </button>
 
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                      @*  @if (User.Identity.IsAuthenticated)
+                        {
+                            if (User.HasClaim(System.Security.Claims.ClaimTypes.Role, "Admin"))
+                            {
+                                <li><a href="/login/details">Welcome, Admin</a></li>
+                                <li class="logout">@Html.ActionLink("Logout", "Logout", "Login")</li>
+                            }
+                            else
+                            {
+                                <li><a href="/login/details">Welcome, @User.Identity.Name </a></li>
+                                <li class="logout">@Html.ActionLink("Logout", "Logout", "Login")</li>
+                            }
+                        }
+                        else
+                        {
+                            <li><a>Welcome, Guest </a></li>
+                            <li>@Html.ActionLink("Login", "Index", "Login")</li>
+                            <li>@Html.ActionLink("Register", "Register", "Login")</li>
+                        }*@
                         <ul class="nav navbar-nav ml-auto">
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Login</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Register</a>
-                            </li>
-                            <li class="nav-item active">
-                                <a class="nav-link" href="#{myProfile}">Hello {userName}</a>
-                            </li>
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                <li class="nav-item active">
+                                    <a class="nav-link" href="#{myProfile}">Hello @Context.User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Name)?.Value</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="Account" asp-action="Logout">Logout</a>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="Account" asp-action="Login">Login</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="Account" asp-action="Register">Register</a>
+                                </li>
+
+                            }
                         </ul>
                     </div>
                 </div>
