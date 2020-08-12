@@ -1,0 +1,40 @@
+﻿
+@{
+    ViewData["Title"] = "Navbar";
+}
+
+<!-- Navigation -->
+<ul class="navbar-nav">
+    @if (User.Identity.IsAuthenticated)
+    {
+        <li class="nav-item">
+            <a class="nav-link" asp-controller="Movies" asp-action="Index">
+                <i class="fa fa-film"></i> מאגר הסרטים
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" asp-controller="Directors" asp-action="Index">
+                <i class="fa fa-person-booth"></i> מאגר הבמאים
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" asp-controller="Soundtracks" asp-action="Index">
+                <i class="fa fa-person-booth"></i> מאגר פסקולים
+            </a>
+        </li>
+
+        @* TODO: ADD LINKS *@
+
+        <li class="nav-item">
+            <a class="nav-link" href="#">
+                <i class="fa fa-eye"></i> סרטים שראיתי
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#">
+                <i class="fa fa-list"></i> רשימת צפייה
+            </a>
+        </li>
+    }
+</ul>
+
