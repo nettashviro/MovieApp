@@ -37,15 +37,19 @@ namespace MovieApp.Models
         public IFormFile Image { get; set; }
 
         public string ImageUrl { get; set; }
-    }
-}
 
-public enum MovieGenre
-{
-    Horror,
-    Drama,
-    Comedy,
-    Action,
-    Romance,
-    Animation
+
+        public enum MovieGenre
+        {
+            Horror,
+            Drama,
+            Comedy,
+            Action,
+            Romance,
+            Animation
+        }
+
+    }
+
+
 }

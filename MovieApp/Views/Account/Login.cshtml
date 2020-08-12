@@ -1,0 +1,117 @@
+﻿@model MovieApp.Models.AccountViewModel.LoginViewModel
+@{
+    ViewData["Title"] = "Login";
+}
+
+@*<div class="row" style="min-height:500px">
+    <div class="col-lg-4"></div>
+    <div class="col-lg-4">
+        <div class="intro">
+            <h2>Hello!</h2>
+            <h6>Not a member already!? <a asp-action="Register">Create an Account Now!</a></h6>
+        </div>
+
+        <form class="user" asp-action="Login">
+            <div class="form-group">
+                <input class="form-control form-control-user" name="email" aria-describedby="emailHelp" placeholder="Enter Email Address...">
+            </div>
+
+            <div class="form-group">
+                <input type="password" class="form-control form-control-user" placeholder="Password" name="password">
+            </div>
+            <button type="submit" class="btn btn-primary btn-user btn-block">
+                Login
+            </button>
+        </form>
+        <hr />
+        <div class="text-center">
+            <a class="small" href="forgot-password.html">Forgot Password?</a>
+        </div>
+        <div class="text-center">
+            <a class="small" asp-action="Register">Create an Account!</a>
+        </div>
+
+        @if (ViewData["Message"] != null && ViewData["Message"].ToString() != "")
+        {
+            <div class="alert alert-danger">@ViewBag.Message</div>
+        }
+
+    </div>
+</div>*@
+
+
+
+
+<!-- Table -->
+<div class="row justify-content-center" dir="rtl">
+    <div class="col-lg-5 col-md-7">
+        <div class="card bg-secondary shadow border-0">
+            <div class="card-body px-lg-5 py-lg-5">
+                <div class="text-center text-muted mb-4">
+                    <small>Not a member already?</small>
+                    <br />
+                    <strong> <a asp-action="Register">Create an Account Now!</a></strong>
+                </div>
+                <form id="account" asp-action="Login">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    @if (!ViewData.ModelState.IsValid && ViewData.ModelState[string.Empty] != null)
+                    {
+                        @foreach (var error in @ViewData.ModelState[string.Empty]?.Errors)
+                        {
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                <span>@error.ErrorMessage</span>
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                            </div>
+                        }
+                    }
+                    @if (ViewData["Message"] != null && ViewData["Message"].ToString() != "")
+                    {
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <span>@ViewBag.Message</span>
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </div>
+                    }
+
+                    <div class="form-group mb-3">
+                        <div class="input-group input-group-alternative">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    <i class="ni ni-email-83"></i>
+                                </span>
+                            </div>
+                            <input asp-for="Email" class="form-control" placeholder="Email" type="email" />
+                        </div>
+                        <span asp-validation-for="Email" class="invalid-feedback" style="display: block"></span>
+                    </div>
+                    <div class="form-group">
+                        <div class="input-group input-group-alternative">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    <i class="ni ni-lock-circle-open"></i>
+                                </span>
+                            </div>
+                            <input asp-for="Password" placeholder="Password" type="password" class="form-control" />
+                        </div>
+                        <span asp-validation-for="Password" class="invalid-feedback" style="display: block"></span>
+                    </div>
+
+                    <div class="text-center">
+                        <button class="btn btn-primary my-4" type="submit">Sign in</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-6 text-right">
+                <a  asp-action="Register" class="text-light">
+                    <small>Create new account</small>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

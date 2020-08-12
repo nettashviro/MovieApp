@@ -4,6 +4,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -13,6 +14,7 @@ using MovieApp.Models;
 
 namespace MovieApp.Controllers
 {
+    [Authorize]
     public class DirectorsController : Controller
     {
         private readonly MovieAppContext _context;
@@ -24,12 +26,14 @@ namespace MovieApp.Controllers
             this._hostEnvironment = hostEnvironment;
         }
 
+        [AllowAnonymous]
         // GET: Directors
         public async Task<IActionResult> Index()
         {
             return View(await _context.Director.ToListAsync());
         }
 
+        [AllowAnonymous]
         // GET: Directors/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -89,6 +93,8 @@ namespace MovieApp.Controllers
         }
 
         // GET: Directors/Edit/5
+        [Authorize(Roles = "Admin")]
+
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -112,6 +118,7 @@ namespace MovieApp.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,FirstName,LastName,Gender,Birthdate,OriginCountry,Image,ImageUrl")] Director director)
         {
@@ -173,6 +180,8 @@ namespace MovieApp.Controllers
         }
 
         // GET: Directors/Delete/5
+        [Authorize(Roles = "Admin")]
+
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -192,6 +201,7 @@ namespace MovieApp.Controllers
 
         // POST: Directors/Delete/5
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {

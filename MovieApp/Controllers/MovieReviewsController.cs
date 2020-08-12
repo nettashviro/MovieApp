@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using MovieApp.Models;
 
 namespace MovieApp.Controllers
 {
+    [Authorize]
     public class MovieReviewsController : Controller
     {
         private readonly MovieAppContext _context;
@@ -19,12 +21,14 @@ namespace MovieApp.Controllers
             _context = context;
         }
 
+        [AllowAnonymous]
         // GET: MovieReviews
         public async Task<IActionResult> Index()
         {
             return View(await _context.MovieReview.ToListAsync());
         }
 
+        [AllowAnonymous]
         // GET: MovieReviews/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -44,6 +48,7 @@ namespace MovieApp.Controllers
         }
 
         // GET: MovieReviews/Create
+
         public IActionResult Create()
         {
             return View();
@@ -66,6 +71,8 @@ namespace MovieApp.Controllers
         }
 
         // GET: MovieReviews/Edit/5
+        [Authorize(Roles = "Admin")]
+
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -85,6 +92,7 @@ namespace MovieApp.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Rank,Title,Description,IsViolent,IsBlackAndWhite,RecommendedAge,IsHavingSequel")] MovieReview movieReview)
         {
@@ -117,6 +125,7 @@ namespace MovieApp.Controllers
         }
 
         // GET: MovieReviews/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -136,6 +145,7 @@ namespace MovieApp.Controllers
 
         // POST: MovieReviews/Delete/5
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
