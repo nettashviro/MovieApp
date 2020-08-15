@@ -36,7 +36,7 @@ namespace MovieApp.Data
               );
             }
 
-            // TODO: ADD MOVIES / DIRECTORS / SOUNDTRACKS STARTER DATA
+            // TODO: ADD MOVIES / Officials / SOUNDTRACKS STARTER DATA
 
             _context.SaveChanges();
         }

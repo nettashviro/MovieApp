@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MovieApp.Models
 {
-    public class Director
+    public class Official
     {
         [Key]
         public int Id { get; set; }
@@ -18,6 +18,9 @@ namespace MovieApp.Models
 
         [Display(Name = "Last name")]
         public string LastName { get; set; }
+
+        public Role Role { get; set; }
+
         public Gender Gender { get; set; }
 
         [Display(Name = "Birth date")]
@@ -39,4 +42,15 @@ public enum Gender
     Male,
     Female,
     Other
+}
+
+public enum Role
+{
+    Producer,
+    Director,
+    Writer,
+    Photographer,
+    Actor,
+    Editor,
+    Soundperson
 }

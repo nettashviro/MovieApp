@@ -15,26 +15,26 @@ using MovieApp.Models;
 namespace MovieApp.Controllers
 {
     [Authorize]
-    public class DirectorsController : Controller
+    public class OfficialsController : Controller
     {
         private readonly MovieAppContext _context;
         private readonly IWebHostEnvironment _hostEnvironment;
 
-        public DirectorsController(MovieAppContext context, IWebHostEnvironment hostEnvironment)
+        public OfficialsController(MovieAppContext context, IWebHostEnvironment hostEnvironment)
         {
             _context = context;
             this._hostEnvironment = hostEnvironment;
         }
 
         [AllowAnonymous]
-        // GET: Directors
+        // GET: Officials
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Director.ToListAsync());
+            return View(await _context.Official.ToListAsync());
         }
 
         [AllowAnonymous]
-        // GET: Directors/Details/5
+        // GET: Officials/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -42,17 +42,17 @@ namespace MovieApp.Controllers
                 return NotFound();
             }
 
-            var director = await _context.Director
+            var official = await _context.Official
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (director == null)
+            if (official == null)
             {
                 return NotFound();
             }
 
-            return View(director);
+            return View(official);
         }
 
-        // GET: Directors/Create
+        // GET: Officials/Create
         public IActionResult Create()
         {
             var countries = new SelectList(CultureHelper.CountryList(), "Key", "Value");
@@ -61,38 +61,38 @@ namespace MovieApp.Controllers
             return View();
         }
 
-        // POST: Directors/Create
+        // POST: Officials/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,FirstName,LastName,Gender,Birthdate,OriginCountry,Image,ImageUrl")] Director director)
+        public async Task<IActionResult> Create([Bind("Id,FirstName,LastName,Role,Gender,Birthdate,OriginCountry,Image,ImageUrl")] Official official)
         {
             if (ModelState.IsValid)
             {
-                if (director.Image != null)
+                if (official.Image != null)
                 {
-                    string fileName = Path.GetFileNameWithoutExtension(director.Image.FileName);
-                    string extension = Path.GetExtension(director.Image.FileName);
-                    director.ImageUrl = fileName = fileName + DateTime.Now.ToString("yymmssfff") + extension;
-                    string path = Path.Combine(_hostEnvironment.WebRootPath + "/img/directors/", fileName);
+                    string fileName = Path.GetFileNameWithoutExtension(official.Image.FileName);
+                    string extension = Path.GetExtension(official.Image.FileName);
+                    official.ImageUrl = fileName = fileName + DateTime.Now.ToString("yymmssfff") + extension;
+                    string path = Path.Combine(_hostEnvironment.WebRootPath + "/img/officials/", fileName);
 
                     using (var fileStream = new FileStream(path, FileMode.Create))
                     {
-                        await director.Image.CopyToAsync(fileStream);
+                        await official.Image.CopyToAsync(fileStream);
                     }
                 }
 
-                director.OriginCountry = CultureHelper.GetCountryByIdentifier(director.OriginCountry);
+                official.OriginCountry = CultureHelper.GetCountryByIdentifier(official.OriginCountry);
 
-                _context.Add(director);
+                _context.Add(official);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(director);
+            return View(official);
         }
 
-        // GET: Directors/Edit/5
+        // GET: Officials/Edit/5
         [Authorize(Roles = "Admin")]
 
         public async Task<IActionResult> Edit(int? id)
@@ -102,8 +102,8 @@ namespace MovieApp.Controllers
                 return NotFound();
             }
 
-            var director = await _context.Director.FindAsync(id);
-            if (director == null)
+            var official = await _context.Official.FindAsync(id);
+            if (official == null)
             {
                 return NotFound();
             }
@@ -111,18 +111,18 @@ namespace MovieApp.Controllers
             var countries = new SelectList(CultureHelper.CountryList(), "Key", "Value");
             ViewBag.Countries = countries.OrderBy(p => p.Text).ToList();
 
-            return View(director);
+            return View(official);
         }
 
-        // POST: Directors/Edit/5
+        // POST: Officials/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,FirstName,LastName,Gender,Birthdate,OriginCountry,Image,ImageUrl")] Director director)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,FirstName,LastName,Role,Gender,Birthdate,OriginCountry,Image,ImageUrl")] Official official)
         {
-            if (id != director.Id)
+            if (id != official.Id)
             {
                 return NotFound();
             }
@@ -131,41 +131,41 @@ namespace MovieApp.Controllers
             {
                 try
                 {
-                    var original_data = _context.Director.AsNoTracking().Where(d => d.Id == id).FirstOrDefault();
-                    if (director.Image != null)
+                    var original_data = _context.Official.AsNoTracking().Where(d => d.Id == id).FirstOrDefault();
+                    if (official.Image != null)
                     {
                         if (original_data.ImageUrl != null)
                         {
-                            var imagePath = Path.Combine(_hostEnvironment.WebRootPath, "img/directors", original_data.ImageUrl);
+                            var imagePath = Path.Combine(_hostEnvironment.WebRootPath, "img/officials", original_data.ImageUrl);
                             if (System.IO.File.Exists(imagePath))
                             {
                                 System.IO.File.Delete(imagePath);
                             }
                         }
 
-                        string fileName = Path.GetFileNameWithoutExtension(director.Image.FileName);
-                        string extension = Path.GetExtension(director.Image.FileName);
-                        director.ImageUrl = fileName = fileName + DateTime.Now.ToString("yymmssfff") + extension;
-                        string path = Path.Combine(_hostEnvironment.WebRootPath + "/img/directors/", fileName);
+                        string fileName = Path.GetFileNameWithoutExtension(official.Image.FileName);
+                        string extension = Path.GetExtension(official.Image.FileName);
+                        official.ImageUrl = fileName = fileName + DateTime.Now.ToString("yymmssfff") + extension;
+                        string path = Path.Combine(_hostEnvironment.WebRootPath + "/img/officials/", fileName);
 
                         using (var fileStream = new FileStream(path, FileMode.Create))
                         {
-                            await director.Image.CopyToAsync(fileStream);
+                            await official.Image.CopyToAsync(fileStream);
                         }
                     }
                     else
                     {
-                        director.ImageUrl = original_data.ImageUrl;
+                        official.ImageUrl = original_data.ImageUrl;
                     }
 
-                    director.OriginCountry = CultureHelper.GetCountryByIdentifier(director.OriginCountry);
+                    official.OriginCountry = CultureHelper.GetCountryByIdentifier(official.OriginCountry);
 
-                    _context.Update(director);
+                    _context.Update(official);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!DirectorExists(director.Id))
+                    if (!OfficialExists(official.Id))
                     {
                         return NotFound();
                     }
@@ -176,10 +176,10 @@ namespace MovieApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(director);
+            return View(official);
         }
 
-        // GET: Directors/Delete/5
+        // GET: Officials/Delete/5
         [Authorize(Roles = "Admin")]
 
         public async Task<IActionResult> Delete(int? id)
@@ -189,41 +189,41 @@ namespace MovieApp.Controllers
                 return NotFound();
             }
 
-            var director = await _context.Director
+            var official = await _context.Official
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (director == null)
+            if (official == null)
             {
                 return NotFound();
             }
 
-            return View(director);
+            return View(official);
         }
 
-        // POST: Directors/Delete/5
+        // POST: Officials/Delete/5
         [HttpPost, ActionName("Delete")]
         [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var director = await _context.Director.FindAsync(id);
+            var official = await _context.Official.FindAsync(id);
 
-            if (director.ImageUrl != null)
+            if (official.ImageUrl != null)
             {
-                var imagePath = Path.Combine(_hostEnvironment.WebRootPath, "img/directors", director.ImageUrl);
+                var imagePath = Path.Combine(_hostEnvironment.WebRootPath, "img/officials", official.ImageUrl);
                 if (System.IO.File.Exists(imagePath))
                 {
                     System.IO.File.Delete(imagePath);
                 }
             }
 
-            _context.Director.Remove(director);
+            _context.Official.Remove(official);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool DirectorExists(int id)
+        private bool OfficialExists(int id)
         {
-            return _context.Director.Any(e => e.Id == id);
+            return _context.Official.Any(e => e.Id == id);
         }
     }
 }
