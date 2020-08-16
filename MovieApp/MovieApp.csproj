@@ -5,6 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Controllers\Official.cs" />
+    <Compile Remove="Models\OfficialController.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="Views\Home\Index.cshtml" />
     <None Include="Views\Home\Privacy.cshtml" />
     <None Include="Views\MovieReviews\Create.cshtml" />
@@ -60,10 +65,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\img\directors\" />
+    <Folder Include="wwwroot\img\officials\" />
     <Folder Include="wwwroot\img\movies\" />
     <Folder Include="wwwroot\img\movies\" />
-    <Folder Include="wwwroot\img\directors\" />
+    <Folder Include="wwwroot\img\officials\" />
   </ItemGroup>
 
 </Project>

@@ -16,7 +16,7 @@ namespace MovieApp.Data
 
         public DbSet<MovieApp.Models.Movie> Movie { get; set; }
 
-        public DbSet<MovieApp.Models.Director> Director { get; set; }
+        public DbSet<MovieApp.Models.Official> Official { get; set; }
 
         public DbSet<MovieApp.Models.Soundtrack> Soundtrack { get; set; }
 
