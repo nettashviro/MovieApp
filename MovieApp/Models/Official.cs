@@ -35,22 +35,22 @@ namespace MovieApp.Models
 
         public string ImageUrl { get; set; }
     }
-}
 
-public enum Gender
-{
-    Male,
-    Female,
-    Other
-}
+    public enum Gender
+    {
+        Male,
+        Female,
+        Other
+    }
 
-public enum Role
-{
-    Producer,
-    Director,
-    Writer,
-    Photographer,
-    Actor,
-    Editor,
-    Soundperson
+    public enum Role
+    {
+        Producer,
+        Director,
+        Writer,
+        Photographer,
+        Actor,
+        Editor,
+        Soundperson
+    }
 }
