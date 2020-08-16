@@ -29954,3 +29954,10 @@ input.datetimepicker[data-color='yellow'] + .bootstrap-datetimepicker-widget.dro
     padding: 16px 0 17px 0;
     border-bottom: lightgrey 1px solid;
 }
+
+.sidebar {
+    background-image: url(/img/sidebarBackground.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: bottom;
+}

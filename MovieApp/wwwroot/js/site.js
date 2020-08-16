@@ -5,8 +5,8 @@
 
 $(document).ready(function () {
     var url = window.location;
-    $('li.nav-active').removeClass('nav-active');
-    $('li.nav-item a').each(function () {
+    $('ul.sidebarLink li.nav-active').removeClass('nav-active');
+    $('ul.sidebarLink li.nav-item a').each(function () {
         if (this.href == url) {
             $(this).parent().addClass('nav-active');
         }
