@@ -4,6 +4,7 @@
 // Write your JavaScript code.
 
 $(document).ready(function () {
+
     var url = window.location;
     $('ul.sidebarLink li.nav-active').removeClass('nav-active');
     $('ul.sidebarLink li.nav-item a').each(function () {
@@ -12,3 +13,4 @@ $(document).ready(function () {
         }
     });
 });
+

@@ -93,7 +93,7 @@ body {
     direction: rtl;
     text-align: right;
     color: #525f7f;
-    background-color: #f8f9fe;
+    background-color: #f3f3f3;
 }
 
 [tabindex='-1']:focus:not(:focus-visible)
@@ -5764,7 +5764,7 @@ input[type='button'].btn-block
 
     display: flex;
 
-    padding: 0.5rem 0.5rem; 
+    /*padding: 0.5rem 0.5rem; */
 
     flex-wrap: wrap;
     align-items: center;
@@ -19182,7 +19182,8 @@ a.btn-icon-only
 
 .main-content {
     position: relative;
-   /* height: 100vh;
+    min-height: 100vh;
+    /* height: 100vh;
     margin-right: 250px;*/
 }
 .main-content .navbar-top
@@ -20011,9 +20012,9 @@ a.btn-icon-only
     position: fixed;
     bottom: 0;
     /* float: left; */
-    /* width: 100%; */
     left: 0;
     padding: 20px;
+    width: 100%;
 }
 .footer .col-footer .heading
 {
@@ -29951,7 +29952,8 @@ input.datetimepicker[data-color='yellow'] + .bootstrap-datetimepicker-widget.dro
     align-items: center;
     color: white;
     font-size: 30px;
-    padding: 16px 0 17px 0;
+    /*  padding: 16px 0 17px 0;*/
+    padding: 8px 0 9px 0;
     border-bottom: lightgrey 1px solid;
 }
 
@@ -29960,4 +29962,40 @@ input.datetimepicker[data-color='yellow'] + .bootstrap-datetimepicker-widget.dro
     background-repeat: no-repeat;
     background-size: cover;
     background-position: bottom;
+}
+
+
+.sidebar {
+    background-image: url(/img/sidebarBackground.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: bottom;
+}
+
+#montageVideo {
+    /*    margin: 0 auto;
+    width: 100%;
+    height: 100%;
+    z-index: -10;
+    display: block;*/
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    min-width: 100%;
+    min-height: 100%;
+    z-index: -15;
+}
+
+#videoOverlay {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    min-width: 100%;
+    min-height: 100%;
+    background-image: linear-gradient(to bottom left, #525f7f7d, #000000);
+    z-index: -1;
+}
+
+#sidenav-main {
+    z-index: 5;
 }
