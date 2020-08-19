@@ -1,0 +1,20 @@
+﻿
+@{
+    ViewData["Title"] = "Footer";
+}
+
+
+@if (User.Identity.IsAuthenticated)
+{
+    <footer class="footer">
+        <div class="row justify-content-xl-between">
+            <div class="col-xl-12">
+                <div class="copyright text-xl-left text-muted">
+                    <a href="https://github.com/nettashviro/MovieApp" class="font-weight-bold ml-1" target="_blank">MovieApp</a> |
+                    <a href="https://www.creative-tim.com/live/argon-dashboard-asp-net" class="font-weight-bold ml-1" target="_blank">UI components example</a>
+
+                </div>
+            </div>
+        </div>
+    </footer>
+}
