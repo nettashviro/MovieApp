@@ -38,6 +38,9 @@ namespace MovieApp.Models
 
         public string ImageUrl { get; set; }
 
+        [Required]
+        [Display(Name = "OMDB Id")]
+        public int MovieIdInOmdb { get; set; }
 
         public enum MovieGenre
         {

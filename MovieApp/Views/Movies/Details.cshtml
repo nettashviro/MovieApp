@@ -64,6 +64,12 @@
         <dd class="col-sm-10">
             <img src="@("/img/movies/"+ Model.ImageUrl)" width="200" height="200">
         </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.MovieIdInOmdb)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.MovieIdInOmdb)
+        </dd>
     </dl>
 </div>
 <div>

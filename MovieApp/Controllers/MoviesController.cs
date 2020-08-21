@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -11,6 +12,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MovieApp.Data;
 using MovieApp.Models;
+using MovieApp.Models.OMDB;
+using MovieApp.Services;
 
 namespace MovieApp.Controllers
 {
@@ -67,7 +70,7 @@ namespace MovieApp.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Country,Language,Year,Genre,Duration,TrailerUrl,Rating,Image,ImageUrl")] Movie movie)
+        public async Task<IActionResult> Create([Bind("Id,Name,Country,Language,Year,Genre,Duration,TrailerUrl,Rating,Image,ImageUrl,MovieIdInOmdb")] Movie movie)
         {
             if (ModelState.IsValid)
             {
@@ -93,6 +96,16 @@ namespace MovieApp.Controllers
                 return RedirectToAction(nameof(Index));
             }
             return View(movie);
+        }
+
+
+        // GET: Movies/FindMovieId
+        public async Task<List<MovieSearchResult>> FindMovieId(string name)
+        {
+            OMDB service = new OMDB();
+            List<MovieSearchResult> movieResult = service.GetMovieIdByName(name);
+
+            return movieResult;
         }
 
         // GET: Movies/Edit/5
@@ -123,7 +136,7 @@ namespace MovieApp.Controllers
         [HttpPost]
         [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Country,Language,Year,Genre,Duration,TrailerUrl,Rating,Image,ImageUrl")] Movie movie)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Country,Language,Year,Genre,Duration,TrailerUrl,Rating,Image,ImageUrl,MovieIdInOmdb")] Movie movie)
         {
             if (id != movie.Id)
             {
