@@ -28,24 +28,24 @@ namespace MovieApp.Services
 
         }
 
-        public string[] GetReviewsByName(string name)
+    
+        public List<MovieReviewsResult> GetMovieReviewsById(string id)
         {
-            //int movieId = GetMovieIdByName(name);
-            string[] reviews = GetMovieReviewsById(1);
+            //int movieId = 0;
+            List<MovieReviewsResult> movieResult = new List<MovieReviewsResult>();
+            string currentUrl = $"{url}movie/{id}/reviews?api_key={apiKey}";
 
-            return reviews;
-        }
+            try
+            {
+                JObject jsonResult = Get(currentUrl);
+                movieResult = JsonConvert.DeserializeObject<List<MovieReviewsResult>>(jsonResult["results"].ToString());
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Error in OMDB Service: There was a problem with extracting movie reviews by id. The problem is: {e.Message}");
+            }
 
-        private string[] GetMovieReviewsById(int movieId)
-        {
-            string[] reviews = new string[5];
-
-            string currentUrl = $"{url}movie/{movieId}/reviews?{apiKey}";
-            JObject result = Get(currentUrl);
-
-            // TODO: continue
-
-            return reviews;
+            return movieResult;
         }
 
         public List<MovieSearchResult> GetMovieIdByName(string name)

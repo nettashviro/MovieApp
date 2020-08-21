@@ -108,6 +108,15 @@ namespace MovieApp.Controllers
             return movieResult;
         }
 
+        // GET: Movies/FindMovieReviews
+        public async Task<List<MovieReviewsResult>> FindMovieReviews(string id)
+        {
+            OMDB service = new OMDB();
+            List<MovieReviewsResult> movieResult = service.GetMovieReviewsById(id);
+
+            return movieResult;
+        }
+
         // GET: Movies/Edit/5
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)

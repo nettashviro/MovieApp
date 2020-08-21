@@ -18,7 +18,7 @@
                     <form id="movieForm" asp-action="Edit" enctype="multipart/form-data">
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="form-group focused">
+                                <div class="form-group">
                                     <label class="form-control-label" for="input-name"></label>
                                     <label asp-for="Name" class="control-label"></label>
                                     <input id="movieNameHebrew" asp-for="Name" class="form-control" />
@@ -26,7 +26,7 @@
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <div class="form-group focused">
+                                <div class="form-group">
                                     <label asp-for="Country" class="control-label"></label>
                                     <select asp-for="Country" asp-items="@(new SelectList(ViewBag.Countries, "Value", "Text"))" class="form-control">
                                         <option></option>
@@ -37,7 +37,7 @@
 
 
                             <div class="col-md-6">
-                                <div class="form-group focused">
+                                <div class="form-group">
                                     <label asp-for="Language" class="control-label"></label>
                                     <select asp-for="Language" asp-items="@(new SelectList(ViewBag.Languages, "Value", "Text"))" class="form-control">
                                         <option></option>
@@ -46,7 +46,7 @@
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <div class="form-group focused">
+                                <div class="form-group">
                                     <label asp-for="Year" class="control-label"></label>
                                     <input asp-for="Year" min="1900" max="2099" class="form-control" value="2020" />
                                     <span asp-validation-for="Year" class="text-danger"></span>
@@ -55,7 +55,7 @@
 
 
                             <div class="col-md-6">
-                                <div class="form-group focused">
+                                <div class="form-group">
                                     <label asp-for="Genre" class="control-label"></label>
                                     <select asp-for="Genre" asp-items="Html.GetEnumSelectList<Movie.MovieGenre>()" class="form-control">
                                         <option></option>
@@ -64,7 +64,7 @@
                             </div>
 
                             <div class="col-md-6">
-                                <div class="form-group focused">
+                                <div class="form-group">
                                     <label asp-for="Duration" class="control-label"></label>
                                     <input asp-for="Duration" class="form-control" min="0" max="220">
                                     <span asp-validation-for="Duration" class="text-danger"></span>
@@ -73,14 +73,14 @@
 
 
                             <div class="col-md-6">
-                                <div class="form-group focused">
+                                <div class="form-group">
                                     <label asp-for="TrailerUrl" class="control-label"></label>
                                     <input asp-for="TrailerUrl" class="form-control" />
                                     <span asp-validation-for="TrailerUrl" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <div class="form-group focused">
+                                <div class="form-group">
                                     <label asp-for="Rating" class="control-label"></label>
                                     <input asp-for="Rating" class="form-control" />
                                     <span asp-validation-for="Rating" class="text-danger"></span>
@@ -89,20 +89,20 @@
 
 
                             <div class="col-md-6">
-                                <div class="form-group focused">
+                                <div class="form-group">
                                     <label asp-for="Image" class="control-label"></label>
                                     <input asp-for="Image" accept="image/*" />
                                     <span asp-validation-for="Image" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <div class="form-group focused">
+                                <div class="form-group">
                                     <label asp-for="MovieIdInOmdb" class="control-label"></label>
                                     <input id="OmdbId" asp-for="MovieIdInOmdb" class="form-control" />
                                     <span id="validtionSpanOmdbId" asp-validation-for="MovieIdInOmdb" class="text-danger"></span>
 
                                 </div>
-                                <div class="form-group focused">
+                                <div class="form-group">
                                     <asp:Button id="OMDBButton" class="btn btn-info" UseSubmitBehaviour="false">חפש במאגר OMDB</asp:Button>
                                 </div>
                             </div>
@@ -120,7 +120,7 @@
                     <h3 class="mb-0">תוצאות חיפוש מOMDB</h3>
                 </div>
                 <div class="table-responsive">
-                    <table id="resultTable" class="table align-items-center table-flush">
+                    <table id="resultTable" class="table align-items-center table-flush table-striped table-hover">
                         <thead class="thead-light">
                             <tr>
                                 <th scope="col">מזהה</th>
@@ -128,7 +128,7 @@
                                 <th scope="col">תאריך יציאה</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody style="cursor: pointer;">
                         </tbody>
                     </table>
                 </div>
@@ -146,5 +146,5 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    <script src="~/js/searchMovideId.js" asp-append-version="true"></script>
+    <script src="~/js/searchMovieId.js" asp-append-version="true"></script>
 }
