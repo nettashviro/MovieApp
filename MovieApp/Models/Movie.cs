@@ -27,8 +27,8 @@ namespace MovieApp.Models
         [Range(0, 5)]
         public float Rating { get; set; }
 
-        [ForeignKey("Id_Director")]
-        public Director Director { get; set; }
+        [ForeignKey("Id_Official")]
+        public Official Official { get; set; }
 
         public ICollection<Soundtrack> Soundtracks { get; set; }
 
@@ -37,15 +37,19 @@ namespace MovieApp.Models
         public IFormFile Image { get; set; }
 
         public string ImageUrl { get; set; }
-    }
-}
 
-public enum MovieGenre
-{
-    Horror,
-    Drama,
-    Comedy,
-    Action,
-    Romance,
-    Animation
+
+        public enum MovieGenre
+        {
+            Horror,
+            Drama,
+            Comedy,
+            Action,
+            Romance,
+            Animation
+        }
+
+    }
+
+
 }

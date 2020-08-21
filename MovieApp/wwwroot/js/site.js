@@ -2,22 +2,15 @@
 // for details on configuring this project to bundle and minify static web assets.
 
 // Write your JavaScript code.
-(function ($) {
 
-	"use strict";
+$(document).ready(function () {
 
-	var fullHeight = function () {
+    var url = window.location;
+    $('ul.sidebarLink li.nav-active').removeClass('nav-active');
+    $('ul.sidebarLink li.nav-item a').each(function () {
+        if (this.href == url) {
+            $(this).parent().addClass('nav-active');
+        }
+    });
+});
 
-		$('.js-fullheight').css('height', $(window).height());
-		$(window).resize(function () {
-			$('.js-fullheight').css('height', $(window).height());
-		});
-
-	};
-	fullHeight();
-
-	$('#sidebarCollapse').on('click', function () {
-		$('#sidebar').toggleClass('active');
-	});
-
-})(jQuery);

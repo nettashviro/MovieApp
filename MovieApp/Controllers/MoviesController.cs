@@ -4,6 +4,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -29,6 +30,7 @@ namespace MovieApp.Controllers
         {
             return View(await _context.Movie.ToListAsync());
         }
+
 
         // GET: Movies/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -71,6 +73,7 @@ namespace MovieApp.Controllers
             {
                 if (movie.Image != null)
                 {
+                    //upload files to wwwroot
                     string fileName = Path.GetFileNameWithoutExtension(movie.Image.FileName);
                     string extension = Path.GetExtension(movie.Image.FileName);
                     movie.ImageUrl = fileName = fileName + DateTime.Now.ToString("yymmssfff") + extension;
@@ -93,6 +96,7 @@ namespace MovieApp.Controllers
         }
 
         // GET: Movies/Edit/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -117,6 +121,7 @@ namespace MovieApp.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Country,Language,Year,Genre,Duration,TrailerUrl,Rating,Image,ImageUrl")] Movie movie)
         {
@@ -179,6 +184,7 @@ namespace MovieApp.Controllers
         }
 
         // GET: Movies/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -197,6 +203,7 @@ namespace MovieApp.Controllers
         }
 
         // POST: Movies/Delete/5
+        [Authorize(Roles = "Admin")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

@@ -19,34 +19,32 @@ namespace MovieApp.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("MovieApp.Models.Director", b =>
+            modelBuilder.Entity("MovieApp.Models.Account", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime>("Birthdate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("FirstName")
+                    b.Property<string>("Email")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Gender")
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
+
+                    b.Property<int>("Type")
                         .HasColumnType("int");
 
-                    b.Property<string>("ImageUrl")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LastName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("OriginCountry")
+                    b.Property<string>("Username")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Director");
+                    b.ToTable("Account");
                 });
 
             modelBuilder.Entity("MovieApp.Models.Movie", b =>
@@ -55,6 +53,9 @@ namespace MovieApp.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("AccountId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Country")
                         .HasColumnType("nvarchar(max)");
@@ -65,7 +66,7 @@ namespace MovieApp.Migrations
                     b.Property<int>("Genre")
                         .HasColumnType("int");
 
-                    b.Property<int?>("Id_Director")
+                    b.Property<int?>("Id_Official")
                         .HasColumnType("int");
 
                     b.Property<string>("ImageUrl")
@@ -88,7 +89,9 @@ namespace MovieApp.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Id_Director");
+                    b.HasIndex("AccountId");
+
+                    b.HasIndex("Id_Official");
 
                     b.ToTable("Movie");
                 });
@@ -133,6 +136,39 @@ namespace MovieApp.Migrations
                     b.ToTable("MovieReview");
                 });
 
+            modelBuilder.Entity("MovieApp.Models.Official", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("Birthdate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("FirstName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Gender")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OriginCountry")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Role")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Official");
+                });
+
             modelBuilder.Entity("MovieApp.Models.Soundtrack", b =>
                 {
                     b.Property<int>("Id")
@@ -164,9 +200,13 @@ namespace MovieApp.Migrations
 
             modelBuilder.Entity("MovieApp.Models.Movie", b =>
                 {
-                    b.HasOne("MovieApp.Models.Director", "Director")
+                    b.HasOne("MovieApp.Models.Account", null)
+                        .WithMany("MovieWatched")
+                        .HasForeignKey("AccountId");
+
+                    b.HasOne("MovieApp.Models.Official", "Official")
                         .WithMany()
-                        .HasForeignKey("Id_Director");
+                        .HasForeignKey("Id_Official");
                 });
 
             modelBuilder.Entity("MovieApp.Models.MovieReview", b =>
