@@ -21,6 +21,7 @@ namespace MovieApp.Controllers
     {
         private readonly MovieAppContext _context;
         private readonly IWebHostEnvironment _hostEnvironment;
+        private OMDB OMDBService = new OMDB();
 
         public MoviesController(MovieAppContext context, IWebHostEnvironment hostEnvironment)
         {
@@ -101,19 +102,15 @@ namespace MovieApp.Controllers
 
         // GET: Movies/FindMovieId
         public async Task<List<MovieSearchResult>> FindMovieId(string name)
-        {
-            OMDB service = new OMDB();
-            List<MovieSearchResult> movieResult = service.GetMovieIdByName(name);
-
+        {          
+            List<MovieSearchResult> movieResult = OMDBService.GetMovieIdByName(name);
             return movieResult;
         }
 
         // GET: Movies/FindMovieReviews
         public async Task<List<MovieReviewsResult>> FindMovieReviews(string id)
         {
-            OMDB service = new OMDB();
-            List<MovieReviewsResult> movieResult = service.GetMovieReviewsById(id);
-
+            List<MovieReviewsResult> movieResult = OMDBService.GetMovieReviewsById(id);
             return movieResult;
         }
 
