@@ -224,6 +224,16 @@ namespace MovieApp.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        // GET: Movies/CountriesMapped
+        public async Task<IActionResult> CountriesMapped()
+        {
+            var allMovies = await _context.Movie.ToListAsync();
+            ViewBag.locations = allMovies.ToDictionary(movie => movie.Name,
+                movie => new { country = movie.Country, imageUrl = movie.ImageUrl });
+
+            return View();
+        }
+
         private bool MovieExists(int id)
         {
             return _context.Movie.Any(e => e.Id == id);
