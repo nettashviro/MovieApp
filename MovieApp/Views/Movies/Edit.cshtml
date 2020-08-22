@@ -97,13 +97,13 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label asp-for="MovieIdInOmdb" class="control-label"></label>
-                                    <input id="OmdbId" asp-for="MovieIdInOmdb" class="form-control" />
-                                    <span id="validtionSpanOmdbId" asp-validation-for="MovieIdInOmdb" class="text-danger"></span>
+                                    <label asp-for="MovieIdInTMDB" class="control-label"></label>
+                                    <input id="TmdbId" asp-for="MovieIdInTMDB" class="form-control" />
+                                    <span id="validtionSpanTmdbId" asp-validation-for="MovieIdInTMDB" class="text-danger"></span>
 
                                 </div>
                                 <div class="form-group">
-                                    <asp:Button id="OMDBButton" class="btn btn-info" UseSubmitBehaviour="false">חפש במאגר OMDB</asp:Button>
+                                    <asp:Button id="TMDBButton" class="btn btn-info" UseSubmitBehaviour="false">חפש במאגר TMDB</asp:Button>
                                 </div>
                             </div>
                         </div>
@@ -117,7 +117,7 @@
         <div class="col-xl-4 order-xl-2 mb-5 mb-xl-0">
             <div class="card shadow">
                 <div class="card-header border-0">
-                    <h3 class="mb-0">תוצאות חיפוש מOMDB</h3>
+                    <h3 class="mb-0">תוצאות חיפוש מTMDB</h3>
                 </div>
                 <div class="table-responsive">
                     <table id="resultTable" class="table align-items-center table-flush table-striped table-hover">

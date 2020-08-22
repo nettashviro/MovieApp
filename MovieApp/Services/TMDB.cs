@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.Routing;
 using MovieApp.Models;
-using MovieApp.Models.OMDB;
+using MovieApp.Models.TMDB;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace MovieApp.Services
 {
-    public class OMDB
+    public class TMDB
     {
         private const string url = "https://api.themoviedb.org/3/";
         private string apiKey = "c660a2bbcb461b092b1e04c1618e0a92";
@@ -23,7 +23,7 @@ namespace MovieApp.Services
         private string movieControllerName = "movie";
 
 
-        public OMDB()
+        public TMDB()
         {
 
         }
@@ -42,7 +42,7 @@ namespace MovieApp.Services
             }
             catch (Exception e)
             {
-                Console.WriteLine($"Error in OMDB Service: There was a problem with extracting movie reviews by id. The problem is: {e.Message}");
+                Console.WriteLine($"Error in TMDB Service: There was a problem with extracting movie reviews by id. The problem is: {e.Message}");
             }
 
             return movieResult;
@@ -62,7 +62,7 @@ namespace MovieApp.Services
             }
             catch (Exception e)
             {
-                Console.WriteLine($"Error in OMDB Service: There was a problem with extracting movie id by name. The problem is: {e.Message}");
+                Console.WriteLine($"Error in TMDB Service: There was a problem with extracting movie id by name. The problem is: {e.Message}");
             }
 
             return movieResult;           

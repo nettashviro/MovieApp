@@ -1,7 +1,7 @@
 ﻿$(document).ready(function () {
     $.ajax({
         url: "/Movies/FindMovieReviews",
-        data: "id=" + $('#movieOMDBId').text(),
+        data: "id=" + $('#movieTMDBId').text(),
         success: function (result) {
             if (result != null) {
 

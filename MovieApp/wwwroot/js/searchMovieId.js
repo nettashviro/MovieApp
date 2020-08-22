@@ -1,6 +1,6 @@
 ﻿$(function () {
 
-    $('#OMDBButton').click(function () {       
+    $('#TMDBButton').click(function () {       
         $.ajax({
             url: "/Movies/FindMovieId",
             data: "name=" + $('#movieNameHebrew').val().toString(),
@@ -10,7 +10,7 @@
                         var tableBody = "";
 
                         for (i = 0; i < result.length; i++) {
-                            tableBody += "<tr onclick='chooseOMDBID(" + result[i].id + ")'><td>" + result[i].id + "</td><td>" + result[i].title + "</td><td>" + result[i].release_date + "</td></tr>";
+                            tableBody += "<tr onclick='chooseTMDBID(" + result[i].id + ")'><td>" + result[i].id + "</td><td>" + result[i].title + "</td><td>" + result[i].release_date + "</td></tr>";
                         }
                         $('#resultTable tbody').html(tableBody);
                         $('#resultMessage').text("");                     
@@ -29,6 +29,6 @@
     });    
 });
 
-function chooseOMDBID(id) {
-    $('#OmdbId').val(id); ;   
+function chooseTMDBID(id) {
+    $('#TmdbId').val(id); ;   
 }

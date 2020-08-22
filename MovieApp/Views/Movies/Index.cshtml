@@ -41,7 +41,7 @@
                         @Html.DisplayNameFor(model => model.Rating)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.MovieIdInOmdb)
+                        @Html.DisplayNameFor(model => model.MovieIdInTMDB)
                     </th>
                     <th></th>
                 </tr>
@@ -78,7 +78,7 @@
                         @Html.DisplayFor(modelItem => item.Rating)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.MovieIdInOmdb)
+                        @Html.DisplayFor(modelItem => item.MovieIdInTMDB)
                     </td>
                     <td>
                         <a class="btn btn-secondary btn-sm fa fa-edit mr-3" asp-action="Edit" asp-route-id="@item.Id"></a>

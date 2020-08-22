@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MovieApp.Models.OMDB
+namespace MovieApp.Models.TMDB
 {
     public class MovieSearchResult
     {
