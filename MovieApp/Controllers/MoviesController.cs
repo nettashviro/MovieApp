@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -11,6 +12,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MovieApp.Data;
 using MovieApp.Models;
+using MovieApp.Models.TMDB;
+using MovieApp.Services;
 
 namespace MovieApp.Controllers
 {
@@ -18,6 +21,7 @@ namespace MovieApp.Controllers
     {
         private readonly MovieAppContext _context;
         private readonly IWebHostEnvironment _hostEnvironment;
+        private TMDB TMDBService = new TMDB();
 
         public MoviesController(MovieAppContext context, IWebHostEnvironment hostEnvironment)
         {
@@ -67,7 +71,7 @@ namespace MovieApp.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Country,Language,Year,Genre,Duration,TrailerUrl,Rating,Image,ImageUrl")] Movie movie)
+        public async Task<IActionResult> Create([Bind("Id,Name,Country,Language,Year,Genre,Duration,TrailerUrl,Rating,Image,ImageUrl,MovieIdInTMDB")] Movie movie)
         {
             if (ModelState.IsValid)
             {
@@ -93,6 +97,21 @@ namespace MovieApp.Controllers
                 return RedirectToAction(nameof(Index));
             }
             return View(movie);
+        }
+
+
+        // GET: Movies/FindMovieId
+        public async Task<List<MovieSearchResult>> FindMovieId(string name)
+        {          
+            List<MovieSearchResult> movieResult = TMDBService.GetMovieIdByName(name);
+            return movieResult;
+        }
+
+        // GET: Movies/FindMovieReviews
+        public async Task<List<MovieReviewsResult>> FindMovieReviews(string id)
+        {
+            List<MovieReviewsResult> movieResult = TMDBService.GetMovieReviewsById(id);
+            return movieResult;
         }
 
         // GET: Movies/Edit/5
@@ -123,7 +142,7 @@ namespace MovieApp.Controllers
         [HttpPost]
         [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Country,Language,Year,Genre,Duration,TrailerUrl,Rating,Image,ImageUrl")] Movie movie)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Country,Language,Year,Genre,Duration,TrailerUrl,Rating,Image,ImageUrl,MovieIdInTMDB")] Movie movie)
         {
             if (id != movie.Id)
             {
