@@ -15,12 +15,16 @@ using Microsoft.AspNetCore.Http;
 using System.Linq;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.IO;
+using Microsoft.AspNetCore.Hosting;
 
 namespace MovieApp.Controllers
 {
     public class AccountController : Controller
     {
         private readonly MovieAppContext _context;
+        private readonly IWebHostEnvironment _hostEnvironment;
+
 
         public AccountController(MovieAppContext context)
         {
@@ -39,23 +43,26 @@ namespace MovieApp.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Login(LoginViewModel model)
         {
-            var user = _context.Account.FirstOrDefault(u => u.Email == model.Email && u.Password == model.Password);
-
-            if (user != null)
+            if (ModelState.IsValid)
             {
-                SignIn(user);
+                var user = _context.Account.FirstOrDefault(u => u.Email == model.Email && u.Password == model.Password);
 
-                // Handle ReturnUrl
-                string redirect = "/Home/";
-                if (Request.Cookies.ContainsKey("ReturnUrl"))
+                if (user != null)
                 {
-                    redirect = Request.Cookies["ReturnUrl"];
-                    Response.Cookies.Delete("ReturnUrl");
+                    SignIn(user);
+
+                    // Handle ReturnUrl
+                    string redirect = "/Home/";
+                    if (Request.Cookies.ContainsKey("ReturnUrl"))
+                    {
+                        redirect = Request.Cookies["ReturnUrl"];
+                        Response.Cookies.Delete("ReturnUrl");
+                    }
+
+                    return Redirect(redirect);
                 }
 
-                return Redirect(redirect);
             }
-
             // If we got this far, something failed, redisplay form
             return View();
         }
@@ -66,7 +73,8 @@ namespace MovieApp.Controllers
 
             var claims = new List<Claim>{
                 new Claim(ClaimTypes.Name, user.Username),
-                new Claim(ClaimTypes.Role, user.Type.ToString())};
+                new Claim(ClaimTypes.Role, user.Type.ToString())
+            };
 
             var claimsIdentity = new ClaimsIdentity(
                 claims, CookieAuthenticationDefaults.AuthenticationScheme);
@@ -100,13 +108,30 @@ namespace MovieApp.Controllers
                     return View();
                 }
 
+                if (model.ProfileImage != null)
+                {
+                    //upload files to wwwroot
+                    string fileName = Path.GetFileNameWithoutExtension(model.ProfileImage.FileName);
+                    string extension = Path.GetExtension(model.ProfileImage.FileName);
+                    model.ProfileImageUrl = fileName = fileName + DateTime.Now.ToString("yymmssfff") + extension;
+                    string path = Path.Combine(_hostEnvironment.WebRootPath + "/img/accounts/", fileName);
+
+                    using (var fileStream = new FileStream(path, FileMode.Create))
+                    {
+                        await model.ProfileImage.CopyToAsync(fileStream);
+                    }
+                }
+
+
                 // Create new account object
                 Account newAccount = new Account()
                 {
                     Username = model.Username,
                     Password = model.Password,
                     Email = model.Email,
-                    Type = Account.UserType.Customer
+                    Type = Account.UserType.Customer,
+                    ProfileImageUrl= model.ProfileImageUrl,
+                    ProfileImage = model.ProfileImage
                 };
 
                 try

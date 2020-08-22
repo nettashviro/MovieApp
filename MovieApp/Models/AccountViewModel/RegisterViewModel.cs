@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Http;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MovieApp.Models.AccountViewModel
 {
@@ -24,5 +26,13 @@ namespace MovieApp.Models.AccountViewModel
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+
+        /*    [Required]
+            [NotMapped]
+            [Display(Name = "Picture")]
+            public IFormFile ProfileImage { get; set; }
+
+
+            public string ProfileImageUrl { get; set; }*/
     }
 }

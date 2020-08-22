@@ -21,8 +21,9 @@ namespace MovieApp.Data
                              Username ="Admin",
                              Password = "Admin",
                              Email = "admin@gmail.com",
-                             Type = Account.UserType.Admin
-                          
+                             Type = Account.UserType.Admin,
+                             ProfileImageUrl= "a"
+
                         },
                          new Account
                          {
@@ -30,7 +31,9 @@ namespace MovieApp.Data
                              Username ="Customer",
                              Password = "Customer",
                              Email = "customer@gmail.com",
-                             Type = Account.UserType.Customer
+                             Type = Account.UserType.Customer,
+                             ProfileImageUrl= "a"
+
                          }
                    }
               );

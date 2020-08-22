@@ -65,6 +65,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="wwwroot\img\accounts\" />
     <Folder Include="wwwroot\img\officials\" />
     <Folder Include="wwwroot\img\movies\" />
     <Folder Include="wwwroot\img\movies\" />

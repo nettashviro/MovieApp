@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MovieApp.Data;
 
 namespace MovieApp.Migrations
 {
     [DbContext(typeof(MovieAppContext))]
-    partial class MovieAppContextModelSnapshot : ModelSnapshot
+    [Migration("20200822111442_add-profile-img")]
+    partial class addprofileimg
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -36,6 +38,7 @@ namespace MovieApp.Migrations
                         .HasMaxLength(100);
 
                     b.Property<string>("ProfileImageUrl")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Type")
