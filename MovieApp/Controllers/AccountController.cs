@@ -26,9 +26,10 @@ namespace MovieApp.Controllers
         private readonly IWebHostEnvironment _hostEnvironment;
 
 
-        public AccountController(MovieAppContext context)
+        public AccountController(MovieAppContext context, IWebHostEnvironment hostEnvironment)
         {
             _context = context;
+            this._hostEnvironment = hostEnvironment;
         }
 
         [HttpGet]
@@ -73,8 +74,14 @@ namespace MovieApp.Controllers
 
             var claims = new List<Claim>{
                 new Claim(ClaimTypes.Name, user.Username),
-                new Claim(ClaimTypes.Role, user.Type.ToString())
+                new Claim(ClaimTypes.Role, user.Type.ToString()),
+                new Claim(ClaimTypes.Email, user.Email)
             };
+
+            if (user.ProfileImageUrl != null)
+            {
+                claims.Add(new Claim(ClaimTypes.Uri, user.ProfileImageUrl));
+            }
 
             var claimsIdentity = new ClaimsIdentity(
                 claims, CookieAuthenticationDefaults.AuthenticationScheme);
@@ -97,7 +104,7 @@ namespace MovieApp.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Register(RegisterViewModel model)
+        public async Task<IActionResult> Register([Bind("Email,Username,Password,ConfirmPassword,ProfileImage,ProfileImageUrl")] RegisterViewModel model)
         {
             if (ModelState.IsValid)
             { 
@@ -110,6 +117,7 @@ namespace MovieApp.Controllers
 
                 if (model.ProfileImage != null)
                 {
+
                     //upload files to wwwroot
                     string fileName = Path.GetFileNameWithoutExtension(model.ProfileImage.FileName);
                     string extension = Path.GetExtension(model.ProfileImage.FileName);
@@ -120,8 +128,7 @@ namespace MovieApp.Controllers
                     {
                         await model.ProfileImage.CopyToAsync(fileStream);
                     }
-                }
-
+                } 
 
                 // Create new account object
                 Account newAccount = new Account()
@@ -130,8 +137,7 @@ namespace MovieApp.Controllers
                     Password = model.Password,
                     Email = model.Email,
                     Type = Account.UserType.Customer,
-                    ProfileImageUrl= model.ProfileImageUrl,
-                    ProfileImage = model.ProfileImage
+                    ProfileImageUrl= model.ProfileImageUrl
                 };
 
                 try

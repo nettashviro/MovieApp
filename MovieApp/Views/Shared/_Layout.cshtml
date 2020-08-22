@@ -42,9 +42,12 @@
     @RenderSection("HeadScripts", required: false)
 </head>
 <body>
+    @{bool isUserConnected = User.Identity.IsAuthenticated; }
+    @{ string imgProfile = @Context.User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Uri)?.Value;}
+    @{ string username = @Context.User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Name)?.Value;}
     <!---------------- SIDEBAR ---------------->
 
-    @if (User.Identity.IsAuthenticated)
+    @if (isUserConnected)
     {
         <nav class="navbar navbar-vertical fixed-right navbar-expand-md navbar-dark bg-dark sidebar" id="sidenav-main">
             <div class="container-fluid">
@@ -67,10 +70,19 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <div class="media align-items-center">
+                                @if (isUserConnected)
+                                {
                                 <span class="avatar avatar-sm rounded-circle">
-                                    @*TODO: ADD USER IMG PROFILE*@
-                                    <img alt="Image placeholder" src="~/img/accounts/team-1-800x800.jpg">
+                                    @if (imgProfile != null)
+                                    {
+                                        <img alt="Profile img" src=@("/img/accounts/" + imgProfile)>
+                                    }
+                                    else
+                                    {
+                                        <img alt="Profile img" src=@("/img/accounts/default.png")>
+                                    }
                                 </span>
+                                }
                             </div>
                         </a>
 
@@ -117,84 +129,91 @@
         </nav>
     }
 
-        <!---------------- MAIN ---------------->
-        <div class="main-content">
-            <!-- TopNav -->
-            <nav class="navbar navbar-top navbar-expand navbar-dark bg-danger border-bottom">
-                <div class="container-fluid">
-                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <!---------------- MAIN ---------------->
+    <div class="main-content">
+        <!-- TopNav -->
+        <nav class="navbar navbar-top navbar-expand navbar-dark bg-danger border-bottom">
+            <div class="container-fluid">
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
 
-                        @*                    <partial name="NavbarSearch" />
-                        *@
+                    <!-- Navbar links -->
+                    <!-- Current user (right part of the website) -->
+                    <ul class="navbar-nav align-items-center mr-auto ">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link pr-0" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <div class="media align-items-center">
+                                    @if (isUserConnected)
+                                    {
+                                    <span class="avatar avatar-sm rounded-circle">
 
-                        <!-- Navbar links -->
-                        <!-- Current user (right part of the website) -->
-                        <ul class="navbar-nav align-items-center mr-auto ">
-                            <li class="nav-item dropdown">
-                                <a class="nav-link pr-0" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <div class="media align-items-center">
-                                        @*TODO: ADD USER IMG PROFILE*@
-                                        <span class="avatar avatar-sm rounded-circle">
-                                            <img alt="Image placeholder" src="~/img/theme/team-4.jpg">
+                                        @if (imgProfile != null)
+                                        {
+                                            <img alt="Profile img" src=@("/img/accounts/" + imgProfile)>
+                                        }
+                                        else
+                                        {
+                                            <img alt="Profile img" src=@("/img/accounts/default.png")>
+                                        }
+                                    </span>
+                                    }
+                                    <div class="media-body  mr-2  d-none d-lg-block">
+                                        <span class="mb-0 text-sm  font-weight-bold">
+                                            @if (isUserConnected)
+                                            {
+                                                @username
+                                            }
+                                            else
+                                            { <span>Guest</span>}
                                         </span>
-                                        <div class="media-body  mr-2  d-none d-lg-block">
-                                            <span class="mb-0 text-sm  font-weight-bold">
-                                                @if (User.Identity.IsAuthenticated)
-                                                {
-                                                    @Context.User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Name)?.Value
-                                                }
-                                                else
-                                                { <span>Guest</span>}
-                                            </span>
-                                        </div>
                                     </div>
-                                </a>
+                                </div>
+                            </a>
 
-                                <partial name="UserMenu" />
+                            <partial name="UserMenu" />
 
-                            </li>
-                        </ul>
-                    </div>
+                        </li>
+                    </ul>
                 </div>
-            </nav>
-
-            @RenderSection("VideoSection", required: false)
-
-            <!-- Page content -->
-            <div class="container-fluid rendered-content">
-                <!-- Page content -->
-                @RenderBody()
-
             </div>
+        </nav>
 
+        @RenderSection("VideoSection", required: false)
 
-            <partial name="Footer" />
-
+        <!-- Page content -->
+        <div class="container-fluid rendered-content">
+            <!-- Page content -->
+            @RenderBody()
 
         </div>
 
-        <!-- Argon Scripts -->
-        <!-- Core -->
-        <script src="~/vendor/jquery/dist/jquery.min.js" asp-append-version="true"></script>
-        <script src="~/vendor/bootstrap/dist/js/bootstrap.bundle.min.js" asp-append-version="true"></script>
-        <script src="~/vendor/js-cookie/js.cookie.js" asp-append-version="true"></script>
-        <script src="~/vendor/jquery.scrollbar/jquery.scrollbar.min.js" asp-append-version="true"></script>
-        <script src="~/vendor/jquery-scroll-lock/dist/jquery-scrollLock.min.js" asp-append-version="true"></script>
-        <!-- Docs JS -->
-        <script src="~/vendor/anchor-js/anchor.min.js" asp-append-version="true"></script>
-        <script src="~/vendor/clipboard/dist/clipboard.min.js" asp-append-version="true"></script>
-        <script src="~/vendor/holderjs/holder.min.js" asp-append-version="true"></script>
-        <script src="~/vendor/prismjs/prism.js" asp-append-version="true"></script>
-        <!-- Optional JS -->
-        <script src="~/vendor/chart.js/dist/Chart.min.js" asp-append-version="true"></script>
-        <script src="~/vendor/chart.js/dist/Chart.extension.js" asp-append-version="true"></script>
-        <script src="~/vendor/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js" asp-append-version="true"></script>
-        <!-- Argon JS -->
-        <script src="~/js/argon.min.js" asp-append-version="true"></script>
 
-        <!--MovieApp JS -->
-        <script src="~/js/site.js" asp-append-version="true"></script>
+        <partial name="Footer" />
 
-        @RenderSection("Scripts", required: false)
-    </body>
+
+    </div>
+
+    <!-- Argon Scripts -->
+    <!-- Core -->
+    <script src="~/vendor/jquery/dist/jquery.min.js" asp-append-version="true"></script>
+    <script src="~/vendor/bootstrap/dist/js/bootstrap.bundle.min.js" asp-append-version="true"></script>
+    <script src="~/vendor/js-cookie/js.cookie.js" asp-append-version="true"></script>
+    <script src="~/vendor/jquery.scrollbar/jquery.scrollbar.min.js" asp-append-version="true"></script>
+    <script src="~/vendor/jquery-scroll-lock/dist/jquery-scrollLock.min.js" asp-append-version="true"></script>
+    <!-- Docs JS -->
+    <script src="~/vendor/anchor-js/anchor.min.js" asp-append-version="true"></script>
+    <script src="~/vendor/clipboard/dist/clipboard.min.js" asp-append-version="true"></script>
+    <script src="~/vendor/holderjs/holder.min.js" asp-append-version="true"></script>
+    <script src="~/vendor/prismjs/prism.js" asp-append-version="true"></script>
+    <!-- Optional JS -->
+    <script src="~/vendor/chart.js/dist/Chart.min.js" asp-append-version="true"></script>
+    <script src="~/vendor/chart.js/dist/Chart.extension.js" asp-append-version="true"></script>
+    <script src="~/vendor/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js" asp-append-version="true"></script>
+    <!-- Argon JS -->
+    <script src="~/js/argon.min.js" asp-append-version="true"></script>
+
+    <!--MovieApp JS -->
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @RenderSection("Scripts", required: false)
+</body>
 </html>

@@ -31,12 +31,10 @@ $(function () {
     });
 
     $('.preview-section').on('click', '.remove_img_preview', function () {
-        $('input.upload-img').val("");
-        $('input.imgUpload').remove();
-
+        $(".upload-img").val("")
 
         $(this).parent('.preview-section').prev().show();
-        $(this).parent('.preview-section').remove();
+        $(this).parent('.preview-section').html("");
     });
 });
 

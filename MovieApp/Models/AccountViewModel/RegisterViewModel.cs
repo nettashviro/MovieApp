@@ -27,12 +27,12 @@ namespace MovieApp.Models.AccountViewModel
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
 
-        /*    [Required]
-            [NotMapped]
-            [Display(Name = "Picture")]
-            public IFormFile ProfileImage { get; set; }
+        [Required]
+        [NotMapped]
+        [Display(Name = "Picture")]
+        public IFormFile ProfileImage { get; set; }
 
 
-            public string ProfileImageUrl { get; set; }*/
+        public string ProfileImageUrl { get; set; }
     }
 }

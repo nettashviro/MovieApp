@@ -36,12 +36,6 @@ namespace MovieApp.Models
         public UserType Type { get; set; }
         public ICollection<Movie> MovieWatched { get; set; }
 
-/*
-        [NotMapped]
-        [Display(Name = "Picture")]
-        public IFormFile ProfileImage { get; set; }
-
-        [DefaultValue("hey")]
-        public string ProfileImageUrl { get; set; }*/
+        public string ProfileImageUrl { get; set; }
     }
 }

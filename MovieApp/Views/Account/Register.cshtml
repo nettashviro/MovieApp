@@ -14,7 +14,7 @@
                     <br />
                     <strong> <a asp-action="Login">Click to login</a></strong>
                 </div>
-                <form asp-action="Register" method="post" role="form">
+                <form asp-action="Register" method="post" role="form" enctype="multipart/form-data">
                     @if (!ViewData.ModelState.IsValid && ViewData.ModelState[string.Empty] != null)
                     {
                         @foreach (var error in @ViewData.ModelState[string.Empty]?.Errors)
@@ -82,31 +82,30 @@
                         </div>
                         <span asp-validation-for="ConfirmPassword" class="invalid-feedback" style="display: block"></span>
                     </div>
-                    <!--<div class="form-group ">-->
-                        @* <div class="post-image-collection">
+                    <div class="form-group ">
+                         <div class="post-image-collection">
             <div class="post-image empty">
                 <div class="upload-section">
                     <input asp-for="ProfileImage" class="form-control upload-img" accept="image/*" />
-                    <label class="icon-camera" for="ProfileImage">
-                        <img src="https://cdn.onlinewebfonts.com/svg/img_134042.png" />
-                    </label>
-                    <p class="uppercase">Profile Img</p>
-                </div>
-                <div class="preview-section"></div>
-
+                <label class="icon-camera" for="ProfileImage">
+                    <img src="https://cdn.onlinewebfonts.com/svg/img_134042.png" />
+                </label>
+                <p class="uppercase">Profile Img</p>
             </div>
-            <span asp-validation-for="ProfileImage" class="text-danger"></span>
+            <div class="preview-section"></div>
+
+        </div>
+        <span asp-validation-for="ProfileImage" class="text-danger"></span>
 
 
-        </div>*@
-                        <!--<input class="form-control" asp-for="ProfileImage" accept="image/*" placeholder="Profile Img" />
-                        <span asp-validation-for="ProfileImage" class="text-danger"></span>
-                    </div>-->
+    </div>
+
+                    </div>
 
                     <div class="text-center">
                         <button class="btn btn-primary mt-4" type="submit">Create account</button>
                     </div>
-                </form>
+</form>
             </div>
         </div>
     </div>
