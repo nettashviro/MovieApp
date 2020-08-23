@@ -228,8 +228,8 @@ namespace MovieApp.Controllers
         public async Task<IActionResult> CountriesMapped()
         {
             var allMovies = await _context.Movie.ToListAsync();
-            ViewBag.locations = allMovies.ToDictionary(movie => movie.Name,
-                movie => new { country = movie.Country, imageUrl = movie.ImageUrl });
+            ViewBag.locations = allMovies.ToDictionary(movie => "Id" + movie.Id,
+                movie => new { name = movie.Name, country = movie.Country, imageUrl = movie.ImageUrl });
 
             return View();
         }
