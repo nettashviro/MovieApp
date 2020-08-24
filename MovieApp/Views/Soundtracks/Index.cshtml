@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "Index";
 }
+@{ string userType = @Context.User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Role)?.Value;}
 
 <h1>Index</h1>
 
@@ -28,26 +29,32 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Duration)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Writer)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Performer)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Duration)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Writer)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Performer)
+                </td>
+                <td>
+                    @if (userType == Account.UserType.Admin.ToString())
+                    {
+                        <a class="btn btn-secondary btn-sm fa fa-trash mr-3" asp-action="Delete" asp-route-id="@item.Id"></a>
+
+                    }
+                    <a class="btn btn-secondary btn-sm fa fa-edit mr-3" asp-action="Edit" asp-route-id="@item.Id"></a>
+
+                    <a class="btn btn-secondary btn-sm fa fa-info-circle mr-3" asp-action="Details" asp-route-id="@item.Id"></a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

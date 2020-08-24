@@ -21,14 +21,12 @@ namespace MovieApp.Controllers
             _context = context;
         }
 
-        [AllowAnonymous]
         // GET: Soundtracks
         public async Task<IActionResult> Index()
         {
             return View(await _context.Soundtrack.ToListAsync());
         }
 
-        [AllowAnonymous]
         // GET: Soundtracks/Details/5
         public async Task<IActionResult> Details(int? id)
         {
