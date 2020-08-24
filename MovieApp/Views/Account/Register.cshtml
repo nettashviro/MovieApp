@@ -8,13 +8,13 @@
     <div class="col-lg-6 col-md-8">
         <div class="card bg-secondary shadow border-0">
 
-            <div class="card-body px-lg-5 py-lg-5" dir="ltr">
-                <div class="text-center text-muted mb-4">
-                    <small>Already a member?</small>
+            <div class="card-body px-lg-5 py-lg-5" >
+                <div class="text-center text-muted mb-4" dir="rtl">
+                    <small>נרשמת כבר?</small>
                     <br />
-                    <strong> <a asp-action="Login">Click to login</a></strong>
+                    <strong> <a asp-action="Login">תתחבר עכשיו!</a></strong>
                 </div>
-                <form asp-action="Register" method="post" role="form" enctype="multipart/form-data">
+                <form asp-action="Register" method="post" role="form" dir="ltr"  enctype="multipart/form-data">
                     @if (!ViewData.ModelState.IsValid && ViewData.ModelState[string.Empty] != null)
                     {
                         @foreach (var error in @ViewData.ModelState[string.Empty]?.Errors)
@@ -88,7 +88,7 @@
                 <div class="upload-section">
                     <input asp-for="ProfileImage" class="form-control upload-img" accept="image/*" />
                 <label class="icon-camera" for="ProfileImage">
-                    <img src="https://cdn.onlinewebfonts.com/svg/img_134042.png" />
+                    <img src=@("/img/icons/cameraPlus.png") />
                 </label>
                 <p class="uppercase">Profile Img</p>
             </div>
@@ -103,7 +103,7 @@
                     </div>
 
                     <div class="text-center">
-                        <button class="btn btn-primary mt-4" type="submit">Create account</button>
+                        <button class="btn btn-primary mt-4" type="submit">צור משתמש</button>
                     </div>
 </form>
             </div>

@@ -17,6 +17,8 @@ using MovieApp.Services;
 
 namespace MovieApp.Controllers
 {
+    [Authorize]
+
     public class MoviesController : Controller
     {
         private readonly MovieAppContext _context;

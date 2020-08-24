@@ -3,16 +3,16 @@
     ViewData["Title"] = "Login";
 }
 
-<div class="row justify-content-center" dir="ltr">
+<div class="row justify-content-center">
     <div class="col-lg-5 col-md-7">
         <div class="card bg-secondary shadow border-0">
             <div class="card-body px-lg-5 py-lg-5">
-                <div class="text-center text-muted mb-4">
-                    <small>Not a member already?</small>
+                <div class="text-center text-muted mb-4" dir="rtl">
+                    <small>לא רשום עדיין?</small>
                     <br />
-                    <strong> <a asp-action="Register">Create an Account Now!</a></strong>
+                    <strong> <a asp-action="Register">תיצור משתמש עכשיו!</a></strong>
                 </div>
-                <form id="account" asp-action="Login">
+                <form id="account" asp-action="Login" dir="ltr">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
                     @if (!ViewData.ModelState.IsValid && ViewData.ModelState[string.Empty] != null)
@@ -60,8 +60,8 @@
                         <span asp-validation-for="Password" class="invalid-feedback" style="display: block"></span>
                     </div>
 
-                    <div class="text-center">
-                        <button class="btn btn-primary my-4" type="submit">Sign in</button>
+                    <div class="text-center" dir="rtl">
+                        <button class="btn btn-primary my-4" type="submit">התחבר</button>
                     </div>
                 </form>
             </div>

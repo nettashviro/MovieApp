@@ -104,7 +104,7 @@ namespace MovieApp.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Register([Bind("Email,Username,Password,ConfirmPassword,ProfileImage,ProfileImageUrl")] RegisterViewModel model)
+        public async Task<IActionResult> Register(RegisterViewModel model)
         {
             if (ModelState.IsValid)
             { 
@@ -114,6 +114,15 @@ namespace MovieApp.Controllers
                     ViewData["Message"] = $"{model.Email} already exists";
                     return View();
                 }
+
+                // Create new account object
+                Account newAccount = new Account()
+                {
+                    Username = model.Username,
+                    Password = model.Password,
+                    Email = model.Email,
+                    Type = Account.UserType.Customer
+                };
 
                 if (model.ProfileImage != null)
                 {
@@ -128,18 +137,11 @@ namespace MovieApp.Controllers
                     {
                         await model.ProfileImage.CopyToAsync(fileStream);
                     }
+
+                    newAccount.ProfileImageUrl = model.ProfileImageUrl;
                 } 
 
-                // Create new account object
-                Account newAccount = new Account()
-                {
-                    Username = model.Username,
-                    Password = model.Password,
-                    Email = model.Email,
-                    Type = Account.UserType.Customer,
-                    ProfileImageUrl= model.ProfileImageUrl
-                };
-
+ 
                 try
                 {
                     // Add object to context db
