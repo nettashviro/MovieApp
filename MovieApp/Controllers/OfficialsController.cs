@@ -26,14 +26,12 @@ namespace MovieApp.Controllers
             this._hostEnvironment = hostEnvironment;
         }
 
-        [AllowAnonymous]
         // GET: Officials
         public async Task<IActionResult> Index()
         {
             return View(await _context.Official.ToListAsync());
         }
 
-        [AllowAnonymous]
         // GET: Officials/Details/5
         public async Task<IActionResult> Details(int? id)
         {
