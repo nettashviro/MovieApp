@@ -1,11 +1,9 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "Map";
 }
 
-
 <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBAcpASlmqwBs5DpRzYzOo4-Tymi8lnp_o&callback=initMap&libraries=&v=weekly"
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBAcpASlmqwBs5DpRzYzOo4-Tymi8lnp_o&callback=initMap&libraries=geometry&v=weekly"
         defer></script>
 <style type="text/css">
         #map {
@@ -23,15 +21,65 @@
     "use strict";
 
     let map;
+    var locationsToPlace = @Json.Serialize(ViewBag.locations);
 
     function initMap() {
-    map = new google.maps.Map(document.getElementById("map"), {
-        center: {
-            lat: 31.771959,
-            lng: 35.217018
-        },
-        zoom: 8
-    });
+        map = new google.maps.Map(document.getElementById("map"), {
+            center: {
+                lat: 31.771959,
+                lng: 35.217018
+            },
+            zoom: 2
+        });
+
+        let geocoder = new google.maps.Geocoder();
+
+        for (var locationId in locationsToPlace) {
+            geocoder.geocode({ 'address': locationsToPlace[locationId].country }, geocodeEncapsulation(locationId));
+        }
+    }
+
+    function geocodeEncapsulation(locationId) {
+        return (function (results, status) {
+
+            var contentString = '<div style="display:flex; flex-direction:column;  padding: 10px;">' +
+                '<div>' +
+                '<div style="float:left">' +
+                `<img src="/img/movies/${locationsToPlace[locationId].imageUrl}" width="50" height="50">` +
+                '</div>' +
+                '<div style="float: right;">' +
+                `<h3>${locationsToPlace[locationId].name}</h3>` +
+                `<h5>${locationsToPlace[locationId].country}</h5>` +
+                '</div>' +
+                '</div>' +
+                `<div><a href="/Movies/Details/${locationId.substring(2)}">Click here</a> to learn more</div>` +
+                '</div>';
+
+            var infowindow = new google.maps.InfoWindow({ maxWidth: 1000 });
+
+            if (status == google.maps.GeocoderStatus.OK) {
+
+                var randomPlaceInCountry = google.maps.geometry.spherical.computeOffset(results[0].geometry.location,
+                    Math.floor(Math.random() * 5000), Math.floor(Math.random() * 360));
+
+                var marker = new google.maps.Marker({
+                    position: randomPlaceInCountry,
+                    map: map,
+                    title: locationsToPlace[locationId].name
+                });
+
+                google.maps.event.addListener(marker, 'click', (function (marker, contentString, infowindow) {
+                    return function () {
+                        infowindow.setContent(contentString);
+                        infowindow.open(map, marker);
+                    };
+                })(marker, contentString, infowindow));
+
+            } else {
+                alert("Could not find location: " + locationsToPlace[locationId].country);
+            }
+        });
     }
 </script>
+
 <div id="map"></div>
