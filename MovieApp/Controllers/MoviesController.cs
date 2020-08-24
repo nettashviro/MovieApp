@@ -17,6 +17,8 @@ using MovieApp.Services;
 
 namespace MovieApp.Controllers
 {
+    [Authorize]
+
     public class MoviesController : Controller
     {
         private readonly MovieAppContext _context;
@@ -241,6 +243,16 @@ namespace MovieApp.Controllers
             _context.Movie.Remove(movie);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+        // GET: Movies/CountriesMapped
+        public async Task<IActionResult> CountriesMapped()
+        {
+            var allMovies = await _context.Movie.ToListAsync();
+            ViewBag.locations = allMovies.ToDictionary(movie => "Id" + movie.Id,
+                movie => new { name = movie.Name, country = movie.Country, imageUrl = movie.ImageUrl });
+
+            return View();
         }
 
         private bool MovieExists(int id)
