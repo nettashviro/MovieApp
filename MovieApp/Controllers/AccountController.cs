@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
-using System.Text;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using MovieApp.Data;
@@ -13,8 +11,6 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using System.Linq;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
 
@@ -24,12 +20,17 @@ namespace MovieApp.Controllers
     {
         private readonly MovieAppContext _context;
         private readonly IWebHostEnvironment _hostEnvironment;
-
+        public Account account;
 
         public AccountController(MovieAppContext context, IWebHostEnvironment hostEnvironment)
         {
             _context = context;
             this._hostEnvironment = hostEnvironment;
+        }
+
+        public Account GetAccount()
+        {
+            return account;
         }
 
         [HttpGet]
@@ -50,6 +51,8 @@ namespace MovieApp.Controllers
 
                 if (user != null)
                 {
+                    account = user;
+
                     SignIn(user);
 
                     // Handle ReturnUrl
@@ -59,7 +62,6 @@ namespace MovieApp.Controllers
                         redirect = Request.Cookies["ReturnUrl"];
                         Response.Cookies.Delete("ReturnUrl");
                     }
-
                     return Redirect(redirect);
                 }
 

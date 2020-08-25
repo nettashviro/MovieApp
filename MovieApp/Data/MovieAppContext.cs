@@ -9,6 +9,10 @@ namespace MovieApp.Data
 {
     public class MovieAppContext : DbContext
     {
+        public MovieAppContext()
+        {
+        }
+
         public MovieAppContext (DbContextOptions<MovieAppContext> options)
             : base(options)
         {
@@ -22,5 +26,8 @@ namespace MovieApp.Data
 
         public DbSet<MovieApp.Models.MovieReview> MovieReview { get; set; }
         public DbSet<MovieApp.Models.Account> Account { get; set; }
+
+        public DbSet<MovieApp.Models.Tweet> Tweet { get; set; }
+
     }
 }

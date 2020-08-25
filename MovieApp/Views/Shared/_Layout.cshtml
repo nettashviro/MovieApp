@@ -72,16 +72,16 @@
                             <div class="media align-items-center">
                                 @if (isUserConnected)
                                 {
-                                <span class="avatar avatar-sm rounded-circle">
-                                    @if (imgProfile != null)
-                                    {
-                                        <img alt="Profile img" src=@("/img/accounts/" + imgProfile)>
-                                    }
-                                    else
-                                    {
-                                        <img alt="Profile img" src=@("/img/accounts/default.png")>
-                                    }
-                                </span>
+                                    <span class="avatar avatar-sm rounded-circle">
+                                        @if (imgProfile != null)
+                                        {
+                                            <img alt="Profile img" src=@("/img/accounts/" + imgProfile)>
+                                        }
+                                        else
+                                        {
+                                            <img alt="Profile img" src=@("/img/accounts/default.png")>
+                                        }
+                                    </span>
                                 }
                             </div>
                         </a>
@@ -133,17 +133,17 @@
                                 <div class="media align-items-center">
                                     @if (isUserConnected)
                                     {
-                                    <span class="avatar avatar-sm rounded-circle">
+                                        <span class="avatar avatar-sm rounded-circle">
 
-                                        @if (imgProfile != null)
-                                        {
-                                            <img alt="Profile img" src=@("/img/accounts/" + imgProfile)>
-                                        }
-                                        else
-                                        {
-                                            <img alt="Profile img" src=@("/img/accounts/default.png")>
-                                        }
-                                    </span>
+                                            @if (imgProfile != null)
+                                            {
+                                                <img alt="Profile img" src=@("/img/accounts/" + imgProfile)>
+                                            }
+                                            else
+                                            {
+                                                <img alt="Profile img" src=@("/img/accounts/default.png")>
+                                            }
+                                        </span>
                                     }
                                     <div class="media-body  mr-2  d-none d-lg-block">
                                         <span class="mb-0 text-sm  font-weight-bold">
@@ -181,28 +181,29 @@
 
     </div>
 
-        <!-- Argon Scripts -->
-        <!-- Core -->
-        <script src="~/vendor/jquery/dist/jquery.min.js" asp-append-version="true"></script>
-        <script src="~/vendor/bootstrap/dist/js/bootstrap.bundle.min.js" asp-append-version="true"></script>
-        <script src="~/vendor/js-cookie/js.cookie.js" asp-append-version="true"></script>
-        <script src="~/vendor/jquery.scrollbar/jquery.scrollbar.min.js" asp-append-version="true"></script>
-        <script src="~/vendor/jquery-scroll-lock/dist/jquery-scrollLock.min.js" asp-append-version="true"></script>
-        <!-- Docs JS -->
-        <script src="~/vendor/anchor-js/anchor.min.js" asp-append-version="true"></script>
-        <script src="~/vendor/clipboard/dist/clipboard.min.js" asp-append-version="true"></script>
-        <script src="~/vendor/holderjs/holder.min.js" asp-append-version="true"></script>
-        <script src="~/vendor/prismjs/prism.js" asp-append-version="true"></script>
-        <!-- Optional JS -->
-        <script src="~/vendor/chart.js/dist/Chart.min.js" asp-append-version="true"></script>
-        <script src="~/vendor/chart.js/dist/Chart.extension.js" asp-append-version="true"></script>
-        <script src="~/vendor/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js" asp-append-version="true"></script>
-        <!-- Argon JS -->
-        <script src="~/js/argon.js" asp-append-version="true"></script>
+    <!-- Argon Scripts -->
+    <!-- Core -->
+    <script src="~/vendor/jquery/dist/jquery.min.js" asp-append-version="true"></script>
+    <script src="~/vendor/bootstrap/dist/js/bootstrap.bundle.min.js" asp-append-version="true"></script>
+    <script src="~/vendor/js-cookie/js.cookie.js" asp-append-version="true"></script>
+    <script src="~/vendor/jquery.scrollbar/jquery.scrollbar.min.js" asp-append-version="true"></script>
+    <script src="~/vendor/jquery-scroll-lock/dist/jquery-scrollLock.min.js" asp-append-version="true"></script>
+    <!-- Docs JS -->
+    <script src="~/vendor/anchor-js/anchor.min.js" asp-append-version="true"></script>
+    <script src="~/vendor/clipboard/dist/clipboard.min.js" asp-append-version="true"></script>
+    <script src="~/vendor/holderjs/holder.min.js" asp-append-version="true"></script>
+    <script src="~/vendor/prismjs/prism.js" asp-append-version="true"></script>
+    <!-- Optional JS -->
+    <script src="~/vendor/chart.js/dist/Chart.min.js" asp-append-version="true"></script>
+    <script src="~/vendor/chart.js/dist/Chart.extension.js" asp-append-version="true"></script>
+    <script src="~/vendor/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js" asp-append-version="true"></script>
+    <!-- Argon JS -->
+    <script src="~/js/argon.js" asp-append-version="true"></script>
 
-        <!--MovieApp JS -->
-        <script src="~/js/site.js" asp-append-version="true"></script>
+    <!--MovieApp JS -->
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
-        @RenderSection("Scripts", required: false)
-    </body>
+    @RenderSection("Scripts", required: false)
+</body>
 </html>

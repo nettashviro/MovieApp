@@ -4,6 +4,8 @@
     ViewData["Title"] = "מאגר הסרטים";
 }
 
+@{ var account = ViewData["account"] as Account;}
+
 @{ string userType = @Context.User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Role)?.Value;}
 <h1>מאגר הסרטים</h1>
 
@@ -14,6 +16,8 @@
         <table class="table align-items-center table-flush">
             <thead class="thead-light">
                 <tr>
+                    <th>
+                    </th>
                     <th>
                         @Html.DisplayNameFor(model => model.Image)
                     </th>
@@ -51,6 +55,14 @@
                 @foreach (var item in Model)
                 {
                     <tr>
+                        <td>
+                            @{var isMovieAlreadyWatched = account.MovieWatched.FirstOrDefault(m => m.Id == item.Id);}
+                            @{string icon = (isMovieAlreadyWatched == null) ? "fa-eye" : "fa-eye-slash";
+                            }
+                            <form asp-action="@((isMovieAlreadyWatched == null)? "AddMovieWatched": "DeleteMovieWatched")" asp-route-id="@item.Id"  method="post">
+                                <button type="submit" class="btn btn-secondary btn-sm fa @icon mr-3"></button>
+                            </form>
+                        </td>
                         <td>
                             <img src="@("/img/movies/"+ item.ImageUrl)" width="30" height="30">
                         </td>

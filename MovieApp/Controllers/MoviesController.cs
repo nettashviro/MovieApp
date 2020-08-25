@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
@@ -24,16 +26,23 @@ namespace MovieApp.Controllers
         private readonly MovieAppContext _context;
         private readonly IWebHostEnvironment _hostEnvironment;
         private TMDB TMDBService = new TMDB();
+        private TwitterController twitter;
 
         public MoviesController(MovieAppContext context, IWebHostEnvironment hostEnvironment)
         {
+            twitter = new TwitterController(context);
             _context = context;
             this._hostEnvironment = hostEnvironment;
+
         }
 
         // GET: Movies
         public async Task<IActionResult> Index()
         {
+            var userId = User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Email)?.Value;
+
+            Account account = await _context.Account.FirstOrDefaultAsync(m => m.Email == userId);
+            ViewData["account"] = account;
             return View(await _context.Movie.ToListAsync());
         }
 
@@ -96,6 +105,25 @@ namespace MovieApp.Controllers
 
                 _context.Add(movie);
                 await _context.SaveChangesAsync();
+
+                var userId = User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Email)?.Value;
+
+                if (userId == null)
+                {
+                    return BadRequest("User email claim is empty");
+                }
+
+                try
+                {
+                    var message = "HOT ALRET: new movie was added: " + movie.Name + " Don't missed it!!";
+                    var imagePath = Path.Combine(_hostEnvironment.WebRootPath, "img/movies", movie.ImageUrl);
+
+                    await twitter.PublishTweetAsync(userId, movie.Id, message, imagePath, Tweet.TweetType.MovieAdded);
+                }
+                catch (WebException)
+                { }
+
+
                 return RedirectToAction(nameof(Index));
             }
             return View(movie);
@@ -242,6 +270,15 @@ namespace MovieApp.Controllers
 
             _context.Movie.Remove(movie);
             await _context.SaveChangesAsync();
+
+
+            try
+            {
+                await twitter.DeleteTweetAsync(movie.Id);
+            }
+            catch (WebException)
+            { }
+
             return RedirectToAction(nameof(Index));
         }
 
@@ -258,6 +295,112 @@ namespace MovieApp.Controllers
         private bool MovieExists(int id)
         {
             return _context.Movie.Any(e => e.Id == id);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> AddMovieWatched(int id)
+        {
+            if(!User.Identity.IsAuthenticated)
+            {
+                return BadRequest("User not logged in");
+            }
+
+            var userId = User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Email)?.Value;
+
+            if (userId == null)
+            {
+                return BadRequest("User email claim is empty");
+            }
+
+            var account = await _context.Account.FirstOrDefaultAsync(m => m.Email == userId);
+            if(account == null)
+            {
+                return BadRequest("User not found");
+            }
+
+            var movie = await _context.Movie.FirstOrDefaultAsync(m => m.Id == id);
+            if (movie == null)
+            {
+                return NotFound();
+            }
+
+            if (account.MovieWatched == null)
+            {
+                List<Movie> movies = new List<Movie>();
+                movies.Add(movie);
+                account.MovieWatched = movies;
+            }else
+            {
+                var isMovieAlreadyWatched = account.MovieWatched.FirstOrDefault(m => m.Id == id);
+                if(isMovieAlreadyWatched != null)
+                {
+                    return BadRequest("Movie already watched");
+                }
+
+                account.MovieWatched.Add(movie);
+            }
+            _context.SaveChanges();
+
+         
+            try
+            {
+                var message = "User " + userId + " marked the movie " + movie.Name + " as watched! Go see it if you haven't seen it already! Rating: "+ movie.Rating + " stars";
+                var imagePath = Path.Combine(_hostEnvironment.WebRootPath, "img/movies", movie.ImageUrl);
+
+                await twitter.PublishTweetAsync(userId, movie.Id, message, imagePath, Tweet.TweetType.MovieWatched);
+            }
+            catch (WebException)
+            { }
+
+
+            return RedirectToAction(nameof(Index));
+          
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> DeleteMovieWatched(int id)
+        {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return BadRequest("User not logged in");
+            }
+
+            var userId = User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Email)?.Value;
+
+            if (userId == null) return BadRequest("User email claim is empty");
+       
+            var account = await _context.Account.FirstOrDefaultAsync(m => m.Email == userId);
+
+            if (account == null) return BadRequest("User not found");
+          
+
+            var movie = await _context.Movie.FirstOrDefaultAsync(m => m.Id == id);
+            if (movie == null) return NotFound();
+
+            var isMovieAlreadyWatched = account.MovieWatched.FirstOrDefault(m => m.Id == id);
+
+            if (isMovieAlreadyWatched == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                account.MovieWatched.Remove(movie);
+            }
+
+            await _context.SaveChangesAsync();
+
+
+            try
+            {
+                await twitter.DeleteTweetAsync(movie.Id, userId, Tweet.TweetType.MovieWatched);
+            }
+            catch (WebException)
+            { }
+
+
+            return RedirectToAction(nameof(Index));
+
         }
     }
 }

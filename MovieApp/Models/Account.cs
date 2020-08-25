@@ -34,6 +34,7 @@ namespace MovieApp.Models
         public string Password { get; set; }
 
         public UserType Type { get; set; }
+
         public ICollection<Movie> MovieWatched { get; set; }
 
         public string ProfileImageUrl { get; set; }
