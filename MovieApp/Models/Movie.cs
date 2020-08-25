@@ -24,8 +24,8 @@ namespace MovieApp.Models
 
         public string TrailerUrl { get; set; }
 
-        [Range(0, 5)]
-        public float Rating { get; set; }
+        [Range(0, 10)]
+        public double Rating { get; set; }
 
         [ForeignKey("Id_Official")]
         public Official Official { get; set; }

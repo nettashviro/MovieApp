@@ -1,4 +1,10 @@
 ﻿$(document).ready(function () {
+    $(document).ajaxStart(function () {
+        $('#loaderDiv').show();
+    }).ajaxStop(function () {
+        $('#loaderDiv').hide();
+    });
+
     $.ajax({
         url: "/Movies/FindMovieReviews",
         data: "id=" + $('#movieTMDBId').text(),
@@ -28,5 +34,5 @@
                 $('#resultMessage').text("לא נמצאנו ביקורות");
             }
         }
-    });
+    });   
 });
