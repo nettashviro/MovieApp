@@ -29,7 +29,15 @@
                 }     
             }
         }); 
-    });    
+    });   
+
+    $('#loaderDiv').hide();
+    $(document).ajaxStart(function () {
+        $('#resultTable tbody').empty();
+        $('#loaderDiv').show();
+    }).ajaxStop(function () {
+        $('#loaderDiv').hide();
+    });
 });
 
 var resultList;
@@ -39,3 +47,4 @@ function chooseTMDBInfo(i) {
     $('#movieNameHebrew').val(resultList[i].title);   
     $('#TmdbRating').val(resultList[i].vote_average);
 }
+
