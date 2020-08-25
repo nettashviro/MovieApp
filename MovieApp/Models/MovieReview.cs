@@ -13,8 +13,8 @@ namespace MovieApp.Models
         [Key]
         public int Id { get; set; }
 
-        [Range(0, 5)]
-        public int Rank { get; set; }
+        [Range(0, 10)]
+        public double Rank { get; set; }
 
         [MaxLength(30)]
         public string Title { get; set; }

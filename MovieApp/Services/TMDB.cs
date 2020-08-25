@@ -18,11 +18,6 @@ namespace MovieApp.Services
         private const string url = "https://api.themoviedb.org/3/";
         private string apiKey = "c660a2bbcb461b092b1e04c1618e0a92";
 
-        private string searchMovieAction = "search/movie";
-        private string reviewsAction = "/reviews";
-        private string movieControllerName = "movie";
-
-
         public TMDB()
         {
 

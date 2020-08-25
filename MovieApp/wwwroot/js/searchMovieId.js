@@ -7,10 +7,13 @@
             success: function (result) {
                 if (result != null) {
                     if (result.length > 0) {
+
+                        resultList = result;
+
                         var tableBody = "";
 
-                        for (i = 0; i < result.length; i++) {
-                            tableBody += "<tr onclick='chooseTMDBID(" + result[i].id + ")'><td>" + result[i].id + "</td><td>" + result[i].title + "</td><td>" + result[i].release_date + "</td></tr>";
+                        for (var i = 0; i < result.length; i++) {
+                            tableBody += "<tr onclick='chooseTMDBInfo(" + i + ")'><td>" + result[i].id + "</td><td>" + result[i].title + "</td><td>" + result[i].release_date + "</td></tr>";
                         }
                         $('#resultTable tbody').html(tableBody);
                         $('#resultMessage').text("");                     
@@ -29,6 +32,10 @@
     });    
 });
 
-function chooseTMDBID(id) {
-    $('#TmdbId').val(id); ;   
+var resultList;
+
+function chooseTMDBInfo(i) {
+    $('#TmdbId').val(resultList[i].id);
+    $('#movieNameHebrew').val(resultList[i].title);   
+    $('#TmdbRating').val(resultList[i].vote_average);
 }
