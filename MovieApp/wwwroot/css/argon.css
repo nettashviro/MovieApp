@@ -19201,6 +19201,7 @@ a.btn-icon-only
     {
         padding-right: 30px !important; 
         padding-left: 30px !important;
+      
     }
 }
 
@@ -22735,7 +22736,6 @@ textarea[resize='horizontal']
 
     .navbar-collapse {
         position: absolute;
-        z-index: 1050;
         top: 0;
         right: 0;
         left: 0;
@@ -29941,9 +29941,10 @@ input.datetimepicker[data-color='yellow'] + .bootstrap-datetimepicker-widget.dro
     border-radius: 3px;
     background-color: transparent;
 }
- 
+
 .rendered-content {
     padding: 30px;
+    margin-bottom: 50px;
 }
 
 .brand-holder {
