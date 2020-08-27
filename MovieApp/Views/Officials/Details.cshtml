@@ -1,13 +1,14 @@
 ﻿@model MovieApp.Models.Official
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "פרטים";
 }
 
-<h1>Details</h1>
+@{ string userType = @Context.User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Role)?.Value;}
+<h1>פרטים</h1>
 
 <div>
-    <h4>Official</h4>
+    <h4>בעל תפקיד</h4>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
@@ -55,6 +56,14 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index" class="btn btn-primary"><i class="fa fa-arrow-right"></i> בחזרה לרשימה</a>
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary"><i class="fa fa-edit"></i> ערוך</a>
+
+    @if (userType == Account.UserType.Admin.ToString())
+    {
+        <form asp-action="Delete" style="display: inline-block;">
+            <input type="hidden" asp-for="Id" />
+            <input type="submit" value="מחק" class="btn btn-primary" />
+        </form>
+    }
 </div>

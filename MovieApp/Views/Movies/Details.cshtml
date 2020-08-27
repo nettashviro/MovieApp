@@ -1,15 +1,17 @@
 ﻿@model MovieApp.Models.Movie
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "פרטים";
 }
+
+@{ string userType = @Context.User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Role)?.Value;}
 
 <div class="row" style="margin-bottom: 50px">
     <div class="col-xl-8 order-xl-1">
         <div>
 
             <div class="card bg-secondary shadow">
-                <div class="card-header border-0">
+                <div class="card-header">
                     <h3 class="mb-0"> @Html.DisplayFor(model => model.Name)</h3>
                 </div>
                 <div class="card-body">
@@ -70,19 +72,25 @@
                         </dd>
                     </dl>
                 </div>
-            </div>
+                <div class="card-footer">
+                    <a asp-action="Index" class="btn btn-primary"><i class="fa fa-arrow-right"></i> בחזרה לרשימה</a>
+                    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary"><i class="fa fa-edit"></i> ערוך</a>
+                    <a asp-action="CountriesMapped" class="btn btn-primary"><i class="fa fa-map-marked-alt"></i> הצג על המפה</a>
 
-            <div>
-                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-danger">Edit</a>
-                <a asp-action="CountriesMapped" class="btn btn-danger">See on map</a>
-                <a asp-action="Index" class="btn btn-danger">Back to List</a>
+                    @if (userType == Account.UserType.Admin.ToString())
+                    {
+                        <form asp-action="Delete" style="display: inline-block;">
+                            <input type="hidden" asp-for="Id" />
+                            <input type="submit" value="מחק סרט" class="btn btn-primary" />
+                        </form>
+                    }
+                </div>
             </div>
-
         </div>
     </div>
     <div class="col-xl-4 order-xl-2 mb-5 mb-xl-0">
-        <div class="card shadow" >
-            <div class="card-header border-0">
+        <div class="card shadow">
+            <div class="card-header">
                 <h3 class="mb-0">ביקורות</h3>
             </div>
             <div id="card-result" class="card-body" style="overflow-y: scroll; height: 650px;">
@@ -100,6 +108,6 @@
 
 
 @section Scripts {
-    
+
     <script src="~/js/searchMovieReviews.js" asp-append-version="true"></script>
 }
