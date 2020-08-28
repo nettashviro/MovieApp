@@ -1,0 +1,31 @@
+﻿@{
+    ViewData["Title"] = "חיפוש מתקדם";
+}
+
+<div class="text-center">
+    <h1 class="display-4">חיפוש על פי פרמטר אחד</h1>
+</div>
+
+<div class="text-center row">
+    <h3 class="display-4 col-md-3">פילוח</h3>
+    <select id="spliceTarget" class="form-control col-md-3">
+        <option value="Movies">סרטים</option>
+        <option value="Officials">בעלי תפקידים</option>
+    </select>
+    <h3 class="display-4 col-md-3">לפי: </h3>
+    <select id="spliceByMoviesSelect" asp-items="Html.GetEnumSelectList<Movie.MovieSpliceOptions>()" class="form-control col-md-3 splice-by">
+        <option></option>
+    </select>
+    <select id="spliceByOfficialsSelect" asp-items="Html.GetEnumSelectList<Official.OfficialSpliceOptions>()" class="form-control col-md-3 splice-by" style="display: none">
+        <option></option>
+    </select>
+</div>
+<div class="row" style="align-items: center;">
+    <svg id="svg_panel" width="1000" height="500" class="col-md-8"></svg>
+    <h3 id="svg_panel_txt" class="col-md-4" style="font-size: 70px;"></h3>
+</div>
+
+@section scripts {
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script type="text/javascript" src="@Url.Content("/js/components/graphs/pieChart.js")"></script>
+}

@@ -18,10 +18,10 @@ namespace MovieApp.Models
 
         [Display(Name = "Last name")]
         public string LastName { get; set; }
+        
+        public OfficialRole Role { get; set; }
 
-        public Role Role { get; set; }
-
-        public Gender Gender { get; set; }
+        public OfficialGender Gender { get; set; }
 
         [Display(Name = "Birth date")]
         [DataType(DataType.Date)]
@@ -34,23 +34,41 @@ namespace MovieApp.Models
         public IFormFile Image { get; set; }
 
         public string ImageUrl { get; set; }
-    }
 
-    public enum Gender
-    {
-        Male,
-        Female,
-        Other
-    }
+        public enum OfficialGender
+        {
+            Male,
+            Female,
+            Other
+        }
 
-    public enum Role
-    {
-        Producer,
-        Director,
-        Writer,
-        Photographer,
-        Actor,
-        Editor,
-        Soundperson
+        public enum OfficialRole
+        {
+            Producer,
+            Director,
+            Writer,
+            Photographer,
+            Actor,
+            Editor,
+            Soundperson
+        }
+
+        public enum OfficialSpliceOptions
+        {
+            Role,
+            Gender,
+            OriginCountry
+        }
+
+        public enum OfficialAverageOfOptions
+        {
+            Age
+        }
+
+        public enum OfficialAverageByOptions
+        {
+            Role,
+            OriginCountry
+        }
     }
 }

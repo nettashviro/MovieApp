@@ -1,0 +1,43 @@
+﻿@{
+    ViewData["Title"] = "חיפוש מתקדם";
+}
+
+<div class="text-center">
+    <h1 class="display-4">חיפוש על פי שני פרמטרים</h1>
+</div>
+
+<div class="text-center row">
+    <h3 class="display-4  col-md-2">הצגת</h3>
+    <select id="spliceTarget" class="form-control col-md-2">
+        <option value="Movies">סרטים</option>
+        <option value="Officials">בעלי תפקידים</option>
+    </select>
+    <h3 class="display-4 col-md-2">בממוצע של</h3>
+    <select id="averageOfMoviesSelect" asp-items="Html.GetEnumSelectList<Movie.MovieAverageOfOptions>()" class="form-control col-md-2 average-of">
+        <option></option>
+    </select>
+    <select id="averageOfOfficialsSelect" asp-items="Html.GetEnumSelectList<Official.OfficialAverageOfOptions>()" class="form-control col-md-2 average-of" style="display: none;">
+        <option></option>
+    </select>
+    <h3 class="display-4 col-md-2">לפי</h3>
+    <select id="averageByMoviesSelect" asp-items="Html.GetEnumSelectList<Movie.MovieAverageByOptions>()" class="form-control col-md-2 average-by">
+        <option></option>
+    </select>
+    <select id="averageByOfficialsSelect" asp-items="Html.GetEnumSelectList<Official.OfficialAverageByOptions>()" class="form-control col-md-2 average-by" style="display: none;">
+        <option></option>
+    </select>
+</div>
+<div>
+    <svg id="svg_panel" width="1000" height="500"></svg>
+</div>
+
+<style>
+    .bar {
+        fill: #f5365c;
+    }
+</style>
+
+@section scripts {
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script type="text/javascript" src="@Url.Content("/js/components/graphs/barChart.js")"></script>
+}

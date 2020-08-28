@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -38,7 +39,6 @@ namespace MovieApp.Models
 
         public string ImageUrl { get; set; }
 
-
         public enum MovieGenre
         {
             Horror,
@@ -49,6 +49,29 @@ namespace MovieApp.Models
             Animation
         }
 
+        public enum MovieSpliceOptions
+        {
+            Country,
+            Genre,
+            Year,
+            Duration,
+            Language,
+            Rating
+        }
+
+        public enum MovieAverageOfOptions
+        {
+            Duration,
+            Rating
+        }
+
+        public enum MovieAverageByOptions
+        {
+            Country,
+            Genre,
+            Year,
+            Language,
+        }
     }
 
 
