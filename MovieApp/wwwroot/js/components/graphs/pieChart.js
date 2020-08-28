@@ -65,7 +65,9 @@ $("#spliceByMoviesSelect").change(function (data) {
     d3.json("Count/?splice=" + text + "&context=" + currentTarget).then(function (data) {
         //Here you have data available, an object with the same structure 
         //as the JSON that was send by the server.
-        drawPieChartSVG("svg_panel", data);
+        if (data) {
+            drawPieChartSVG("svg_panel", data);
+        }
     });
 });
 
@@ -75,7 +77,9 @@ $("#spliceByOfficialsSelect").change(function (data) {
     d3.json("Count/?splice=" + text + "&context=" + currentTarget).then(function (data) {
         //Here you have data available, an object with the same structure 
         //as the JSON that was send by the server.
-        drawPieChartSVG("svg_panel", data);
+        if (data) {
+            drawPieChartSVG("svg_panel", data);
+        }
     });
 });
 

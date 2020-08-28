@@ -72,7 +72,9 @@ $("#averageOfMoviesSelect").change(function (data) {
         d3.json("Average/?avgOf=" + ofText + "&avgBy=" + byText + "&context=" + currentTarget).then(function (data) {
             //Here you have data available, an object with the same structure 
             //as the JSON that was send by the server.
-            drawBarChartSVG("svg_panel", data, ofText, byText);
+            if (data) {
+                drawBarChartSVG("svg_panel", data, ofText, byText);
+            }
         });
     } 
 });
@@ -87,7 +89,9 @@ $("#averageOfOfficialsSelect").change(function (data) {
         d3.json("Average/?avgOf=" + ofText + "&avgBy=" + byText + "&context=" + currentTarget).then(function (data) {
             //Here you have data available, an object with the same structure 
             //as the JSON that was send by the server.
-            drawBarChartSVG("svg_panel", data, ofText, byText);
+            if (data) {
+                drawBarChartSVG("svg_panel", data, ofText, byText);
+            }
         });
     }
 });
@@ -102,7 +106,9 @@ $("#averageByMoviesSelect").change(function (data) {
         d3.json("Average/?avgOf=" + ofText + "&avgBy=" + byText + "&context=" + currentTarget).then(function (data) {
             //Here you have data available, an object with the same structure 
             //as the JSON that was send by the server.
-            drawBarChartSVG("svg_panel", data, ofText, byText);
+            if (data) {
+                drawBarChartSVG("svg_panel", data, ofText, byText);
+            }
         });
     }
 });
@@ -117,7 +123,9 @@ $("#averageByOfficialsSelect").change(function (data) {
         d3.json("Average/?avgOf=" + ofText + "&avgBy=" + byText + "&context=" + currentTarget).then(function (data) {
             //Here you have data available, an object with the same structure 
             //as the JSON that was send by the server.
-            drawBarChartSVG("svg_panel", data, ofText, byText);
+            if (data) {
+                drawBarChartSVG("svg_panel", data, ofText, byText);
+            }
         });
     }
 });
