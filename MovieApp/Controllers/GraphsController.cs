@@ -13,12 +13,10 @@ namespace MovieApp.Controllers
     public class GraphsController : Controller
     {
         private readonly MovieAppContext _context;
-        private readonly IWebHostEnvironment _hostEnvironment;
 
-        public GraphsController(MovieAppContext context, IWebHostEnvironment hostEnvironment)
+        public GraphsController(MovieAppContext context)
         {
             _context = context;
-            this._hostEnvironment = hostEnvironment;
         }
 
         public IActionResult Index()
