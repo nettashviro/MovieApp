@@ -46,7 +46,7 @@ namespace MovieApp.Controllers
                 return NotFound();
             }
 
-            var movie = await _context.Movie
+            var movie = await _context.Movie.Include(m => m.OfficialOfMovies).ThenInclude(oof => oof.Official)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (movie == null)
             {
@@ -65,6 +65,15 @@ namespace MovieApp.Controllers
             var languages = new SelectList(CultureHelper.LanguageList(), "Key", "Value");
             ViewBag.Languages = languages.OrderBy(p => p.Text).ToList();
 
+            ViewData["OfficialId"] = new SelectList(_context.Official, "Id", "Id");
+            IEnumerable<SelectListItem> officialNameSelectList = from o in _context.Official
+                                                     select new SelectListItem
+                                                     {
+                                                         Value = o.Id.ToString(),
+                                                         Text = o.FirstName +  " " + o.LastName
+                                                     };
+            ViewData["OfficialName"] = officialNameSelectList;
+
             return View();
         }
 
@@ -73,7 +82,7 @@ namespace MovieApp.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Country,Language,Year,Genre,Duration,TrailerUrl,Rating,Image,ImageUrl,MovieIdInTMDB")] Movie movie)
+        public async Task<IActionResult> Create([Bind("Id,Name,Country,Language,Year,Genre,Duration,TrailerUrl,Rating,Image,ImageUrl,MovieIdInTMDB")] Movie movie, int[] OfficialsIds)
         {
             if (ModelState.IsValid)
             {
@@ -94,6 +103,11 @@ namespace MovieApp.Controllers
                 movie.Country = CultureHelper.GetCountryByIdentifier(movie.Country);
                 movie.Language = CultureHelper.GetLanguageByIdentifier(movie.Language);
 
+                movie.OfficialOfMovies = new List<OfficialOfMovie>();
+                foreach (var id in OfficialsIds)
+                {
+                    movie.OfficialOfMovies.Add(new OfficialOfMovie() { MovieId = movie.Id, OfficialId = id });
+                }
                 _context.Add(movie);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

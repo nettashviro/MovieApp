@@ -27,8 +27,7 @@ namespace MovieApp.Models
         [Range(0, 10)]
         public double Rating { get; set; }
 
-        [ForeignKey("Id_Official")]
-        public Official Official { get; set; }
+        public ICollection<OfficialOfMovie> OfficialOfMovies { get; set; }
 
         public ICollection<Soundtrack> Soundtracks { get; set; }
 

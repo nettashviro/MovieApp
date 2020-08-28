@@ -34,6 +34,8 @@ namespace MovieApp.Models
         public IFormFile Image { get; set; }
 
         public string ImageUrl { get; set; }
+
+        public ICollection<OfficialOfMovie> OfficialOfMovies { get; set; }
     }
 
     public enum Gender

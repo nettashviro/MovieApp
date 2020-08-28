@@ -40,7 +40,7 @@ namespace MovieApp.Controllers
                 return NotFound();
             }
 
-            var official = await _context.Official
+            var official = await _context.Official.Include(o => o.OfficialOfMovies).ThenInclude(oof => oof.Movie)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (official == null)
             {
@@ -54,6 +54,8 @@ namespace MovieApp.Controllers
         public IActionResult Create()
         {
             var countries = new SelectList(CultureHelper.CountryList(), "Key", "Value");
+            ViewData["MovieId"] = new SelectList(_context.Movie, "Id", "Id");
+            ViewData["MovieName"] = new SelectList(_context.Movie, "Id", "Name");
             ViewBag.Countries = countries.OrderBy(p => p.Text).ToList();
 
             return View();
@@ -64,7 +66,7 @@ namespace MovieApp.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,FirstName,LastName,Role,Gender,Birthdate,OriginCountry,Image,ImageUrl")] Official official)
+        public async Task<IActionResult> Create([Bind("Id,FirstName,LastName,Role,Gender,Birthdate,OriginCountry,Image,ImageUrl")] Official official, int[] MovieId)
         {
             if (ModelState.IsValid)
             {
@@ -82,6 +84,10 @@ namespace MovieApp.Controllers
                 }
 
                 official.OriginCountry = CultureHelper.GetCountryByIdentifier(official.OriginCountry);
+                official.OfficialOfMovies = new List<OfficialOfMovie>();
+                foreach ( var id in MovieId) {
+                    official.OfficialOfMovies.Add(new OfficialOfMovie() { MovieId = id, OfficialId = official.Id });
+                }                
 
                 _context.Add(official);
                 await _context.SaveChangesAsync();

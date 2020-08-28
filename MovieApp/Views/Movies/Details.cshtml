@@ -68,6 +68,43 @@
                         <dd class="col-sm-10" id="movieTMDBId">
                             @Html.DisplayFor(model => model.MovieIdInTMDB)
                         </dd>
+                        <dt class="col-sm-3">
+                            @Html.DisplayNameFor(model => model.OfficialOfMovies)
+                        </dt>
+                        <dd class="col-sm-10">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.OfficialOfMovies.First().Official.Id)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.OfficialOfMovies.First().Official.FirstName)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.OfficialOfMovies.First().Official.LastName)
+                                        </th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.OfficialOfMovies)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Official.Id)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Official.FirstName)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Official.LastName)
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </dd>
                     </dl>
                 </div>
             </div>
