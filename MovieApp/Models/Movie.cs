@@ -25,8 +25,8 @@ namespace MovieApp.Models
 
         public string TrailerUrl { get; set; }
 
-        [Range(0, 5)]
-        public float Rating { get; set; }
+        [Range(0, 10)]
+        public double Rating { get; set; }
 
         [ForeignKey("Id_Official")]
         public Official Official { get; set; }
@@ -38,6 +38,10 @@ namespace MovieApp.Models
         public IFormFile Image { get; set; }
 
         public string ImageUrl { get; set; }
+
+        [Required]
+        [Display(Name = "TMDB Id")]
+        public int MovieIdInTMDB { get; set; }
 
         public enum MovieGenre
         {
@@ -73,6 +77,4 @@ namespace MovieApp.Models
             Language,
         }
     }
-
-
 }

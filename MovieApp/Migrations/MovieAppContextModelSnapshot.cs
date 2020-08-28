@@ -35,6 +35,9 @@ namespace MovieApp.Migrations
                         .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
 
+                    b.Property<string>("ProfileImageUrl")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("Type")
                         .HasColumnType("int");
 
@@ -75,11 +78,14 @@ namespace MovieApp.Migrations
                     b.Property<string>("Language")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("MovieIdInTMDB")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<float>("Rating")
-                        .HasColumnType("real");
+                    b.Property<double>("Rating")
+                        .HasColumnType("float");
 
                     b.Property<string>("TrailerUrl")
                         .HasColumnType("nvarchar(max)");
@@ -116,8 +122,8 @@ namespace MovieApp.Migrations
                     b.Property<bool>("IsViolent")
                         .HasColumnType("bit");
 
-                    b.Property<int>("Rank")
-                        .HasColumnType("int");
+                    b.Property<double>("Rank")
+                        .HasColumnType("float");
 
                     b.Property<int>("RecommendedAge")
                         .HasColumnType("int");
