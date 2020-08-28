@@ -14,6 +14,7 @@ using MovieApp.Data;
 using MovieApp.Models;
 using MovieApp.Models.TMDB;
 using MovieApp.Services;
+using X.PagedList;
 
 namespace MovieApp.Controllers
 {
@@ -32,9 +33,29 @@ namespace MovieApp.Controllers
         }
 
         // GET: Movies
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string nameFilter, Movie.MovieGenre? genreFilter, string languageFilter, int? page)
         {
-            return View(await _context.Movie.ToListAsync());
+            var languages = new SelectList(CultureHelper.LanguageList(), "Key", "Value");
+            ViewBag.Languages = languages.OrderBy(p => p.Text).ToList();
+
+            var movies = await _context.Movie.ToListAsync();
+            if (!String.IsNullOrEmpty(nameFilter))
+            {
+                movies = movies.Where(m => m.Name.ToLower().Contains(nameFilter.ToLower())).ToList();
+            }
+            if (genreFilter != null)
+            {
+                movies = movies.Where(m => m.Genre == genreFilter).ToList();
+            }
+            if (languageFilter != null)
+            {
+                movies = movies.Where(m => m.Language == CultureHelper.GetLanguageByIdentifier(languageFilter)).ToList();
+            }
+
+            int pageSize = 25;
+            int pageNumber = page ?? 1;
+
+            return View(movies.ToPagedList(pageNumber, pageSize));
         }
 
 

@@ -1,12 +1,45 @@
-﻿@model IEnumerable<MovieApp.Models.Movie>
+﻿@using X.PagedList.Mvc.Core;
+@model X.PagedList.IPagedList<MovieApp.Models.Movie>
 
 @{
     ViewData["Title"] = "מאגר הסרטים";
 }
 
+<!-- CSS -->
+<link type="text/css" href="~/css/moviesIndex.css?v=1.2.0" rel="stylesheet" asp-append-version="true">
+
 @{ string userType = @Context.User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Role)?.Value;}
 <h1>מאגר הסרטים</h1>
 
+<form asp-controller="Movies" asp-action="Index" method="get">
+    <p>
+        <div class="form-group row">
+            <label class="col-sm-1 col-form-label col-form-label-sm">ז'אנר:</label>
+
+            <div class="col-sm-5">
+                <select asp-items="Html.GetEnumSelectList<Movie.MovieGenre>()" name="genreFilter" class="form-control form-control-sm">
+                    <option value="">הכל</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-1 col-form-label col-form-label-sm">שם הסרט:</label>
+            <div class="col-sm-5">
+                <input type="text" name="nameFilter" class="form-control form-control-sm" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-1 col-form-label col-form-label-sm">שפה:</label>
+
+            <div class="col-sm-5">
+                <select asp-items="@(new SelectList(ViewBag.Languages, "Value", "Text"))" name="languageFilter" class="form-control form-control-sm">
+                    <option value="">הכל</option>
+                </select>
+            </div>
+        </div>
+        <input type="submit" value="חפש סרט" class="btn btn-primary" />
+    </p>
+</form>
 
 <div class="card shadow">
 
@@ -15,34 +48,34 @@
             <thead class="thead-light">
                 <tr>
                     <th>
-                        @Html.DisplayNameFor(model => model.Image)
+                        @Html.DisplayNameFor(model => model.FirstOrDefault().Image)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Name)
+                        @Html.DisplayNameFor(model => model.FirstOrDefault().Name)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Country)
+                        @Html.DisplayNameFor(model => model.FirstOrDefault().Country)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Language)
+                        @Html.DisplayNameFor(model => model.FirstOrDefault().Language)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Year)
+                        @Html.DisplayNameFor(model => model.FirstOrDefault().Year)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Genre)
+                        @Html.DisplayNameFor(model => model.FirstOrDefault().Genre)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Duration)
+                        @Html.DisplayNameFor(model => model.FirstOrDefault().Duration)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.TrailerUrl)
+                        @Html.DisplayNameFor(model => model.FirstOrDefault().TrailerUrl)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Rating)
+                        @Html.DisplayNameFor(model => model.FirstOrDefault().Rating)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.MovieIdInTMDB)
+                        @Html.DisplayNameFor(model => model.FirstOrDefault().MovieIdInTMDB)
                     </th>
                     <th></th>
                 </tr>
@@ -95,7 +128,9 @@
             </tbody>
         </table>
     </div>
-
+    <div class="pagination" style="margin-left: 400px">
+        @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
+    </div>
 </div>
 
 <p>
