@@ -33,24 +33,31 @@
                                 <span asp-validation-for="Duration" class="text-danger"></span>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label asp-for="SoundtrackUrl" class="control-label"></label>
-                            <input asp-for="SoundtrackUrl" class="form-control" />
-                            <span asp-validation-for="SoundtrackUrl" class="text-danger"></span>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="SoundtrackUrl" class="control-label"></label>
+                                <input asp-for="SoundtrackUrl" class="form-control" />
+                                <span asp-validation-for="SoundtrackUrl" class="text-danger"></span>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label asp-for="SoundtrackOfMovies" class="control-label"></label>
-                            <select name="MovieId" class="form-control" asp-items="ViewBag.MovieName" multiple></select>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="SoundtrackOfMovies" class="control-label"></label>
+                                <select name="MovieId" class="form-control" asp-items="ViewBag.MovieName" multiple></select>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label asp-for="Writer" class="control-label"></label>
-                            <select name="WriterId" class="form-control" asp-items="ViewBag.WriterName"></select>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="Writer" class="control-label"></label>
+                                <select name="WriterId" class="form-control" asp-items="ViewBag.WriterName"></select>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label asp-for="Performer" class="control-label"></label>
-                            <select name="PerformerId" class="form-control" asp-items="ViewBag.PerformerName"></select>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="Performer" class="control-label"></label>
+                                <select name="PerformerId" class="form-control" asp-items="ViewBag.PerformerName"></select>
+                            </div>
                         </div>
-
                     </div>
                 </div>
                 <div class="card-footer">
