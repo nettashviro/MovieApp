@@ -27,5 +27,10 @@ namespace MovieApp.Models
 
         [Display(Name = "מבצע")]
         public Official Performer { get; set; }
+
+        public enum SoundtrackAverageOfOptions
+        {
+            Duration
+        }
     }
 }

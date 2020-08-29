@@ -100,7 +100,8 @@ namespace MovieApp.Controllers
                    })
                    .ToList();
                     return Json(list);
-                } else if (context == "Movies")
+                } 
+                else if (context == "Movies")
                 {
                     var list = _context.Movie
                     .ToList()
@@ -112,7 +113,31 @@ namespace MovieApp.Controllers
                    })
                    .ToList();
                     return Json(list);
-                } else
+                }
+                else if (context == "Soundtracks")
+                {
+                    var list = _context.Movie
+                        .Join(_context.SoundtrackOfMovie,
+                            m => m.Id,
+                            som => som.MovieId,
+                            (m, som) => new
+                            {
+                                movieId = m.Id,
+                                soundtrackId = som.SoundtrackId,
+                                groupByAvg = som.Soundtrack.GetType().GetProperty(avgOf).GetValue(som.Soundtrack, null),
+                                groupByKey = m.GetType().GetProperty(avgBy).GetValue(m, null)
+                            })
+                        .ToList()
+                        .GroupBy(p => p.groupByKey)
+                        .Select(gb => new
+                        {
+                            Key = gb.Key.ToString(),
+                            Count = gb.Average(a => (double)a.groupByAvg)
+                        })
+                        .ToList();
+                    return Json(list);
+                }
+                else
                 {
                     return null;
                 }
@@ -121,6 +146,35 @@ namespace MovieApp.Controllers
             {
                 return null;
             }
+        }
+
+        // GET: Graphs/Groupby/
+        public async Task<IActionResult> Groupby()
+        {
+            var list = _context.Movie
+                .Join(_context.OfficialOfMovie,
+                    m => m.Id,
+                    oom => oom.MovieId,
+                    (m, oom) => new
+                    {
+                        movieId = m.Id,
+                        rating = m.Rating,
+                        duration = m.Duration,
+                        genre = m.Genre,
+                        name = m.Name,
+                        officialId = oom.OfficialId
+                    })
+                .GroupBy(p => new { p.duration, p.rating, p.genre, p.movieId, p.name})
+                .Select(gb => new
+                {
+                    Duration = gb.Key.duration,
+                    Rating = gb.Key.rating,
+                    Genre = gb.Key.genre,
+                    Name = gb.Key.name,
+                    Count = gb.Count()
+                })
+                .ToList();
+            return Json(list);
         }
     }
 }

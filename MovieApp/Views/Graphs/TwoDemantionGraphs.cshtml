@@ -11,6 +11,7 @@
     <select id="spliceTarget" class="form-control col-md-2">
         <option value="Movies">סרטים</option>
         <option value="Officials">בעלי תפקידים</option>
+        <option value="Soundtracks">פסקולים</option>
     </select>
     <h3 class="display-4 col-md-2">בממוצע של</h3>
     <select id="averageOfMoviesSelect" asp-items="Html.GetEnumSelectList<Movie.MovieAverageOfOptions>()" class="form-control col-md-2 average-of">
@@ -19,11 +20,17 @@
     <select id="averageOfOfficialsSelect" asp-items="Html.GetEnumSelectList<Official.OfficialAverageOfOptions>()" class="form-control col-md-2 average-of" style="display: none;">
         <option></option>
     </select>
+    <select id="averageOfSoundtracksSelect" asp-items="Html.GetEnumSelectList<Soundtrack.SoundtrackAverageOfOptions>()" class="form-control col-md-2 average-of" style="display: none;">
+        <option></option>
+    </select>
     <h3 class="display-4 col-md-2">לפי</h3>
     <select id="averageByMoviesSelect" asp-items="Html.GetEnumSelectList<Movie.MovieAverageByOptions>()" class="form-control col-md-2 average-by">
         <option></option>
     </select>
     <select id="averageByOfficialsSelect" asp-items="Html.GetEnumSelectList<Official.OfficialAverageByOptions>()" class="form-control col-md-2 average-by" style="display: none;">
+        <option></option>
+    </select>
+    <select id="averageBySoundtracksSelect" asp-items="Html.GetEnumSelectList<Movie.MovieAverageByOptions>()" class="form-control col-md-2 average-by" style="display: none;">
         <option></option>
     </select>
 </div>

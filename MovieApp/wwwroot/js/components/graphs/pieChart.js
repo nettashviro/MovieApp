@@ -8,7 +8,7 @@ var drawPieChartSVG = function (svg_id, data) {
     var width = svg.width.baseVal.value,
         height = svg.height.baseVal.value,
         radius = Math.min(width, height) / 2;
-    var colors = d3.scaleOrdinal(d3.schemeCategory10);
+    var colors = d3.scaleOrdinal(d3.schemeSet2);
     var arc = d3.arc()
         .outerRadius(radius - 10)
         .innerRadius(0)
@@ -39,7 +39,7 @@ var drawPieChartSVG = function (svg_id, data) {
         .on("mouseover", function (d, i) {
             var txt = document.getElementById(svg_id + "_txt");
             if (txt) {
-                txt.innerHTML = d.data.key + " (" + d.data.count + ")";
+                txt.innerHTML = (d.data.key || "ללא") + " (" + d.data.count + ")";
             }
         });
 
@@ -55,7 +55,7 @@ var drawPieChartSVG = function (svg_id, data) {
         .attr("text-anchor", "middle")
 
         // d.data - our data item, assigned to the current section. "label" is a part of our data object
-        .text(function (d, i) { return d.data.key; });
+        .text(function (d, i) { return d.data.key || "ללא"; });
 };
 
 

@@ -19,7 +19,7 @@ var drawBarChartSVG = function (svg_id, data, averageOf, averageBy) {
     var g = svg.append("g")
         .attr("transform", "translate(" + 100 + "," + 100 + ")");
 
-    xScale.domain(data.map(function (d) { return d.key; }));
+    xScale.domain(data.map(function (d) { return d.key || "ללא"; }));
     yScale.domain([0, d3.max(data, function (d) { return d.count; })]);
 
     g.append("g")
@@ -48,7 +48,7 @@ var drawBarChartSVG = function (svg_id, data, averageOf, averageBy) {
         .data(data)
         .enter().append("rect")
         .attr("class", "bar")
-        .attr("x", function (d) { return xScale(d.key); })
+        .attr("x", function (d) { return xScale(d.key || "ללא"); })
         .attr("y", function (d) { return yScale(d.count); })
         .attr("width", xScale.bandwidth())
         .attr("height", function (d) { return height - yScale(d.count); });
@@ -128,6 +128,41 @@ $("#averageByOfficialsSelect").change(function (data) {
         });
     }
 });
+
+$("#averageOfSoundtracksSelect").change(function (data) {
+    var ofText = $('#averageOfSoundtracksSelect option[value="' + data.currentTarget.value + '"')[0].text;
+
+    var bySelectValue = $("#averageBySoundtracksSelect")[0].value;
+    if (bySelectValue != "") {
+        var byText = $('#averageBySoundtracksSelect option[value="' + bySelectValue + '"')[0].text;
+        var currentTarget = $("#spliceTarget")[0].value;
+        d3.json("Average/?avgOf=" + ofText + "&avgBy=" + byText + "&context=" + currentTarget).then(function (data) {
+            //Here you have data available, an object with the same structure 
+            //as the JSON that was send by the server.
+            if (data) {
+                drawBarChartSVG("svg_panel", data, ofText, byText);
+            }
+        });
+    }
+});
+
+$("#averageBySoundtracksSelect").change(function (data) {
+    var byText = $('#averageBySoundtracksSelect option[value="' + data.currentTarget.value + '"')[0].text;
+
+    var ofSelectValue = $("#averageOfSoundtracksSelect")[0].value;
+    if (ofSelectValue != "") {
+        var ofText = $('#averageOfSoundtracksSelect option[value="' + ofSelectValue + '"')[0].text;
+        var currentTarget = $("#spliceTarget")[0].value;
+        d3.json("Average/?avgOf=" + ofText + "&avgBy=" + byText + "&context=" + currentTarget).then(function (data) {
+            //Here you have data available, an object with the same structure 
+            //as the JSON that was send by the server.
+            if (data) {
+                drawBarChartSVG("svg_panel", data, ofText, byText);
+            }
+        });
+    }
+});
+
 
 $("#spliceTarget").change(function (data) {
     var splicesBy = $(".average-by");
