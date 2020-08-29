@@ -56,14 +56,14 @@
             @Html.DisplayNameFor(model => model.OfficialOfMovies)
         </dt>
         <dd class="col-sm-10">
-            <table class="table">
+            <table class="table table-bordered table-condensed table-striped table-hover">
                 <thead>
                     <tr>
                         <th>
-                            @Html.DisplayNameFor(model => model.OfficialOfMovies.First().Movie.Id)
+                            @Html.DisplayNameFor(model => model.OfficialOfMovies.First().Movie.Name)
                         </th>
                         <th>
-                            @Html.DisplayNameFor(model => model.OfficialOfMovies.First().Movie.Name)
+                            @Html.DisplayNameFor(model => model.OfficialOfMovies.First().Movie.Genre)
                         </th>
                         <th></th>
                     </tr>
@@ -71,12 +71,12 @@
                 <tbody>
                     @foreach (var item in Model.OfficialOfMovies)
                     {
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Movie.Id)
-                            </td>
+                        <tr onclick="window.location='/Movies/Details/@item.MovieId'" style="cursor:pointer">
                             <td>
                                 @Html.DisplayFor(modelItem => item.Movie.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Movie.Genre)
                             </td>
                         </tr>
                     }

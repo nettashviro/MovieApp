@@ -149,6 +149,15 @@ namespace MovieApp.Controllers
 
             var languages = new SelectList(CultureHelper.LanguageList(), "Key", "Value");
             ViewBag.Languages = languages.OrderBy(p => p.Text).ToList();
+
+            ViewData["OfficialId"] = new SelectList(_context.Official, "Id", "Id");
+            IEnumerable<SelectListItem> officialNameSelectList = from o in _context.Official
+                                                                 select new SelectListItem
+                                                                 {
+                                                                     Value = o.Id.ToString(),
+                                                                     Text = o.FirstName + " " + o.LastName
+                                                                 };
+            ViewData["OfficialName"] = officialNameSelectList;
             return View(movie);
         }
 
@@ -158,7 +167,7 @@ namespace MovieApp.Controllers
         [HttpPost]
         [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Country,Language,Year,Genre,Duration,TrailerUrl,Rating,Image,ImageUrl,MovieIdInTMDB")] Movie movie)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Country,Language,Year,Genre,Duration,TrailerUrl,Rating,Image,ImageUrl,MovieIdInTMDB")] Movie movie, int[] OfficialsIds)
         {
             if (id != movie.Id)
             {
@@ -198,6 +207,16 @@ namespace MovieApp.Controllers
 
                     movie.Country = CultureHelper.GetCountryByIdentifier(movie.Country);
                     movie.Language = CultureHelper.GetLanguageByIdentifier(movie.Language);
+
+                    if (movie.OfficialOfMovies == null)
+                    {
+                        movie.OfficialOfMovies = new List<OfficialOfMovie>();
+                    }
+
+                    foreach (var officialId in OfficialsIds)
+                    {
+                        movie.OfficialOfMovies.Add(new OfficialOfMovie() { MovieId = movie.Id, OfficialId = officialId });
+                    }
 
                     _context.Update(movie);
                     await _context.SaveChangesAsync();

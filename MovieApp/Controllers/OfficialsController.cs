@@ -114,6 +114,8 @@ namespace MovieApp.Controllers
 
             var countries = new SelectList(CultureHelper.CountryList(), "Key", "Value");
             ViewBag.Countries = countries.OrderBy(p => p.Text).ToList();
+            ViewData["MovieId"] = new SelectList(_context.Movie, "Id", "Id");
+            ViewData["MovieName"] = new SelectList(_context.Movie, "Id", "Name");
 
             return View(official);
         }
@@ -124,7 +126,7 @@ namespace MovieApp.Controllers
         [HttpPost]
         [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,FirstName,LastName,Role,Gender,Birthdate,OriginCountry,Image,ImageUrl")] Official official)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,FirstName,LastName,Role,Gender,Birthdate,OriginCountry,Image,ImageUrl")] Official official, int[] MovieId)
         {
             if (id != official.Id)
             {
@@ -163,6 +165,15 @@ namespace MovieApp.Controllers
                     }
 
                     official.OriginCountry = CultureHelper.GetCountryByIdentifier(official.OriginCountry);
+                    if (official.OfficialOfMovies == null)
+                    {
+                        official.OfficialOfMovies = new List<OfficialOfMovie>();
+                    }
+
+                    foreach (var movieId in MovieId)
+                    {
+                        official.OfficialOfMovies.Add(new OfficialOfMovie() { MovieId = movieId, OfficialId = official.Id });
+                    }
 
                     _context.Update(official);
                     await _context.SaveChangesAsync();

@@ -35,6 +35,7 @@ namespace MovieApp.Models
 
         public string ImageUrl { get; set; }
 
+        [Display(Name = "סרטים שבהם משתתף")]
         public ICollection<OfficialOfMovie> OfficialOfMovies { get; set; }
     }
 
