@@ -106,16 +106,35 @@ namespace MovieApp.Controllers
                 return NotFound();
             }
 
-            var official = await _context.Official.FindAsync(id);
+            var official = await _context.Official
+                .Include(o => o.OfficialOfMovies)
+                .FirstOrDefaultAsync(o => o.Id == id);
             if (official == null)
             {
                 return NotFound();
             }
 
-            var countries = new SelectList(CultureHelper.CountryList(), "Key", "Value");
-            ViewBag.Countries = countries.OrderBy(p => p.Text).ToList();
-            ViewBag.MovieId = new SelectList(_context.Movie, "Id", "Id");
-            ViewBag.MovieName = new SelectList(_context.Movie, "Id", "Name");
+
+
+            IEnumerable<SelectListItem> countriesSelectList = from c in CultureHelper.CountryList()
+                                                              select new SelectListItem
+                                                              {
+                                                                  Value = c.Key,
+                                                                  Text = c.Value,
+                                                                  Selected = CultureHelper.GetCountryByIdentifier(c.Key) == official.OriginCountry
+                                                              };
+            ViewBag.Countries = countriesSelectList.OrderBy(p => p.Text).ToList();
+
+            List<SelectListItem> movieNameSelectList = new List<SelectListItem>();
+            foreach (var m in _context.Movie)
+            {
+                SelectListItem s = new SelectListItem();
+                s.Value = m.Id.ToString();
+                s.Text = m.Name;
+                s.Selected = official.OfficialOfMovies.Any(oom => m.Id == oom.MovieId);
+                movieNameSelectList.Add(s);
+            }
+            ViewBag.MovieName = movieNameSelectList;
 
             return View(official);
         }
@@ -174,6 +193,9 @@ namespace MovieApp.Controllers
                     {
                         official.OfficialOfMovies.Add(new OfficialOfMovie() { MovieId = movieId, OfficialId = official.Id });
                     }
+
+                    _context.OfficialOfMovie.RemoveRange(_context.OfficialOfMovie.Where(oom => oom.OfficialId == official.Id));
+                    _context.OfficialOfMovie.AddRange(official.OfficialOfMovies);
 
                     _context.Update(official);
                     await _context.SaveChangesAsync();

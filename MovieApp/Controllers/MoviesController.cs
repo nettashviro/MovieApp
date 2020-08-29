@@ -48,7 +48,7 @@ namespace MovieApp.Controllers
 
             var movie = await _context.Movie
                 .Include(m => m.OfficialOfMovies).ThenInclude(oom => oom.Official)
-                .Include(m => m.SoundtracksOfMovie).ThenInclude(som => som.Soundtrack)
+                .Include(m => m.SoundtracksOfMovie).ThenInclude(som => som.Soundtrack).ThenInclude(s => s.Performer)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (movie == null)
             {
@@ -151,25 +151,56 @@ namespace MovieApp.Controllers
                 return NotFound();
             }
 
-            var movie = await _context.Movie.FindAsync(id);
+            var movie = await _context.Movie
+                .Include(m => m.OfficialOfMovies)
+                .Include(m => m.SoundtracksOfMovie)
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (movie == null)
             {
                 return NotFound();
             }
-            var countries = new SelectList(CultureHelper.CountryList(), "Key", "Value");
-            ViewBag.Countries = countries.OrderBy(p => p.Text).ToList();
 
-            var languages = new SelectList(CultureHelper.LanguageList(), "Key", "Value");
-            ViewBag.Languages = languages.OrderBy(p => p.Text).ToList();
-
-            ViewBag.OfficialId = new SelectList(_context.Official, "Id", "Id");
-            IEnumerable<SelectListItem> officialNameSelectList = from o in _context.Official
-                                                                 select new SelectListItem
+            IEnumerable<SelectListItem> countriesSelectList = from c in CultureHelper.CountryList()
+                                                              select new SelectListItem
                                                                  {
-                                                                     Value = o.Id.ToString(),
-                                                                     Text = o.FirstName + " " + o.LastName
+                                                                     Value = c.Key,
+                                                                     Text = c.Value,
+                                                                     Selected = CultureHelper.GetCountryByIdentifier(c.Key) == movie.Country
                                                                  };
+            ViewBag.Countries = countriesSelectList.OrderBy(p => p.Text).ToList();
+
+            IEnumerable<SelectListItem> languagesSelectList = from c in CultureHelper.LanguageList()
+                                                              select new SelectListItem
+                                                              {
+                                                                  Value = c.Key,
+                                                                  Text = c.Value,
+                                                                  Selected = CultureHelper.GetLanguageByIdentifier(c.Key) == movie.Language
+                                                              };
+
+            ViewBag.Languages = languagesSelectList.OrderBy(p => p.Text).ToList();
+
+            List<SelectListItem> officialNameSelectList = new List<SelectListItem>();
+            foreach(var o in _context.Official)
+            {
+                SelectListItem s = new SelectListItem();
+                s.Value = o.Id.ToString();
+                s.Text = o.FirstName + " " + o.LastName;
+                s.Selected = movie.OfficialOfMovies.Any(oom => o.Id == oom.OfficialId);
+                officialNameSelectList.Add(s);
+            }
+
             ViewBag.OfficialName = officialNameSelectList;
+
+            List<SelectListItem> soundtrackNameSelectList = new List<SelectListItem>();
+            foreach (var st in _context.Soundtrack)
+            {
+                SelectListItem s = new SelectListItem();
+                s.Value = st.Id.ToString();
+                s.Text = st.Name;
+                s.Selected = movie.SoundtracksOfMovie.Any(som => st.Id == som.SoundtrackId);
+                soundtrackNameSelectList.Add(s);
+            }
+            ViewBag.SoundtrackName = soundtrackNameSelectList;
             return View(movie);
         }
 
@@ -179,7 +210,7 @@ namespace MovieApp.Controllers
         [HttpPost]
         [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Country,Language,Year,Genre,Duration,TrailerUrl,Rating,Image,ImageUrl,MovieIdInTMDB")] Movie movie, int[] OfficialsIds)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Country,Language,Year,Genre,Duration,TrailerUrl,Rating,Image,ImageUrl,MovieIdInTMDB")] Movie movie, int[] OfficialsIds, int[] SoundtracksIds)
         {
             if (id != movie.Id)
             {
@@ -220,15 +251,23 @@ namespace MovieApp.Controllers
                     movie.Country = CultureHelper.GetCountryByIdentifier(movie.Country);
                     movie.Language = CultureHelper.GetLanguageByIdentifier(movie.Language);
 
-                    if (movie.OfficialOfMovies == null)
-                    {
-                        movie.OfficialOfMovies = new List<OfficialOfMovie>();
-                    }
-
+                    movie.OfficialOfMovies = new List<OfficialOfMovie>();
                     foreach (var officialId in OfficialsIds)
                     {
                         movie.OfficialOfMovies.Add(new OfficialOfMovie() { MovieId = movie.Id, OfficialId = officialId });
                     }
+
+                    movie.SoundtracksOfMovie = new List<SoundtrackOfMovie>();
+                    foreach (var soundtrackId in SoundtracksIds)
+                    {
+                        movie.SoundtracksOfMovie.Add(new SoundtrackOfMovie() { MovieId = movie.Id, SoundtrackId = soundtrackId });
+                    }
+
+                    _context.OfficialOfMovie.RemoveRange(_context.OfficialOfMovie.Where(oom => oom.MovieId == movie.Id));
+                    _context.OfficialOfMovie.AddRange(movie.OfficialOfMovies);
+
+                    _context.SoundtrackOfMovie.RemoveRange(_context.SoundtrackOfMovie.Where(som => som.MovieId == movie.Id));
+                    _context.SoundtrackOfMovie.AddRange(movie.SoundtracksOfMovie);
 
                     _context.Update(movie);
                     await _context.SaveChangesAsync();

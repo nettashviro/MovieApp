@@ -28,10 +28,9 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label asp-for="Country" class="control-label"></label>
-                                    <select asp-for="Country" asp-items="@(new SelectList(ViewBag.Countries, "Value", "Text"))" class="form-control">
+                                    <select name="Country" asp-items="ViewBag.Countries" class="form-control">
                                         <option></option>
                                     </select>
-                                    <span asp-validation-for="Country" class="text-danger"></span>
                                 </div>
                             </div>
 
@@ -39,7 +38,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label asp-for="Language" class="control-label"></label>
-                                    <select asp-for="Language" asp-items="@(new SelectList(ViewBag.Languages, "Value", "Text"))" class="form-control">
+                                    <select name="Language" asp-items="ViewBag.Languages" class="form-control">
                                         <option></option>
                                     </select>
                                     <span asp-validation-for="Language" class="text-danger"></span>
@@ -86,12 +85,16 @@
                                     <span asp-validation-for="Rating" class="text-danger"></span>
                                 </div>
                             </div>
-
-
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label asp-for="OfficialOfMovies" class="control-label"></label>
                                     <select name="OfficialsIds" class="form-control" asp-items="ViewBag.OfficialName" multiple></select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="SoundtracksOfMovie" class="control-label"></label>
+                                    <select name="SoundtracksIds" class="form-control" asp-items="ViewBag.SoundtrackName" multiple></select>
                                 </div>
                             </div>
                             <div class="col-md-6">
