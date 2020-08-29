@@ -171,7 +171,7 @@ dt
 dd
 {
     margin-bottom: .5rem;
-    margin-left: 0;
+    margin-right: 0;
 }
 
 blockquote
@@ -6316,12 +6316,10 @@ input[type='button'].btn-block
     margin-left: 1.5rem;
 }
 
-.card-header
-{
+.card-header {
     margin-bottom: 0;
     padding: 1.25rem 1.5rem;
-
-    border-bottom: 1px solid rgba(0, 0, 0, .05); 
+    border-bottom: 1px solid rgba(0, 0, 0, .1);
     background-color: #fff;
 }
 .card-header:first-child
@@ -6333,11 +6331,9 @@ input[type='button'].btn-block
     border-top: 0;
 }
 
-.card-footer
-{
+.card-footer {
     padding: 1.25rem 1.5rem;
-
-    border-top: 1px solid rgba(0, 0, 0, .05); 
+    border-top: 1px solid rgba(0, 0, 0, .1);
     background-color: #fff;
 }
 .card-footer:last-child
@@ -19201,6 +19197,7 @@ a.btn-icon-only
     {
         padding-right: 30px !important; 
         padding-left: 30px !important;
+      
     }
 }
 
@@ -22735,7 +22732,6 @@ textarea[resize='horizontal']
 
     .navbar-collapse {
         position: absolute;
-        z-index: 1050;
         top: 0;
         right: 0;
         left: 0;
@@ -29941,9 +29937,10 @@ input.datetimepicker[data-color='yellow'] + .bootstrap-datetimepicker-widget.dro
     border-radius: 3px;
     background-color: transparent;
 }
- 
+
 .rendered-content {
     padding: 30px;
+    margin-bottom: 50px;
 }
 
 .brand-holder {

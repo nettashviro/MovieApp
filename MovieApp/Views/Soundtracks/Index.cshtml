@@ -1,11 +1,11 @@
 ﻿@model IEnumerable<MovieApp.Models.Soundtrack>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "מאגר הפסקולים";
 }
 @{ string userType = @Context.User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Role)?.Value;}
 
-<h1>Index</h1>
+<h1>מאגר הפסקולים</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -25,7 +25,6 @@
             <th>
                 @Html.DisplayNameFor(model => model.Performer)
             </th>
-            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -47,13 +46,8 @@
                 @Html.DisplayFor(modelItem => item.Performer.LastName)
             </td>
             <td>
-
                 <a class="btn btn-secondary btn-sm fa fa-info-circle mr-3" asp-action="Details" asp-route-id="@item.Id"></a>
                 <a class="btn btn-secondary btn-sm fa fa-edit mr-3" asp-action="Edit" asp-route-id="@item.Id"></a>
-                @if (userType == Account.UserType.Admin.ToString())
-                {
-                    <a class="btn btn-secondary btn-sm fa fa-trash mr-3" asp-action="Delete" asp-route-id="@item.Id"></a>
-                }
             </td>
         </tr>
         }

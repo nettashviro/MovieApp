@@ -13,24 +13,27 @@ namespace MovieApp.Models
         [Key]
         public int Id { get; set; }
 
-        [Display(Name = "First name")]
+        [Display(Name = "שם פרטי")]
         public string FirstName { get; set; }
 
-        [Display(Name = "Last name")]
+        [Display(Name = "שם משפחה")]
         public string LastName { get; set; }
 
+        [Display(Name = "תפקיד")]
         public Role Role { get; set; }
 
+        [Display(Name = "מגדר")]
         public Gender Gender { get; set; }
 
-        [Display(Name = "Birth date")]
+        [Display(Name = "תאריך לידה")]
         [DataType(DataType.Date)]
         public DateTime Birthdate { get; set; }
 
+        [Display(Name = "מדינת מוצא")]
         public string OriginCountry { get; set; }
 
         [NotMapped]
-        [Display(Name = "Picture")]
+        [Display(Name = "תמונה")]
         public IFormFile Image { get; set; }
 
         public string ImageUrl { get; set; }
@@ -41,21 +44,21 @@ namespace MovieApp.Models
 
     public enum Gender
     {
-        Male,
-        Female,
-        Other
+        זכר,
+        נקבה,
+        אחר
     }
 
     public enum Role
     {
-        Producer,
-        Director,
-        Writer,
-        Photographer,
-        Actor,
-        Editor,
-        Soundperson,
-        Singer,
-        SongWriter
+        מפיק,
+        במאי,
+        תסריטאי,
+        צלם,
+        שחקן,
+        עורך,
+        סאונדמן,
+        זמר,
+        פזמונאי
     }
 }

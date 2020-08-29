@@ -4,7 +4,7 @@
     ViewData["Title"] = "מאגר הסרטים";
 }
 
-@{ string userType = @Context.User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Role)?.Value;}
+
 <h1>מאגר הסרטים</h1>
 
 
@@ -50,47 +50,42 @@
             <tbody>
                 @foreach (var item in Model)
                 {
-                <tr>
-                    <td>
-                        <img src="@("/img/movies/"+ item.ImageUrl)" width="30" height="30">
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Country)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Language)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Year)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Genre)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Duration)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.TrailerUrl)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Rating)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.MovieIdInTMDB)
-                    </td>
-                    <td>
-                        <a class="btn btn-secondary btn-sm fa fa-info-circle mr-3" asp-action="Details" asp-route-id="@item.Id"></a>
-                        <a class="btn btn-secondary btn-sm fa fa-edit mr-3" asp-action="Edit" asp-route-id="@item.Id"></a>
-
-                        @if (userType == Account.UserType.Admin.ToString())
-                        {
-                            <a class="btn btn-secondary btn-sm fa fa-trash mr-3" asp-action="Delete" asp-route-id="@item.Id"></a>
-                        }
-                    </td>
-                </tr>
+                    <tr>
+                        <td>
+                            <img src="@("/img/movies/"+ item.ImageUrl)" width="30" height="30">
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Country)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Language)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Year)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Genre)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Duration)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.TrailerUrl)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Rating)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.MovieIdInTMDB)
+                        </td>
+                        <td>
+                            <a class="btn btn-outline-primary btn-sm fa fa-info-circle mr-3" asp-action="Details" asp-route-id="@item.Id"></a>
+                            <a class="btn btn-outline-primary btn-sm fa fa-edit mr-3" asp-action="Edit" asp-route-id="@item.Id"></a>
+                        </td>
+                    </tr>
                 }
             </tbody>
         </table>
@@ -99,5 +94,5 @@
 </div>
 
 <p>
-    <a class="btn btn-danger" asp-action="Create">צור חדש</a>
+    <a class="btn btn-primary" asp-action="Create">צור חדש</a>
 </p>

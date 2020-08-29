@@ -76,7 +76,7 @@ namespace MovieApp.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Duration,TrailerUrl")] Soundtrack soundtrack, int WriterId, int PerformerId, int[] MovieId)
+        public async Task<IActionResult> Create([Bind("Id,Name,Duration,SoundtrackUrl")] Soundtrack soundtrack, int WriterId, int PerformerId, int[] MovieId)
         {
             if (ModelState.IsValid)
             {
@@ -152,7 +152,7 @@ namespace MovieApp.Controllers
         [HttpPost]
         [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Duration,TrailerUrl")] Soundtrack soundtrack, int WriterId, int PerformerId, int[] MovieId)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Duration,SoundtrackUrl")] Soundtrack soundtrack, int WriterId, int PerformerId, int[] MovieId)
         {
             if (id != soundtrack.Id)
             {
