@@ -59,10 +59,26 @@ var drawPieChartSVG = function (svg_id, data) {
 };
 
 
+var convertEnumTextToAttribute = function (enumText) {
+    const enumValueToAttribute = {
+        "מדינה": "Country",
+        "סוגה": "Genre",
+        "שנת יציאה": "Year",
+        "משך בדקות": "Duration",
+        "שפת מקור": "Language",
+        "דירוג": "Rating",
+        "תפקיד": "Role",
+        "מגדר": "Gender",
+        "מדינת מוצא": "OriginCountry"
+    }
+
+    return enumValueToAttribute[enumText];
+}
+
 $("#spliceByMoviesSelect").change(function (data) {
     var text = $('#spliceByMoviesSelect option[value="' + data.currentTarget.value + '"')[0].text;
     var currentTarget = $("#spliceTarget")[0].value; 
-    d3.json("Count/?splice=" + text + "&context=" + currentTarget).then(function (data) {
+    d3.json("Count/?splice=" + convertEnumTextToAttribute(text) + "&context=" + currentTarget).then(function (data) {
         //Here you have data available, an object with the same structure 
         //as the JSON that was send by the server.
         if (data) {
@@ -74,7 +90,7 @@ $("#spliceByMoviesSelect").change(function (data) {
 $("#spliceByOfficialsSelect").change(function (data) {
     var text = $('#spliceByOfficialsSelect option[value="' + data.currentTarget.value + '"')[0].text;
     var currentTarget = $("#spliceTarget")[0].value; 
-    d3.json("Count/?splice=" + text + "&context=" + currentTarget).then(function (data) {
+    d3.json("Count/?splice=" + convertEnumTextToAttribute(text) + "&context=" + currentTarget).then(function (data) {
         //Here you have data available, an object with the same structure 
         //as the JSON that was send by the server.
         if (data) {

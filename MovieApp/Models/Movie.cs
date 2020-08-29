@@ -64,25 +64,37 @@ namespace MovieApp.Models
 
         public enum MovieSpliceOptions
         {
+            [Display(Name = "מדינה")]
             Country,
+            [Display(Name = "סוגה")]
             Genre,
+            [Display(Name = "שנת יציאה")]
             Year,
+            [Display(Name = "משך בדקות")]
             Duration,
+            [Display(Name = "שפת מקור")]
             Language,
+            [Display(Name = "דירוג")]
             Rating
         }
 
         public enum MovieAverageOfOptions
         {
+            [Display(Name = "משך בדקות")]
             Duration,
+            [Display(Name = "דירוג")]
             Rating
         }
 
         public enum MovieAverageByOptions
         {
+            [Display(Name = "מדינה")]
             Country,
+            [Display(Name = "סוגה")]
             Genre,
+            [Display(Name = "שנת יציאה")]
             Year,
+            [Display(Name = "שפת מקור")]
             Language,
         }
     }

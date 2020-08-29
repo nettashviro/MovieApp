@@ -1,7 +1,6 @@
 ﻿// svg_id - id of target svg
 // data - array of objects {label, value}
 var drawBarChartSVG = function (svg_id, data, averageOf, averageBy) {
-
     var svg = d3.select("#" + svg_id),
         margin = 200,
         width = svg.attr("width") - margin,
@@ -61,6 +60,24 @@ var drawBarChartSVG = function (svg_id, data, averageOf, averageBy) {
     }
 }
 
+var convertEnumTextToAttribute = function (enumText) {
+    const enumValueToAttribute = {
+        "משך בדקות": "Duration",
+        "דירוג": "Rating",
+
+        "מדינה": "Country",
+        "סוגה": "Genre",
+        "שנת יציאה": "Year",
+        "שפת מקור": "Language",
+
+        "גיל": "Age",
+        "תפקיד": "Role",
+        "מדינת מוצא": "OriginCountry"
+    }
+
+    return enumValueToAttribute[enumText];
+}
+
 $("#averageOfMoviesSelect").change(function (data) {
     var ofText = $('#averageOfMoviesSelect option[value="' + data.currentTarget.value + '"')[0].text;
 
@@ -68,7 +85,7 @@ $("#averageOfMoviesSelect").change(function (data) {
     if (bySelectValue != "") {
         var byText = $('#averageByMoviesSelect option[value="' + bySelectValue + '"')[0].text;
         var currentTarget = $("#spliceTarget")[0].value;
-        d3.json("Average/?avgOf=" + ofText + "&avgBy=" + byText + "&context=" + currentTarget).then(function (data) {
+        d3.json("Average/?avgOf=" + convertEnumTextToAttribute(ofText) + "&avgBy=" + convertEnumTextToAttribute(byText) + "&context=" + currentTarget).then(function (data) {
             //Here you have data available, an object with the same structure 
             //as the JSON that was send by the server.
             if (data) {
@@ -85,7 +102,7 @@ $("#averageOfOfficialsSelect").change(function (data) {
     if (bySelectValue != "") {
         var byText = $('#averageByOfficialsSelect option[value="' + bySelectValue + '"')[0].text;
         var currentTarget = $("#spliceTarget")[0].value;
-        d3.json("Average/?avgOf=" + ofText + "&avgBy=" + byText + "&context=" + currentTarget).then(function (data) {
+        d3.json("Average/?avgOf=" + convertEnumTextToAttribute(ofText) + "&avgBy=" + convertEnumTextToAttribute(byText) + "&context=" + currentTarget).then(function (data) {
             //Here you have data available, an object with the same structure 
             //as the JSON that was send by the server.
             if (data) {
@@ -102,7 +119,7 @@ $("#averageByMoviesSelect").change(function (data) {
     if (ofSelectValue != "") {
         var ofText = $('#averageOfMoviesSelect option[value="' + ofSelectValue + '"')[0].text;
         var currentTarget = $("#spliceTarget")[0].value;
-        d3.json("Average/?avgOf=" + ofText + "&avgBy=" + byText + "&context=" + currentTarget).then(function (data) {
+        d3.json("Average/?avgOf=" + convertEnumTextToAttribute(ofText) + "&avgBy=" + convertEnumTextToAttribute(byText) + "&context=" + currentTarget).then(function (data) {
             //Here you have data available, an object with the same structure 
             //as the JSON that was send by the server.
             if (data) {
@@ -119,7 +136,7 @@ $("#averageByOfficialsSelect").change(function (data) {
     if (ofSelectValue != "") {
         var ofText = $('#averageOfOfficialsSelect option[value="' + ofSelectValue + '"')[0].text;
         var currentTarget = $("#spliceTarget")[0].value;
-        d3.json("Average/?avgOf=" + ofText + "&avgBy=" + byText + "&context=" + currentTarget).then(function (data) {
+        d3.json("Average/?avgOf=" + convertEnumTextToAttribute(ofText) + "&avgBy=" + convertEnumTextToAttribute(byText) + "&context=" + currentTarget).then(function (data) {
             //Here you have data available, an object with the same structure 
             //as the JSON that was send by the server.
             if (data) {
@@ -136,7 +153,7 @@ $("#averageOfSoundtracksSelect").change(function (data) {
     if (bySelectValue != "") {
         var byText = $('#averageBySoundtracksSelect option[value="' + bySelectValue + '"')[0].text;
         var currentTarget = $("#spliceTarget")[0].value;
-        d3.json("Average/?avgOf=" + ofText + "&avgBy=" + byText + "&context=" + currentTarget).then(function (data) {
+        d3.json("Average/?avgOf=" + convertEnumTextToAttribute(ofText) + "&avgBy=" + convertEnumTextToAttribute(byText) + "&context=" + currentTarget).then(function (data) {
             //Here you have data available, an object with the same structure 
             //as the JSON that was send by the server.
             if (data) {
@@ -153,7 +170,7 @@ $("#averageBySoundtracksSelect").change(function (data) {
     if (ofSelectValue != "") {
         var ofText = $('#averageOfSoundtracksSelect option[value="' + ofSelectValue + '"')[0].text;
         var currentTarget = $("#spliceTarget")[0].value;
-        d3.json("Average/?avgOf=" + ofText + "&avgBy=" + byText + "&context=" + currentTarget).then(function (data) {
+        d3.json("Average/?avgOf=" + convertEnumTextToAttribute(ofText) + "&avgBy=" + convertEnumTextToAttribute(byText) + "&context=" + currentTarget).then(function (data) {
             //Here you have data available, an object with the same structure 
             //as the JSON that was send by the server.
             if (data) {

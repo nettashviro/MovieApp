@@ -30,6 +30,7 @@ namespace MovieApp.Models
 
         public enum SoundtrackAverageOfOptions
         {
+            [Display(Name = "משך בדקות")]
             Duration
         }
     }

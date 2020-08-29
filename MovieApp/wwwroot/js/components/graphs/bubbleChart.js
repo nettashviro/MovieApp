@@ -67,7 +67,7 @@ var drawBubbleChartSVG = function (svg_id, data) {
         tooltip
             .style("opacity", 1)
             .style("white-space", "pre-line")
-            .html("שם: " + d.name + "\n" + "ז'אנר: " + d.genre + "\n" + "כמות: " + d.count)
+            .html("שם: " + d.name + "\n" + "סוגה: " + convertGenreEnumValueToAttribute(d.genre) + "\n" + "כמות: " + d.count)
             .style("left", (d3.mouse(this)[0] + 70) + "px")
             .style("top", (d3.mouse(this)[1] + 300) + "px")
 
@@ -102,6 +102,12 @@ var drawBubbleChartSVG = function (svg_id, data) {
         }
     }
 };
+
+var convertGenreEnumValueToAttribute = function (enumValue) {
+    const enumValueToAttribute = ["אימה","דרמה", "קומדייה","אקשן","רומנטיקה","אנימציה"]
+
+    return enumValueToAttribute[enumValue];
+}
 
 $("#showGraph").click(function (data) {
     d3.json("GroupBy").then(function (data) {

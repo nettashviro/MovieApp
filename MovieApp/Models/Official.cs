@@ -63,19 +63,25 @@ namespace MovieApp.Models
 
         public enum OfficialSpliceOptions
         {
+            [Display(Name = "תפקיד")]
             Role,
+            [Display(Name = "מגדר")]
             Gender,
+            [Display(Name = "מדינת מוצא")]
             OriginCountry
         }
 
         public enum OfficialAverageOfOptions
         {
+            [Display(Name = "גיל")]
             Age
         }
 
         public enum OfficialAverageByOptions
         {
+            [Display(Name = "תפקיד")]
             Role,
+            [Display(Name = "מדינת מוצא")]
             OriginCountry
         }
     }
