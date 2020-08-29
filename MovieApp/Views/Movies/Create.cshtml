@@ -1,7 +1,7 @@
 ﻿@model MovieApp.Models.Movie
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "יצירה";
 }
 
 <div class="row">
@@ -86,7 +86,18 @@
                                 <span asp-validation-for="Rating" class="text-danger"></span>
                             </div>
                         </div>
-
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="OfficialOfMovies" class="control-label"></label>
+                                <select name="OfficialsIds" class="form-control" asp-items="ViewBag.OfficialName" multiple></select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="SoundtracksOfMovie" class="control-label"></label>
+                                <select name="SoundtracksIds" class="form-control" asp-items="ViewBag.SoundtrackName" multiple></select>
+                            </div>
+                        </div>
 
                         <div class="col-md-6">
                             <div class="form-group">
@@ -110,7 +121,7 @@
                     <div class="form-group">
                         <input type="submit" value="יצירה" class="btn btn-primary" />
                     </div>
-                </form>
+</form>
             </div>
         </div>
     </div>
@@ -146,7 +157,7 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">בחזרה לרשימה</a>
 </div>
 
 @section Scripts {

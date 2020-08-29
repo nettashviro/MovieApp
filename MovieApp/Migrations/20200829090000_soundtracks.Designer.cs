@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MovieApp.Data;
 
 namespace MovieApp.Migrations
 {
     [DbContext(typeof(MovieAppContext))]
-    partial class MovieAppContextModelSnapshot : ModelSnapshot
+    [Migration("20200829090000_soundtracks")]
+    partial class soundtracks
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -195,6 +197,9 @@ namespace MovieApp.Migrations
                     b.Property<double>("Duration")
                         .HasColumnType("float");
 
+                    b.Property<int?>("MovieId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
@@ -209,26 +214,13 @@ namespace MovieApp.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("MovieId");
+
                     b.HasIndex("PerformerId");
 
                     b.HasIndex("WriterId");
 
                     b.ToTable("Soundtrack");
-                });
-
-            modelBuilder.Entity("MovieApp.Models.SoundtrackOfMovie", b =>
-                {
-                    b.Property<int>("MovieId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SoundtrackId")
-                        .HasColumnType("int");
-
-                    b.HasKey("MovieId", "SoundtrackId");
-
-                    b.HasIndex("SoundtrackId");
-
-                    b.ToTable("SoundtrackOfMovie");
                 });
 
             modelBuilder.Entity("MovieApp.Models.Movie", b =>
@@ -262,6 +254,10 @@ namespace MovieApp.Migrations
 
             modelBuilder.Entity("MovieApp.Models.Soundtrack", b =>
                 {
+                    b.HasOne("MovieApp.Models.Movie", "Movie")
+                        .WithMany("Soundtracks")
+                        .HasForeignKey("MovieId");
+
                     b.HasOne("MovieApp.Models.Official", "Performer")
                         .WithMany()
                         .HasForeignKey("PerformerId");
@@ -269,21 +265,6 @@ namespace MovieApp.Migrations
                     b.HasOne("MovieApp.Models.Official", "Writer")
                         .WithMany()
                         .HasForeignKey("WriterId");
-                });
-
-            modelBuilder.Entity("MovieApp.Models.SoundtrackOfMovie", b =>
-                {
-                    b.HasOne("MovieApp.Models.Movie", "Movie")
-                        .WithMany("SoundtracksOfMovie")
-                        .HasForeignKey("MovieId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("MovieApp.Models.Soundtrack", "Soundtrack")
-                        .WithMany("SoundtrackOfMovies")
-                        .HasForeignKey("SoundtrackId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }
