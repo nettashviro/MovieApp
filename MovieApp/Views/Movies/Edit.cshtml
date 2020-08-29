@@ -28,18 +28,15 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label asp-for="Country" class="control-label"></label>
-                                <select asp-for="Country" asp-items="@(new SelectList(ViewBag.Countries, "Value", "Text"))" class="form-control">
+                                <select name="Country" asp-items="ViewBag.Countries" class="form-control">
                                     <option></option>
                                 </select>
-                                <span asp-validation-for="Country" class="text-danger"></span>
                             </div>
                         </div>
-
-
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label asp-for="Language" class="control-label"></label>
-                                <select asp-for="Language" asp-items="@(new SelectList(ViewBag.Languages, "Value", "Text"))" class="form-control">
+                                <select name="Language" asp-items="ViewBag.Languages" class="form-control">
                                     <option></option>
                                 </select>
                                 <span asp-validation-for="Language" class="text-danger"></span>
@@ -52,8 +49,6 @@
                                 <span asp-validation-for="Year" class="text-danger"></span>
                             </div>
                         </div>
-
-
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label asp-for="Genre" class="control-label"></label>
@@ -62,7 +57,6 @@
                                 </select>
                             </div>
                         </div>
-
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label asp-for="Duration" class="control-label"></label>
@@ -70,8 +64,6 @@
                                 <span asp-validation-for="Duration" class="text-danger"></span>
                             </div>
                         </div>
-
-
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label asp-for="TrailerUrl" class="control-label"></label>
@@ -86,8 +78,18 @@
                                 <span asp-validation-for="Rating" class="text-danger"></span>
                             </div>
                         </div>
-
-
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="OfficialOfMovies" class="control-label"></label>
+                                <select name="OfficialsIds" class="form-control" asp-items="ViewBag.OfficialName" multiple></select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="SoundtracksOfMovie" class="control-label"></label>
+                                <select name="SoundtracksIds" class="form-control" asp-items="ViewBag.SoundtrackName" multiple></select>
+                            </div>
+                        </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label asp-for="Image" class="control-label"></label>
@@ -100,14 +102,12 @@
                                 <label asp-for="MovieIdInTMDB" class="control-label"></label>
                                 <input id="TmdbId" asp-for="MovieIdInTMDB" class="form-control" />
                                 <span id="validtionSpanTmdbId" asp-validation-for="MovieIdInTMDB" class="text-danger"></span>
-
-                            </div>
-                            <div class="form-group">
-                                <asp:Button id="TMDBButton" class="btn btn-info" UseSubmitBehaviour="false">חפש במאגר TMDB</asp:Button>
                             </div>
                         </div>
+                        <div class="form-group">
+                            <asp:Button id="TMDBButton" class="btn btn-info" UseSubmitBehaviour="false">חפש במאגר TMDB</asp:Button>
+                        </div>
                     </div>
-
                 </div>
                 <div class="card-footer">
                     <div class="form-group">
@@ -116,8 +116,8 @@
                     </div>
                 </div>
             </form>
-        </div>
     </div>
+</div>
     <div class="col-xl-4 order-xl-2 mb-5 mb-xl-0">
         <div class="card shadow">
             <div class="card-header border-0">
@@ -145,7 +145,6 @@
             </div>
         </div>
     </div>
-
 </div>
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

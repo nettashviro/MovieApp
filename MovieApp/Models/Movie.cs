@@ -3,8 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace MovieApp.Models
 {
@@ -37,10 +35,11 @@ namespace MovieApp.Models
         [Display(Name = "דירוג")]
         public double Rating { get; set; }
 
-        [ForeignKey("Id_Official")]
-        public Official Official { get; set; }
+        [Display(Name = "בעלי תפקידים בסרט")]
+        public ICollection<OfficialOfMovie> OfficialOfMovies { get; set; }
 
-        public ICollection<Soundtrack> Soundtracks { get; set; }
+        [Display(Name = "פסקול")]
+        public ICollection<SoundtrackOfMovie> SoundtracksOfMovie { get; set; }
 
         [NotMapped]
         [Display(Name = "תמונה")]

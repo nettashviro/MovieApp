@@ -37,6 +37,9 @@ namespace MovieApp.Models
         public IFormFile Image { get; set; }
 
         public string ImageUrl { get; set; }
+
+        [Display(Name = "סרטים שבהם משתתף")]
+        public ICollection<OfficialOfMovie> OfficialOfMovies { get; set; }
     }
 
     public enum Gender
@@ -54,6 +57,8 @@ namespace MovieApp.Models
         צלם,
         שחקן,
         עורך,
-        סאונדמן
+        סאונדמן,
+        זמר,
+        פזמונאי
     }
 }

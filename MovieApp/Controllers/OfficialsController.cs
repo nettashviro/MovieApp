@@ -40,7 +40,7 @@ namespace MovieApp.Controllers
                 return NotFound();
             }
 
-            var official = await _context.Official
+            var official = await _context.Official.Include(o => o.OfficialOfMovies).ThenInclude(oof => oof.Movie)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (official == null)
             {
@@ -54,6 +54,8 @@ namespace MovieApp.Controllers
         public IActionResult Create()
         {
             var countries = new SelectList(CultureHelper.CountryList(), "Key", "Value");
+            ViewBag.MovieId = new SelectList(_context.Movie, "Id", "Id");
+            ViewBag.MovieName = new SelectList(_context.Movie, "Id", "Name");
             ViewBag.Countries = countries.OrderBy(p => p.Text).ToList();
 
             return View();
@@ -64,7 +66,7 @@ namespace MovieApp.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,FirstName,LastName,Role,Gender,Birthdate,OriginCountry,Image,ImageUrl")] Official official)
+        public async Task<IActionResult> Create([Bind("Id,FirstName,LastName,Role,Gender,Birthdate,OriginCountry,Image,ImageUrl")] Official official, int[] MovieId)
         {
             if (ModelState.IsValid)
             {
@@ -82,6 +84,10 @@ namespace MovieApp.Controllers
                 }
 
                 official.OriginCountry = CultureHelper.GetCountryByIdentifier(official.OriginCountry);
+                official.OfficialOfMovies = new List<OfficialOfMovie>();
+                foreach ( var id in MovieId) {
+                    official.OfficialOfMovies.Add(new OfficialOfMovie() { MovieId = id, OfficialId = official.Id });
+                }                
 
                 _context.Add(official);
                 await _context.SaveChangesAsync();
@@ -100,14 +106,35 @@ namespace MovieApp.Controllers
                 return NotFound();
             }
 
-            var official = await _context.Official.FindAsync(id);
+            var official = await _context.Official
+                .Include(o => o.OfficialOfMovies)
+                .FirstOrDefaultAsync(o => o.Id == id);
             if (official == null)
             {
                 return NotFound();
             }
 
-            var countries = new SelectList(CultureHelper.CountryList(), "Key", "Value");
-            ViewBag.Countries = countries.OrderBy(p => p.Text).ToList();
+
+
+            IEnumerable<SelectListItem> countriesSelectList = from c in CultureHelper.CountryList()
+                                                              select new SelectListItem
+                                                              {
+                                                                  Value = c.Key,
+                                                                  Text = c.Value,
+                                                                  Selected = CultureHelper.GetCountryByIdentifier(c.Key) == official.OriginCountry
+                                                              };
+            ViewBag.Countries = countriesSelectList.OrderBy(p => p.Text).ToList();
+
+            List<SelectListItem> movieNameSelectList = new List<SelectListItem>();
+            foreach (var m in _context.Movie)
+            {
+                SelectListItem s = new SelectListItem();
+                s.Value = m.Id.ToString();
+                s.Text = m.Name;
+                s.Selected = official.OfficialOfMovies.Any(oom => m.Id == oom.MovieId);
+                movieNameSelectList.Add(s);
+            }
+            ViewBag.MovieName = movieNameSelectList;
 
             return View(official);
         }
@@ -118,7 +145,7 @@ namespace MovieApp.Controllers
         [HttpPost]
         [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,FirstName,LastName,Role,Gender,Birthdate,OriginCountry,Image,ImageUrl")] Official official)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,FirstName,LastName,Role,Gender,Birthdate,OriginCountry,Image,ImageUrl")] Official official, int[] MovieId)
         {
             if (id != official.Id)
             {
@@ -157,6 +184,18 @@ namespace MovieApp.Controllers
                     }
 
                     official.OriginCountry = CultureHelper.GetCountryByIdentifier(official.OriginCountry);
+                    if (official.OfficialOfMovies == null)
+                    {
+                        official.OfficialOfMovies = new List<OfficialOfMovie>();
+                    }
+
+                    foreach (var movieId in MovieId)
+                    {
+                        official.OfficialOfMovies.Add(new OfficialOfMovie() { MovieId = movieId, OfficialId = official.Id });
+                    }
+
+                    _context.OfficialOfMovie.RemoveRange(_context.OfficialOfMovie.Where(oom => oom.OfficialId == official.Id));
+                    _context.OfficialOfMovie.AddRange(official.OfficialOfMovies);
 
                     _context.Update(official);
                     await _context.SaveChangesAsync();

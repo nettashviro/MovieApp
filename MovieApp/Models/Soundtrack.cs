@@ -13,14 +13,19 @@ namespace MovieApp.Models
         [Display(Name = "שם")]
         public string Name { get; set; }
 
-        // TODO: parse int to display minutes
         [Display(Name = "משך בדקות")]
-        public int Duration { get; set; }
+        public double Duration { get; set; }
+
+        [Display(Name = "כתובת לפסקול")]
+        public string SoundtrackUrl { get; set; }
+
+        [Display(Name = "סרטים בהם מנוגן")]
+        public ICollection<SoundtrackOfMovie> SoundtrackOfMovies { get; set; }
 
         [Display(Name = "כותב")]
-        public string Writer { get; set; }
+        public Official Writer { get; set; }
 
         [Display(Name = "מבצע")]
-        public string Performer { get; set; }
+        public Official Performer { get; set; }
     }
 }
