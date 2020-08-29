@@ -65,14 +65,14 @@ namespace MovieApp.Controllers
             var languages = new SelectList(CultureHelper.LanguageList(), "Key", "Value");
             ViewBag.Languages = languages.OrderBy(p => p.Text).ToList();
 
-            ViewData["OfficialId"] = new SelectList(_context.Official, "Id", "Id");
+            ViewBag.OfficialId = new SelectList(_context.Official, "Id", "Id");
             IEnumerable<SelectListItem> officialNameSelectList = from o in _context.Official
                                                      select new SelectListItem
                                                      {
                                                          Value = o.Id.ToString(),
                                                          Text = o.FirstName +  " " + o.LastName
                                                      };
-            ViewData["OfficialName"] = officialNameSelectList;
+            ViewBag.OfficialName = officialNameSelectList;
 
             return View();
         }
@@ -150,14 +150,14 @@ namespace MovieApp.Controllers
             var languages = new SelectList(CultureHelper.LanguageList(), "Key", "Value");
             ViewBag.Languages = languages.OrderBy(p => p.Text).ToList();
 
-            ViewData["OfficialId"] = new SelectList(_context.Official, "Id", "Id");
+            ViewBag.OfficialId = new SelectList(_context.Official, "Id", "Id");
             IEnumerable<SelectListItem> officialNameSelectList = from o in _context.Official
                                                                  select new SelectListItem
                                                                  {
                                                                      Value = o.Id.ToString(),
                                                                      Text = o.FirstName + " " + o.LastName
                                                                  };
-            ViewData["OfficialName"] = officialNameSelectList;
+            ViewBag.OfficialName = officialNameSelectList;
             return View(movie);
         }
 

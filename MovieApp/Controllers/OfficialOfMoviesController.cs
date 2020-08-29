@@ -49,8 +49,8 @@ namespace MovieApp.Controllers
         // GET: OfficialOfMovies/Create
         public IActionResult Create()
         {
-            ViewData["MovieId"] = new SelectList(_context.Movie, "Id", "Id");
-            ViewData["OfficialId"] = new SelectList(_context.Official, "Id", "Id");
+            ViewBag.MovieId = new SelectList(_context.Movie, "Id", "Id");
+            ViewBag.OfficialId = new SelectList(_context.Official, "Id", "Id");
             return View();
         }
 
@@ -67,8 +67,8 @@ namespace MovieApp.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["MovieId"] = new SelectList(_context.Movie, "Id", "Id", officialOfMovie.MovieId);
-            ViewData["OfficialId"] = new SelectList(_context.Official, "Id", "Id", officialOfMovie.OfficialId);
+            ViewBag.MovieId = new SelectList(_context.Movie, "Id", "Id", officialOfMovie.MovieId);
+            ViewBag.OfficialId = new SelectList(_context.Official, "Id", "Id", officialOfMovie.OfficialId);
             return View(officialOfMovie);
         }
 
@@ -85,8 +85,8 @@ namespace MovieApp.Controllers
             {
                 return NotFound();
             }
-            ViewData["MovieId"] = new SelectList(_context.Movie, "Id", "Id", officialOfMovie.MovieId);
-            ViewData["OfficialId"] = new SelectList(_context.Official, "Id", "Id", officialOfMovie.OfficialId);
+            ViewBag.MovieId = new SelectList(_context.Movie, "Id", "Id", officialOfMovie.MovieId);
+            ViewBag.OfficialId = new SelectList(_context.Official, "Id", "Id", officialOfMovie.OfficialId);
             return View(officialOfMovie);
         }
 
@@ -122,8 +122,8 @@ namespace MovieApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["MovieId"] = new SelectList(_context.Movie, "Id", "Id", officialOfMovie.MovieId);
-            ViewData["OfficialId"] = new SelectList(_context.Official, "Id", "Id", officialOfMovie.OfficialId);
+            ViewBag.MovieId = new SelectList(_context.Movie, "Id", "Id", officialOfMovie.MovieId);
+            ViewBag.OfficialId = new SelectList(_context.Official, "Id", "Id", officialOfMovie.OfficialId);
             return View(officialOfMovie);
         }
 

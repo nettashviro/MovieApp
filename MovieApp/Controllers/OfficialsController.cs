@@ -54,8 +54,8 @@ namespace MovieApp.Controllers
         public IActionResult Create()
         {
             var countries = new SelectList(CultureHelper.CountryList(), "Key", "Value");
-            ViewData["MovieId"] = new SelectList(_context.Movie, "Id", "Id");
-            ViewData["MovieName"] = new SelectList(_context.Movie, "Id", "Name");
+            ViewBag.MovieId = new SelectList(_context.Movie, "Id", "Id");
+            ViewBag.MovieName = new SelectList(_context.Movie, "Id", "Name");
             ViewBag.Countries = countries.OrderBy(p => p.Text).ToList();
 
             return View();
