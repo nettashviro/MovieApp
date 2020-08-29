@@ -1,67 +1,90 @@
 ﻿@model MovieApp.Models.Official
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "עריכה";
 }
 
-<h1>Edit</h1>
-
-<h4>Official</h4>
-<hr />
 <div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit" enctype="multipart/form-data">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="FirstName" class="control-label"></label>
-                <input asp-for="FirstName" class="form-control" />
-                <span asp-validation-for="FirstName" class="text-danger"></span>
+    <div class="col-xl-8 order-xl-1">
+        <div class="card bg-secondary shadow">
+            <div class="card-header bg-white border-0">
+                <div class="row align-items-center">
+                    <div class="col-8">
+                        <h3 class="mb-0">עריכת בעל תפקיד</h3>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="LastName" class="control-label"></label>
-                <input asp-for="LastName" class="form-control" />
-                <span asp-validation-for="LastName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Role" class="control-label"></label>
-                <select asp-for="Role" asp-items="Html.GetEnumSelectList<Role>()" class="form-control">
-                </select>
-                <span asp-validation-for="Role" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Gender" class="control-label"></label>
-                <select asp-for="Gender" asp-items="Html.GetEnumSelectList<Gender>()" class="form-control">
-                </select>
-                <span asp-validation-for="Gender" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Birthdate" class="control-label"></label>
-                <input asp-for="Birthdate" class="form-control" />
-                <span asp-validation-for="Birthdate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="OriginCountry" class="control-label"></label>
-                <select asp-for="OriginCountry" asp-items="@(new SelectList(ViewBag.Countries, "Value", "Text"))" class="form-control">
-                    <option selected="selected" value="@ViewBag.OriginCountry"></option>
+            <form asp-action="Edit" enctype="multipart/form-data">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <input type="hidden" asp-for="Id" />
+                            <div class="form-group">
+                                <label asp-for="FirstName" class="control-label"></label>
+                                <input asp-for="FirstName" class="form-control" />
+                                <span asp-validation-for="FirstName" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="LastName" class="control-label"></label>
+                                <input asp-for="LastName" class="form-control" />
+                                <span asp-validation-for="LastName" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="Role" class="control-label"></label>
+                                <select asp-for="Role" asp-items="Html.GetEnumSelectList<Role>()" class="form-control">
+                                </select>
+                                <span asp-validation-for="Role" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="Gender" class="control-label"></label>
+                                <select asp-for="Gender" asp-items="Html.GetEnumSelectList<Gender>()" class="form-control">
+                                </select>
+                                <span asp-validation-for="Gender" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="Birthdate" class="control-label"></label>
+                                <input asp-for="Birthdate" class="form-control" />
+                                <span asp-validation-for="Birthdate" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="OriginCountry" class="control-label"></label>
+                                <select asp-for="OriginCountry" asp-items="@(new SelectList(ViewBag.Countries, "Value", "Text"))" class="form-control">
+                                    <option selected="selected" value="@ViewBag.OriginCountry"></option>
 
-                </select>
-                <span asp-validation-for="OriginCountry" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Image" class="control-label"></label>
-                <input asp-for="Image" accept="image/*" />
-                <span asp-validation-for="Image" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+                                </select>
+                                <span asp-validation-for="OriginCountry" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="Image" class="control-label"></label>
+                                <input asp-for="Image" accept="image/*" />
+                                <span asp-validation-for="Image" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="form-group">
+                        <a asp-action="Index" class="btn btn-primary">בחזרה לרשימה</a>
+                        <input type="submit" value="שמירה" class="btn btn-primary" />
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {
