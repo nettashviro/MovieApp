@@ -28,7 +28,8 @@ namespace MovieApp.Models
         [Display(Name = "בעלי תפקידים בסרט")]
         public ICollection<OfficialOfMovie> OfficialOfMovies { get; set; }
 
-        public ICollection<Soundtrack> Soundtracks { get; set; }
+        [Display(Name = "שירים בסרט")]
+        public ICollection<SoundtrackOfMovie> SoundtracksOfMovie { get; set; }
 
         [NotMapped]
         [Display(Name = "Picture")]

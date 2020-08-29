@@ -31,30 +31,31 @@
     <tbody>
         @foreach (var item in Model)
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Duration)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Writer)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Performer)
-                </td>
-                <td>
-                    @if (userType == Account.UserType.Admin.ToString())
-                    {
-                        <a class="btn btn-secondary btn-sm fa fa-trash mr-3" asp-action="Delete" asp-route-id="@item.Id"></a>
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Duration)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Writer.FirstName)
+                @Html.DisplayFor(modelItem => item.Writer.LastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Performer.FirstName)
+                @Html.DisplayFor(modelItem => item.Performer.LastName)
+            </td>
+            <td>
 
-                    }
-                    <a class="btn btn-secondary btn-sm fa fa-edit mr-3" asp-action="Edit" asp-route-id="@item.Id"></a>
-
-                    <a class="btn btn-secondary btn-sm fa fa-info-circle mr-3" asp-action="Details" asp-route-id="@item.Id"></a>
-                </td>
-            </tr>
+                <a class="btn btn-secondary btn-sm fa fa-info-circle mr-3" asp-action="Details" asp-route-id="@item.Id"></a>
+                <a class="btn btn-secondary btn-sm fa fa-edit mr-3" asp-action="Edit" asp-route-id="@item.Id"></a>
+                @if (userType == Account.UserType.Admin.ToString())
+                {
+                    <a class="btn btn-secondary btn-sm fa fa-trash mr-3" asp-action="Delete" asp-route-id="@item.Id"></a>
+                }
+            </td>
+        </tr>
         }
     </tbody>
 </table>

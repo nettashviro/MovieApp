@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -11,10 +12,15 @@ namespace MovieApp.Models
         public string Name { get; set; }
 
         // TODO: parse int to display minutes
-        public int Duration { get; set; }
+        public double Duration { get; set; }
+        
+        public string TrailerUrl { get; set; }
 
-        public string Writer { get; set; }
+        [Display(Name = "סרטים בהם מנוגן")]
+        public ICollection<SoundtrackOfMovie> SoundtrackOfMovies { get; set; }
 
-        public string Performer { get; set; }
+        public Official Writer { get; set; }
+
+        public Official Performer { get; set; }
     }
 }

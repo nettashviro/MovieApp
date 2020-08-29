@@ -54,6 +54,8 @@ namespace MovieApp.Models
         Photographer,
         Actor,
         Editor,
-        Soundperson
+        Soundperson,
+        Singer,
+        SongWriter
     }
 }

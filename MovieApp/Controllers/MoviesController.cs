@@ -46,7 +46,9 @@ namespace MovieApp.Controllers
                 return NotFound();
             }
 
-            var movie = await _context.Movie.Include(m => m.OfficialOfMovies).ThenInclude(oof => oof.Official)
+            var movie = await _context.Movie
+                .Include(m => m.OfficialOfMovies).ThenInclude(oom => oom.Official)
+                .Include(m => m.SoundtracksOfMovie).ThenInclude(som => som.Soundtrack)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (movie == null)
             {
@@ -74,6 +76,9 @@ namespace MovieApp.Controllers
                                                      };
             ViewBag.OfficialName = officialNameSelectList;
 
+            ViewBag.SoundtrackId = new SelectList(_context.Soundtrack, "Id", "Id");
+            ViewBag.SoundtrackName = new SelectList(_context.Soundtrack, "Id", "Name");
+
             return View();
         }
 
@@ -82,7 +87,7 @@ namespace MovieApp.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Country,Language,Year,Genre,Duration,TrailerUrl,Rating,Image,ImageUrl,MovieIdInTMDB")] Movie movie, int[] OfficialsIds)
+        public async Task<IActionResult> Create([Bind("Id,Name,Country,Language,Year,Genre,Duration,TrailerUrl,Rating,Image,ImageUrl,MovieIdInTMDB")] Movie movie, int[] OfficialsIds, int[] SoundtracksIds)
         {
             if (ModelState.IsValid)
             {
@@ -108,6 +113,13 @@ namespace MovieApp.Controllers
                 {
                     movie.OfficialOfMovies.Add(new OfficialOfMovie() { MovieId = movie.Id, OfficialId = id });
                 }
+
+                movie.SoundtracksOfMovie = new List<SoundtrackOfMovie>();
+                foreach (var id in SoundtracksIds)
+                {
+                    movie.SoundtracksOfMovie.Add(new SoundtrackOfMovie() { MovieId = movie.Id, SoundtrackId = id });
+                }
+
                 _context.Add(movie);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

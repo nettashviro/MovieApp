@@ -114,8 +114,8 @@ namespace MovieApp.Controllers
 
             var countries = new SelectList(CultureHelper.CountryList(), "Key", "Value");
             ViewBag.Countries = countries.OrderBy(p => p.Text).ToList();
-            ViewData["MovieId"] = new SelectList(_context.Movie, "Id", "Id");
-            ViewData["MovieName"] = new SelectList(_context.Movie, "Id", "Name");
+            ViewBag.MovieId = new SelectList(_context.Movie, "Id", "Id");
+            ViewBag.MovieName = new SelectList(_context.Movie, "Id", "Name");
 
             return View(official);
         }

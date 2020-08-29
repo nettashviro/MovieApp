@@ -24,7 +24,11 @@ namespace MovieApp.Controllers
         // GET: Soundtracks
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Soundtrack.ToListAsync());
+            var soundtracks = await _context.Soundtrack
+                .Include(s => s.Writer)
+                .Include(s => s.Performer)
+                .ToListAsync();
+            return View(soundtracks);
         }
 
         // GET: Soundtracks/Details/5
@@ -36,6 +40,9 @@ namespace MovieApp.Controllers
             }
 
             var soundtrack = await _context.Soundtrack
+                .Include(s => s.SoundtrackOfMovies).ThenInclude(sof => sof.Movie)
+                .Include(s => s.Writer)
+                .Include(s => s.Performer)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (soundtrack == null)
             {
@@ -49,6 +56,18 @@ namespace MovieApp.Controllers
         // GET: Soundtracks/Create
         public IActionResult Create()
         {
+            ViewBag.WriterId = new SelectList(_context.Official, "Id", "Id");
+            ViewBag.PerformerId = new SelectList(_context.Official, "Id", "Id");
+            IEnumerable<SelectListItem> officialNameSelectList = from o in _context.Official
+                                                                 select new SelectListItem
+                                                                 {
+                                                                     Value = o.Id.ToString(),
+                                                                     Text = o.FirstName + " " + o.LastName
+                                                                 };
+            ViewBag.WriterName = officialNameSelectList;
+            ViewBag.PerformerName = officialNameSelectList;
+            ViewBag.MovieId = new SelectList(_context.Movie, "Id", "Id");
+            ViewBag.MovieName = new SelectList(_context.Movie, "Id", "Name");
             return View();
         }
 
@@ -57,10 +76,18 @@ namespace MovieApp.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Duration,Writer,Performer")] Soundtrack soundtrack)
+        public async Task<IActionResult> Create([Bind("Id,Name,Duration,TrailerUrl")] Soundtrack soundtrack, int WriterId, int PerformerId, int[] MovieId)
         {
             if (ModelState.IsValid)
             {
+                soundtrack.Writer = _context.Official.First(o => o.Id == WriterId);
+                soundtrack.Performer = _context.Official.First(o => o.Id == PerformerId);
+                soundtrack.SoundtrackOfMovies = new List<SoundtrackOfMovie>();
+                foreach (var id in MovieId)
+                {
+                    soundtrack.SoundtrackOfMovies.Add(new SoundtrackOfMovie() { MovieId = id, SoundtrackId = soundtrack.Id });
+                }
+
                 _context.Add(soundtrack);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
