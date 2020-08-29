@@ -249,7 +249,8 @@ namespace MovieApp.Controllers
         public async Task<IActionResult> CountriesMapped()
         {
             var allMovies = await _context.Movie.ToListAsync();
-            ViewBag.locations = allMovies.ToDictionary(movie => "Id" + movie.Id,
+            var moviesWithLocation = allMovies.Where(m => !String.IsNullOrEmpty(m.Country));
+            ViewBag.locations = moviesWithLocation.ToDictionary(movie => "Id" + movie.Id,
                 movie => new { name = movie.Name, country = movie.Country, imageUrl = movie.ImageUrl });
 
             return View();
