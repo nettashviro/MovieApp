@@ -55,7 +55,6 @@ var drawBarChartSVG = function (svg_id, data, averageOf, averageBy) {
 
     var yAxisTickTexts = $(".tick text");
     for (yAxisTickText of yAxisTickTexts) {
-        debugger;
         if (yAxisTickText.getAttribute("x")) {
             yAxisTickText.setAttribute("x","-25");
         }
