@@ -52,7 +52,7 @@ namespace MovieApp.Controllers
                 movies = movies.Where(m => m.Language == CultureHelper.GetLanguageByIdentifier(languageFilter)).ToList();
             }
 
-            int pageSize = 25;
+            int pageSize = 2;
             int pageNumber = page ?? 1;
 
             return View(movies.ToPagedList(pageNumber, pageSize));
