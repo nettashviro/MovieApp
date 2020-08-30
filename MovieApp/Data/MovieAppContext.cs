@@ -53,7 +53,6 @@ namespace MovieApp.Data
 
         public DbSet<MovieApp.Models.Soundtrack> Soundtrack { get; set; }
 
-        public DbSet<MovieApp.Models.MovieReview> MovieReview { get; set; }
         public DbSet<MovieApp.Models.Account> Account { get; set; }
 
         public DbSet<MovieApp.Models.Tweet> Tweet { get; set; }

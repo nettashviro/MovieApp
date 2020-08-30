@@ -13,24 +13,24 @@ namespace MovieApp.ViewComponents
     public class RecommendMovieViewComponent : ViewComponent
     {
         private MovieAppContext _context;
-        List<Movie> _moviesReccomend;
+        List<Movie> _moviesRecommend;
 
         public RecommendMovieViewComponent(MovieAppContext context)
         {
             _context = context;
-            _moviesReccomend = new List<Movie>();
+            _moviesRecommend = new List<Movie>();
         }
 
         private void GetRecommendList(IEnumerable<Movie.MovieGenre> listGenre, IEnumerable<Movie> alreadyWatched)
         {
-            if (_moviesReccomend.Count < 3)
+            if (_moviesRecommend.Count < 3)
             {
                 foreach (var genre in listGenre)
                 {
                     var moviesByGenre = _context.Movie.Where(x => x.Genre == genre).ToList();
-                    var filter = alreadyWatched.AsQueryable().Concat(_moviesReccomend);
+                    var filter = alreadyWatched.AsQueryable().Concat(_moviesRecommend);
                     var moviesFilter = moviesByGenre.Except(filter);
-                    _moviesReccomend.AddRange(moviesFilter);
+                    _moviesRecommend.AddRange(moviesFilter);
                 }
             }
         }
@@ -55,7 +55,7 @@ namespace MovieApp.ViewComponents
 
             GetRecommendList(bothGenre, account.MovieWatched);
 
-            List<Movie> moviesReccomend = _moviesReccomend.Distinct().ToList();
+            List<Movie> moviesReccomend = _moviesRecommend.Distinct().ToList();
             ViewBag.moviesReccomend = (moviesReccomend.Count > 3) ? moviesReccomend.GetRange(0, 3) : moviesReccomend;
             ViewData["account"] = account;
             ViewBag.path = path;

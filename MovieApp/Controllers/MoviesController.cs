@@ -199,8 +199,10 @@ namespace MovieApp.Controllers
 
                 try
                 {
-                    var message = "HOT ALRET: new movie was added: " + movie.Name + " ,Don't missed it!!";
-                    var imagePath = Path.Combine(_hostEnvironment.WebRootPath, "img/movies", movie.ImageUrl);
+                    var message = "HOT ALRET: new movie was added: " + movie.Name + " , Don't missed it!!";
+                    string imgPath = (movie.ImageUrl != null) ? movie.ImageUrl : "default-movie.png";
+
+                    var imagePath = Path.Combine(_hostEnvironment.WebRootPath, "img/movies", imgPath);
 
                     await twitter.PublishTweetAsync(userId, movie.Id, message, imagePath, Tweet.TweetType.MovieAdded);
                 }
@@ -229,7 +231,6 @@ namespace MovieApp.Controllers
         }
 
         // GET: Movies/Edit/5
-        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -294,7 +295,6 @@ namespace MovieApp.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Country,Language,Year,Genre,Duration,TrailerUrl,Rating,Image,ImageUrl,MovieIdInTMDB")] Movie movie, int[] OfficialsIds, int[] SoundtracksIds)
         {
@@ -450,7 +450,7 @@ namespace MovieApp.Controllers
             if (userId == null) return BadRequest("User email claim is empty");
        
 
-            var account = await _context.Account.Include(a => a.MovieWatched).FirstOrDefaultAsync(m => m.Email == userId);
+            Account account = await _context.Account.Include(a => a.MovieWatched).FirstOrDefaultAsync(m => m.Email == userId);
             if (account == null) return BadRequest("User not found");
          
 
@@ -480,9 +480,11 @@ namespace MovieApp.Controllers
 
             try
             {
-                var message = "User " + userId + " marked the movie " + movie.Name + " as watched! Go see it if you haven't seen it already! Rating: " + movie.Rating + " stars";
-                var imagePath = Path.Combine(_hostEnvironment.WebRootPath, "img/movies", movie.ImageUrl);
+                var message = "User " + account.Username + " marked the movie " + movie.Name + " as watched! Go see it if you haven't seen it already! Rating: " + movie.Rating + " stars";
+                string imgPath = (movie.ImageUrl != null) ? movie.ImageUrl : "default-movie.png";
 
+                var imagePath = Path.Combine(_hostEnvironment.WebRootPath, "img/movies", imgPath);
+                
                 await twitter.PublishTweetAsync(userId, movie.Id, message, imagePath, Tweet.TweetType.MovieWatched);
             }
             catch (WebException)

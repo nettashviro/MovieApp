@@ -12,11 +12,6 @@
   <ItemGroup>
     <None Include="Views\Home\Index.cshtml" />
     <None Include="Views\Home\Privacy.cshtml" />
-    <None Include="Views\MovieReviews\Create.cshtml" />
-    <None Include="Views\MovieReviews\Delete.cshtml" />
-    <None Include="Views\MovieReviews\Details.cshtml" />
-    <None Include="Views\MovieReviews\Edit.cshtml" />
-    <None Include="Views\MovieReviews\Index.cshtml" />
     <None Include="Views\Shared\Error.cshtml" />
     <None Include="Views\Shared\_Layout.cshtml" />
     <None Include="Views\Soundtracks\Create.cshtml" />
