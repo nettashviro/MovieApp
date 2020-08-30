@@ -82,13 +82,19 @@ namespace MovieApp.Controllers
                 .Include(m => m.SoundtracksOfMovie).ThenInclude(som => som.Soundtrack).ThenInclude(s => s.Performer)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
+            if (movie == null)
+            {
+                return NotFound();
+            }
+
+
             if (!User.Identity.IsAuthenticated) return BadRequest("User not logged in");
 
             var userId = User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Email)?.Value;
             if (userId == null) return BadRequest("User email claim is empty");
 
 
-            var account = await _context.Account.Include(x=> x.MovieClicked).FirstOrDefaultAsync(m => m.Email == userId);
+            var account = await _context.Account.Include(x => x.MovieClicked).FirstOrDefaultAsync(m => m.Email == userId);
             if (account == null) return BadRequest("User not found");
 
             if (account.MovieClicked == null)
@@ -99,28 +105,18 @@ namespace MovieApp.Controllers
             }
             else
             {
-                var isMovieAlreadyClicked = account.MovieClicked.FirstOrDefault(m => m.Id == id);
-
-                if (isMovieAlreadyClicked == null)
+                if (account.MovieClicked.Count == 5)
                 {
-                    if(account.MovieClicked.Count == 5)
-                    {
-                        var moviesList = account.MovieClicked.ToList();
-                        moviesList.RemoveAt(0);
-                        account.MovieClicked = moviesList;
-                    }
-
-                    account.MovieClicked.Add(movie);
+                    var moviesList = account.MovieClicked.ToList();
+                    moviesList.RemoveAt(0);
+                    account.MovieClicked = moviesList;
                 }
+
+                account.MovieClicked.Add(movie);
             }
 
             await _context.SaveChangesAsync();
 
-
-            if (movie == null)
-            {
-                return NotFound();
-            }
 
             return View(movie);
         }

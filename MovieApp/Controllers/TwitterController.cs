@@ -100,9 +100,9 @@ namespace MovieApp.Controllers
 
                 if (filePath.StartsWith("http://") || filePath.StartsWith("https://"))
                 {
+                   
                     var webClient = new WebClient();
                     imageBytes = webClient.DownloadData(filePath);
-
 
                 } else
                 {
