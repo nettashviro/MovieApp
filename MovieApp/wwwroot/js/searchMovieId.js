@@ -46,5 +46,6 @@ function chooseTMDBInfo(i) {
     $('#TmdbId').val(resultList[i].id);
     $('#movieNameHebrew').val(resultList[i].title);   
     $('#TmdbRating').val(resultList[i].vote_average);
+    $('#movieImgURL').val(resultList[i].poster_path);
 }
 
