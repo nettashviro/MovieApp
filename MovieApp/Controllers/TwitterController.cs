@@ -8,7 +8,7 @@ using Tweetinvi;
 using System.Collections.Generic;
 using Tweetinvi.Parameters;
 using Microsoft.AspNetCore.Authorization;
-
+using System.Net;
 
 namespace MovieApp.Controllers
 {
@@ -95,12 +95,25 @@ namespace MovieApp.Controllers
         {
             try
             {
-                var fileBytes = System.IO.File.ReadAllBytes(filePath);
-
+                byte[] imageBytes;
                 var publishTweetParameters = new PublishTweetParameters(message);
-                if (fileBytes != null)
+
+                if (filePath.StartsWith("http://") || filePath.StartsWith("https://"))
                 {
-                    var media = Upload.UploadBinary(fileBytes);
+                    var webClient = new WebClient();
+                    imageBytes = webClient.DownloadData(filePath);
+
+
+                } else
+                {
+
+                    imageBytes =  System.IO.File.ReadAllBytes(filePath);
+                }
+
+
+                if (imageBytes != null)
+                {
+                    var media = Upload.UploadBinary(imageBytes);
                     publishTweetParameters.Medias.Add(media);
                 }
 

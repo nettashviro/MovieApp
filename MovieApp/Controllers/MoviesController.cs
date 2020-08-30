@@ -188,9 +188,15 @@ namespace MovieApp.Controllers
                 try
                 {
                     var message = "HOT ALRET: new movie was added: " + movie.Name + " , Don't missed it!!";
-                    string imgPath = (movie.ImageUrl != null) ? movie.ImageUrl : "default-movie.png";
+                    string imagePath;
+                    if (!movie.ImageUrl.StartsWith("http://") && !movie.ImageUrl.StartsWith("https://"))
+                    {
+                        imagePath = Path.Combine(_hostEnvironment.WebRootPath, movie.ImageUrl);
+                    }else
+                    {
+                        imagePath =  movie.ImageUrl;
 
-                    var imagePath = Path.Combine(_hostEnvironment.WebRootPath, "img/movies", imgPath);
+                    }
 
                     await twitter.PublishTweetAsync(userId, movie.Id, message, imagePath, Tweet.TweetType.MovieAdded);
                 }
@@ -453,11 +459,9 @@ namespace MovieApp.Controllers
             try
             {
                 var message = "User " + account.Username + " marked the movie " + movie.Name + " as watched! Go see it if you haven't seen it already! Rating: " + movie.Rating + " stars";
-                string imgPath = (movie.ImageUrl != null) ? movie.ImageUrl : "default-movie.png";
-
-                var imagePath = Path.Combine(_hostEnvironment.WebRootPath, "img/movies", imgPath);
+                string imgPath = (movie.ImageUrl != null) ? movie.ImageUrl : Path.Combine(_hostEnvironment.WebRootPath, "/img/movies/defaultMoviePoster.png");
                 
-                await twitter.PublishTweetAsync(userId, movie.Id, message, imagePath, Tweet.TweetType.MovieWatched);
+                await twitter.PublishTweetAsync(userId, movie.Id, message, imgPath, Tweet.TweetType.MovieWatched);
             }
             catch (WebException)
             { }
