@@ -1,0 +1,51 @@
+﻿
+@model IEnumerable<MovieApp.Models.Movie>
+
+@{ var account = ViewData["account"] as Account;}
+
+@if (account.MovieWatched != null && account.MovieWatched.Count > 0)
+{
+<div class="container">
+    <div class="row">
+        <div class="flex-wrap-movielist">
+            @foreach (var movie in account.MovieWatched)
+            {
+                <div class="movie-item-style-2 movie-item-style-1">
+
+                    <img width="170" height="200" src="@("/img/movies/" + movie.ImageUrl)" alt="@movie.Name">
+
+                    <div class="hvr-inner">
+                        <a class="btn btn-secondary btn-sm fa fa-info-circle mr-3" asp-action="Details" asp-route-id="@movie.Id"></a>
+                        <a class="btn btn-secondary btn-sm fa fa-edit mr-3" asp-action="Edit" asp-route-id="@movie.Id"></a>
+
+                        @{var isMovieAlreadyWatched = (account.MovieWatched != null) ? account.MovieWatched.FirstOrDefault(m => m.Id == movie.Id) : null;}
+                        @{string icon = (isMovieAlreadyWatched == null) ? "fa-eye" : "fa-eye-slash"; }
+                        <form asp-action="@((isMovieAlreadyWatched == null) ? "AddMovieWatched" : "DeleteMovieWatched")" asp-route-id="@movie.Id" asp-route-path="Seen" method="post">
+                            <button id="@movie.Id-seen" type="submit" class="btn btn-secondary btn-sm fa @icon mr-3"></button>
+                        </form>
+         
+                    </div>
+
+                    <div class="mv-item-infor">
+                        <h6><a asp-controller="Movies" asp-action="Details" asp-route-id="@movie.Id">@movie.Name</a></h6>
+                        <p class="rate"><i class="fa fa-star"></i><span>@movie.Rating</span> /10</p>
+                    </div>
+
+                </div>
+            }
+            </div>
+        </div>
+    </div>
+}else
+{
+    <br />
+    <div class="jumbotron">
+        <h2>אין לך עדיין סרטים שראית!</h2>
+
+        <p>
+            <div class="alert alert-info">
+                תתחיל לראות סרטים, אל תפספס!
+            </div>
+        </p>
+    </div>
+}

@@ -12,6 +12,8 @@ using Microsoft.EntityFrameworkCore;
 using MovieApp.Data;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
+using MovieApp.Models;
+using MovieApp.Services;
 
 namespace MovieApp
 {
@@ -63,7 +65,15 @@ namespace MovieApp
                     context.Request.Path = "/Errors/PageNotFound";
                     await next();
                 }
-            });
+
+                if(context.Response.StatusCode ==400 )//Bad request
+                {
+                    context.Request.Path = "/Errors/BadRequest";
+                    await next();
+                }
+
+             });
+
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();

@@ -9,7 +9,11 @@ namespace MovieApp.Data
 {
     public class MovieAppContext : DbContext
     {
-        public MovieAppContext (DbContextOptions<MovieAppContext> options)
+        public MovieAppContext()
+        {
+        }
+
+        public MovieAppContext(DbContextOptions<MovieAppContext> options)
             : base(options)
         {
         }
@@ -17,7 +21,7 @@ namespace MovieApp.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<OfficialOfMovie>()
-                .HasKey(oom => new { oom.MovieId, oom.OfficialId});
+                .HasKey(oom => new { oom.MovieId, oom.OfficialId });
 
             modelBuilder.Entity<OfficialOfMovie>()
                 .HasOne(oom => oom.Movie)
@@ -30,7 +34,7 @@ namespace MovieApp.Data
                 .HasForeignKey(oom => oom.OfficialId);
 
             modelBuilder.Entity<SoundtrackOfMovie>()
-            .HasKey(som => new { som.MovieId, som.SoundtrackId});
+            .HasKey(som => new { som.MovieId, som.SoundtrackId });
 
             modelBuilder.Entity<SoundtrackOfMovie>()
                 .HasOne(som => som.Movie)
@@ -49,8 +53,10 @@ namespace MovieApp.Data
 
         public DbSet<MovieApp.Models.Soundtrack> Soundtrack { get; set; }
 
-        public DbSet<MovieApp.Models.MovieReview> MovieReview { get; set; }
         public DbSet<MovieApp.Models.Account> Account { get; set; }
+
+        public DbSet<MovieApp.Models.Tweet> Tweet { get; set; }
+
         public DbSet<MovieApp.Models.OfficialOfMovie> OfficialOfMovie { get; set; }
         public DbSet<MovieApp.Models.SoundtrackOfMovie> SoundtrackOfMovie { get; set; }
     }

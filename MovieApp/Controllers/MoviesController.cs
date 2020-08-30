@@ -4,9 +4,13 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -24,9 +28,11 @@ namespace MovieApp.Controllers
         private readonly MovieAppContext _context;
         private readonly IWebHostEnvironment _hostEnvironment;
         private TMDB TMDBService = new TMDB();
+        private TwitterController twitter;
 
         public MoviesController(MovieAppContext context, IWebHostEnvironment hostEnvironment)
         {
+            twitter = new TwitterController(context);
             _context = context;
             this._hostEnvironment = hostEnvironment;
         }
@@ -34,8 +40,33 @@ namespace MovieApp.Controllers
         // GET: Movies
         public async Task<IActionResult> Index()
         {
+            var userId = User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Email)?.Value;
+
+            Account account = await _context.Account.FirstOrDefaultAsync(m => m.Email == userId);
+            ViewData["account"] = account;
             return View(await _context.Movie.ToListAsync());
         }
+
+        // GET: Movies/Seen
+        public async Task<IActionResult> Seen()
+        {
+            var userId = User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Email)?.Value;
+
+            Account account = await _context.Account.Include(m => m.MovieWatched).FirstOrDefaultAsync(m => m.Email == userId);
+            ViewData["account"] = account;
+            return View();
+        }
+
+        // GET: Movies/Watchlist
+        public async Task<IActionResult> Watchlist()
+        {
+            var userId = User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Email)?.Value;
+
+            Account account = await _context.Account.Include(m => m.MovieWatchlist).FirstOrDefaultAsync(m => m.Email == userId);
+            ViewData["account"] = account;
+            return View();
+        }
+
 
 
         // GET: Movies/Details/5
@@ -50,6 +81,42 @@ namespace MovieApp.Controllers
                 .Include(m => m.OfficialOfMovies).ThenInclude(oom => oom.Official)
                 .Include(m => m.SoundtracksOfMovie).ThenInclude(som => som.Soundtrack).ThenInclude(s => s.Performer)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
+            if (!User.Identity.IsAuthenticated) return BadRequest("User not logged in");
+
+            var userId = User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Email)?.Value;
+            if (userId == null) return BadRequest("User email claim is empty");
+
+
+            var account = await _context.Account.Include(x=> x.MovieClicked).FirstOrDefaultAsync(m => m.Email == userId);
+            if (account == null) return BadRequest("User not found");
+
+            if (account.MovieClicked == null)
+            {
+                List<Movie> movies = new List<Movie>();
+                movies.Add(movie);
+                account.MovieClicked = movies;
+            }
+            else
+            {
+                var isMovieAlreadyClicked = account.MovieClicked.FirstOrDefault(m => m.Id == id);
+
+                if (isMovieAlreadyClicked == null)
+                {
+                    if(account.MovieClicked.Count == 5)
+                    {
+                        var moviesList = account.MovieClicked.ToList();
+                        moviesList.RemoveAt(0);
+                        account.MovieClicked = moviesList;
+                    }
+
+                    account.MovieClicked.Add(movie);
+                }
+            }
+
+            await _context.SaveChangesAsync();
+
+
             if (movie == null)
             {
                 return NotFound();
@@ -104,7 +171,7 @@ namespace MovieApp.Controllers
                         await movie.Image.CopyToAsync(fileStream);
                     }
                 }
-                
+
                 movie.Country = CultureHelper.GetCountryByIdentifier(movie.Country);
                 movie.Language = CultureHelper.GetLanguageByIdentifier(movie.Language);
 
@@ -122,6 +189,27 @@ namespace MovieApp.Controllers
 
                 _context.Add(movie);
                 await _context.SaveChangesAsync();
+
+                var userId = User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Email)?.Value;
+
+                if (userId == null)
+                {
+                    return BadRequest("User email claim is empty");
+                }
+
+                try
+                {
+                    var message = "HOT ALRET: new movie was added: " + movie.Name + " , Don't missed it!!";
+                    string imgPath = (movie.ImageUrl != null) ? movie.ImageUrl : "default-movie.png";
+
+                    var imagePath = Path.Combine(_hostEnvironment.WebRootPath, "img/movies", imgPath);
+
+                    await twitter.PublishTweetAsync(userId, movie.Id, message, imagePath, Tweet.TweetType.MovieAdded);
+                }
+                catch (WebException)
+                { }
+
+
                 return RedirectToAction(nameof(Index));
             }
             return View(movie);
@@ -130,7 +218,7 @@ namespace MovieApp.Controllers
 
         // GET: Movies/FindMovieId
         public async Task<List<MovieSearchResult>> FindMovieId(string name)
-        {          
+        {
             List<MovieSearchResult> movieResult = TMDBService.GetMovieIdByName(name);
             return movieResult;
         }
@@ -143,7 +231,6 @@ namespace MovieApp.Controllers
         }
 
         // GET: Movies/Edit/5
-        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -208,7 +295,6 @@ namespace MovieApp.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Country,Language,Year,Genre,Duration,TrailerUrl,Rating,Image,ImageUrl,MovieIdInTMDB")] Movie movie, int[] OfficialsIds, int[] SoundtracksIds)
         {
@@ -326,6 +412,15 @@ namespace MovieApp.Controllers
 
             _context.Movie.Remove(movie);
             await _context.SaveChangesAsync();
+
+            // TODO: REMOVE FROM USER WATCHED IF MOVIE DELETED
+            try
+            {
+                await twitter.DeleteTweetAsync(movie.Id);
+            }
+            catch (WebException)
+            { }
+
             return RedirectToAction(nameof(Index));
         }
 
@@ -344,5 +439,179 @@ namespace MovieApp.Controllers
         {
             return _context.Movie.Any(e => e.Id == id);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> AddMovieWatched(int id, string path = "Index")
+        {
+            if (!User.Identity.IsAuthenticated) return BadRequest("User not logged in");
+            
+
+            var userId = User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Email)?.Value;
+            if (userId == null) return BadRequest("User email claim is empty");
+       
+
+            Account account = await _context.Account.Include(a => a.MovieWatched).FirstOrDefaultAsync(m => m.Email == userId);
+            if (account == null) return BadRequest("User not found");
+         
+
+            var movie = await _context.Movie.FirstOrDefaultAsync(m => m.Id == id);
+            if (movie == null) return NotFound("movie not found");
+        
+
+            if (account.MovieWatched == null)
+            {
+                List<Movie> movies = new List<Movie>();
+                movies.Add(movie);
+                account.MovieWatched = movies;
+            }
+            else
+            {
+                var isMovieAlreadyWatched = account.MovieWatched.FirstOrDefault(m => m.Id == id);
+                if (isMovieAlreadyWatched != null)
+                {
+                    return BadRequest("Movie already watched");
+                }
+
+                account.MovieWatched.Add(movie);
+            }
+
+            await _context.SaveChangesAsync();
+
+
+            try
+            {
+                var message = "User " + account.Username + " marked the movie " + movie.Name + " as watched! Go see it if you haven't seen it already! Rating: " + movie.Rating + " stars";
+                string imgPath = (movie.ImageUrl != null) ? movie.ImageUrl : "default-movie.png";
+
+                var imagePath = Path.Combine(_hostEnvironment.WebRootPath, "img/movies", imgPath);
+                
+                await twitter.PublishTweetAsync(userId, movie.Id, message, imagePath, Tweet.TweetType.MovieWatched);
+            }
+            catch (WebException)
+            { }
+
+
+            return RedirectToAction(path);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteMovieWatched(int id, string path = "Index")
+        {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return BadRequest("User not logged in");
+            }
+
+            var userId = User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Email)?.Value;
+
+            if (userId == null) return BadRequest("User email claim is empty");
+
+            var account = await _context.Account.Include(a => a.MovieWatched).FirstOrDefaultAsync(m => m.Email == userId);
+
+            if (account == null) return BadRequest("User not found");
+
+
+            var movie = await _context.Movie.FirstOrDefaultAsync(m => m.Id == id);
+            if (movie == null) return NotFound();
+
+            var isMovieAlreadyWatched = account.MovieWatched.FirstOrDefault(m => m.Id == id);
+
+            if (isMovieAlreadyWatched == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                account.MovieWatched.Remove(movie);
+            }
+
+            await _context.SaveChangesAsync();
+
+
+            try
+            {
+                await twitter.DeleteTweetAsync(movie.Id, userId, Tweet.TweetType.MovieWatched);
+            }
+            catch (WebException)
+            { }
+
+
+            return RedirectToAction(path);
+
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddMovieWatchlist(int id, string path = "Index")
+        {
+            if (!User.Identity.IsAuthenticated) return BadRequest("User not logged in");
+
+
+            var userId = User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Email)?.Value;
+            if (userId == null) return BadRequest("User email claim is empty");
+
+
+            var account = await _context.Account.Include(a => a.MovieWatchlist).FirstOrDefaultAsync(m => m.Email == userId);
+            if (account == null) return BadRequest("User not found");
+
+
+            var movie = await _context.Movie.FirstOrDefaultAsync(m => m.Id == id);
+            if (movie == null) return NotFound("movie not found");
+
+
+            if (account.MovieWatchlist == null)
+            {
+                List<Movie> movies = new List<Movie>();
+                movies.Add(movie);
+                account.MovieWatchlist = movies;
+            }
+            else
+            {
+                var isMovieInWatchlist = account.MovieWatchlist.FirstOrDefault(m => m.Id == id);
+                if (isMovieInWatchlist != null)
+                {
+                    return BadRequest("Movie already in watchlist");
+                }
+
+                account.MovieWatchlist.Add(movie);
+            }
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(path);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteMovieWatchlist(int id, string path = "Index")
+        {
+            if (!User.Identity.IsAuthenticated) return BadRequest("User not logged in");
+
+            var userId = User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Email)?.Value;
+
+            if (userId == null) return BadRequest("User email claim is empty");
+
+            var account = await _context.Account.Include(a => a.MovieWatchlist).FirstOrDefaultAsync(m => m.Email == userId);
+
+            if (account == null) return BadRequest("User not found");
+
+
+            var movie = await _context.Movie.FirstOrDefaultAsync(m => m.Id == id);
+            if (movie == null) return NotFound();
+
+            var isMovieAlreadyWatched = account.MovieWatchlist.FirstOrDefault(m => m.Id == id);
+
+            if (isMovieAlreadyWatched == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                account.MovieWatchlist.Remove(movie);
+            }
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(path);
+        }
+
     }
 }

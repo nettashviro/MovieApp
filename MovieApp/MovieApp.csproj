@@ -12,11 +12,6 @@
   <ItemGroup>
     <None Include="Views\Home\Index.cshtml" />
     <None Include="Views\Home\Privacy.cshtml" />
-    <None Include="Views\MovieReviews\Create.cshtml" />
-    <None Include="Views\MovieReviews\Delete.cshtml" />
-    <None Include="Views\MovieReviews\Details.cshtml" />
-    <None Include="Views\MovieReviews\Edit.cshtml" />
-    <None Include="Views\MovieReviews\Index.cshtml" />
     <None Include="Views\Shared\Error.cshtml" />
     <None Include="Views\Shared\_Layout.cshtml" />
     <None Include="Views\Soundtracks\Create.cshtml" />
@@ -62,6 +57,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.4" />
+    <PackageReference Include="TweetinviAPI" Version="4.0.3" />
   </ItemGroup>
 
   <ItemGroup>
