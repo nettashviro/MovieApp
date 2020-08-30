@@ -155,8 +155,7 @@ namespace MovieApp.Controllers
             if (ModelState.IsValid)
             {
                 movie.ImageUrl =  (movie.ImageUrl == null)? "/img/movies/defaultMoviePoster.png": ("http://image.tmdb.org/t/p/w188_and_h282_bestv2" + movie.ImageUrl);
-               
-                movie.Country = CultureHelper.GetCountryByIdentifier(movie.Country);
+                movie.TrailerUrl = (movie.TrailerUrl == null) ? null : movie.TrailerUrl;
                 movie.Language = CultureHelper.GetLanguageByIdentifier(movie.Language);
 
                 movie.OfficialOfMovies = new List<OfficialOfMovie>();
@@ -219,6 +218,15 @@ namespace MovieApp.Controllers
             List<MovieReviewsResult> movieResult = TMDBService.GetMovieReviewsById(id);
             return movieResult;
         }
+
+
+        // GET: Movies/FindMovieVideos
+        public async Task<string> FindMovieVideos(string id)
+        {
+            string movieResult = TMDBService.GetMovieTrailerById(id);
+            return movieResult;
+        }
+
 
         // GET: Movies/Edit/5
         public async Task<IActionResult> Edit(int? id)
