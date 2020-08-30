@@ -158,20 +158,8 @@ namespace MovieApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (movie.Image != null)
-                {
-                    //upload files to wwwroot
-                    string fileName = Path.GetFileNameWithoutExtension(movie.Image.FileName);
-                    string extension = Path.GetExtension(movie.Image.FileName);
-                    movie.ImageUrl = fileName = fileName + DateTime.Now.ToString("yymmssfff") + extension;
-                    string path = Path.Combine(_hostEnvironment.WebRootPath + "/img/movies/", fileName);
-
-                    using (var fileStream = new FileStream(path, FileMode.Create))
-                    {
-                        await movie.Image.CopyToAsync(fileStream);
-                    }
-                }
-
+                movie.ImageUrl =  (movie.ImageUrl == null)? "/img/movies/defaultMoviePoster.png": ("http://image.tmdb.org/t/p/w188_and_h282_bestv2" + movie.ImageUrl);
+               
                 movie.Country = CultureHelper.GetCountryByIdentifier(movie.Country);
                 movie.Language = CultureHelper.GetLanguageByIdentifier(movie.Language);
 
@@ -308,30 +296,14 @@ namespace MovieApp.Controllers
                 try
                 {
                     var original_data = _context.Movie.AsNoTracking().Where(m => m.Id == id).FirstOrDefault();
-                    if (movie.Image != null)
+
+                    if (movie.ImageUrl == null)
                     {
-                        if (original_data.ImageUrl != null)
-                        {
-                            var imagePath = Path.Combine(_hostEnvironment.WebRootPath, "img/movies", original_data.ImageUrl);
-                            if (System.IO.File.Exists(imagePath))
-                            {
-                                System.IO.File.Delete(imagePath);
-                            }
-                        }
-
-                        string fileName = Path.GetFileNameWithoutExtension(movie.Image.FileName);
-                        string extension = Path.GetExtension(movie.Image.FileName);
-                        movie.ImageUrl = fileName = fileName + DateTime.Now.ToString("yymmssfff") + extension;
-                        string path = Path.Combine(_hostEnvironment.WebRootPath + "/img/movies/", fileName);
-
-                        using (var fileStream = new FileStream(path, FileMode.Create))
-                        {
-                            await movie.Image.CopyToAsync(fileStream);
-                        }
+                        movie.ImageUrl = "/img/movies/defaultMoviePoster.png";
                     }
                     else
                     {
-                        movie.ImageUrl = original_data.ImageUrl;
+                        movie.ImageUrl = "http://image.tmdb.org/t/p/w188_and_h282_bestv2" + movie.ImageUrl;
                     }
 
                     movie.Country = CultureHelper.GetCountryByIdentifier(movie.Country);
@@ -401,13 +373,13 @@ namespace MovieApp.Controllers
         {
             var movie = await _context.Movie.FindAsync(id);
 
-            if (movie.ImageUrl != null)
+            if (movie.ImageUrl == null)
             {
-                var imagePath = Path.Combine(_hostEnvironment.WebRootPath, "img/movies", movie.ImageUrl);
-                if (System.IO.File.Exists(imagePath))
-                {
-                    System.IO.File.Delete(imagePath);
-                }
+                movie.ImageUrl = "/img/movies/defaultMoviePoster.png";
+            }
+            else
+            {
+                movie.ImageUrl = "http://image.tmdb.org/t/p/w188_and_h282_bestv2" + movie.ImageUrl;
             }
 
             _context.Movie.Remove(movie);

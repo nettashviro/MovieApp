@@ -45,6 +45,7 @@ namespace MovieApp.Models
         [Display(Name = "תמונה")]
         public IFormFile Image { get; set; }
 
+        [Required]
         public string ImageUrl { get; set; }
 
         [Required]
