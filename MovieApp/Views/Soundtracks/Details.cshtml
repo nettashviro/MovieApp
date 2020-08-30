@@ -4,7 +4,6 @@
     ViewData["Title"] = "פרטי פסקול";
 }
 
-@{ string userType = @Context.User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Role)?.Value;}
 
 <div class="row" style="margin-bottom: 50px">
     <div class="col-xl-8 order-xl-1">
@@ -70,7 +69,7 @@
                 <a asp-action="Index" class="btn btn-primary"><i class="fa fa-arrow-right"></i> בחזרה לרשימה</a>
                 <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary"><i class="fa fa-edit"></i> ערוך</a>
 
-                @if (userType == Account.UserType.Admin.ToString())
+                @if (User.HasClaim(ClaimTypes.Role, Account.UserType.Admin.ToString()))
                 {
                     <form asp-action="Delete" style="display: inline-block;">
                         <input type="hidden" asp-for="Id" />

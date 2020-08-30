@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
-using System.Text;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using MovieApp.Data;
@@ -13,8 +11,6 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using System.Linq;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
 
@@ -25,12 +21,13 @@ namespace MovieApp.Controllers
         private readonly MovieAppContext _context;
         private readonly IWebHostEnvironment _hostEnvironment;
 
-
         public AccountController(MovieAppContext context, IWebHostEnvironment hostEnvironment)
         {
             _context = context;
             this._hostEnvironment = hostEnvironment;
         }
+
+    
 
         [HttpGet]
         [AllowAnonymous]
@@ -50,6 +47,7 @@ namespace MovieApp.Controllers
 
                 if (user != null)
                 {
+
                     SignIn(user);
 
                     // Handle ReturnUrl
@@ -59,7 +57,6 @@ namespace MovieApp.Controllers
                         redirect = Request.Cookies["ReturnUrl"];
                         Response.Cookies.Delete("ReturnUrl");
                     }
-
                     return Redirect(redirect);
                 }
 
@@ -71,7 +68,6 @@ namespace MovieApp.Controllers
         private async void SignIn(Account user)
         {
             HttpContext.Session.SetString("Type", user.Type.ToString());
-
             var claims = new List<Claim>{
                 new Claim(ClaimTypes.Name, user.Username),
                 new Claim(ClaimTypes.Role, user.Type.ToString()),
