@@ -10,10 +10,10 @@ using MovieApp.Data;
 namespace MovieApp.Migrations
 {
     [DbContext(typeof(MovieAppContext))]
-    [Migration("20200829153619_add-movi-watched")]
-    partial class addmoviwatched
+    [Migration("20200825161443_changing_rating_range")]
+    partial class changing_rating_range
     {
-        protected  void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -86,8 +86,8 @@ namespace MovieApp.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<float>("Rating")
-                        .HasColumnType("real");
+                    b.Property<double>("Rating")
+                        .HasColumnType("float");
 
                     b.Property<string>("TrailerUrl")
                         .HasColumnType("nvarchar(max)");
@@ -124,8 +124,8 @@ namespace MovieApp.Migrations
                     b.Property<bool>("IsViolent")
                         .HasColumnType("bit");
 
-                    b.Property<int>("Rank")
-                        .HasColumnType("int");
+                    b.Property<double>("Rank")
+                        .HasColumnType("float");
 
                     b.Property<int>("RecommendedAge")
                         .HasColumnType("int");
@@ -204,30 +204,6 @@ namespace MovieApp.Migrations
                     b.HasIndex("MovieId");
 
                     b.ToTable("Soundtrack");
-                });
-
-            modelBuilder.Entity("MovieApp.Models.Tweet", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Author")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("MovieId")
-                        .HasColumnType("int");
-
-                    b.Property<long>("TweetId")
-                        .HasColumnType("bigint");
-
-                    b.Property<int>("Type")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Tweet");
                 });
 
             modelBuilder.Entity("MovieApp.Models.Movie", b =>

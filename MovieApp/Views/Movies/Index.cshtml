@@ -97,13 +97,9 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.MovieIdInTMDB)
                     </td>
-                    <td>
-                        <a class="btn btn-secondary btn-sm fa fa-info-circle mr-3" asp-action="Details" asp-route-id="@item.Id"></a>
-                        <a class="btn btn-secondary btn-sm fa fa-edit mr-3" asp-action="Edit" asp-route-id="@item.Id"></a>
-
-                        @if (User.HasClaim(ClaimTypes.Role, Account.UserType.Admin.ToString()))
-                        {
-                            <a class="btn btn-secondary btn-sm fa fa-trash mr-3" asp-action="Delete" asp-route-id="@item.Id"></a>}
+                   <td>
+                            <a class="btn btn-outline-primary btn-sm fa fa-info-circle mr-3" asp-action="Details" asp-route-id="@item.Id"></a>
+                            <a class="btn btn-outline-primary btn-sm fa fa-edit mr-3" asp-action="Edit" asp-route-id="@item.Id"></a>
                     </td>
                 </tr>
                 }
@@ -116,7 +112,7 @@
 
 
 <p>
-    <a class="btn btn-danger" asp-action="Create">צור חדש</a>
+    <a class="btn btn-primary" asp-action="Create">צור חדש</a>
 </p>
 
 

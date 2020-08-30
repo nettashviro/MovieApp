@@ -24,7 +24,11 @@ namespace MovieApp.Controllers
         // GET: Soundtracks
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Soundtrack.ToListAsync());
+            var soundtracks = await _context.Soundtrack
+                .Include(s => s.Writer)
+                .Include(s => s.Performer)
+                .ToListAsync();
+            return View(soundtracks);
         }
 
         // GET: Soundtracks/Details/5
@@ -36,6 +40,9 @@ namespace MovieApp.Controllers
             }
 
             var soundtrack = await _context.Soundtrack
+                .Include(s => s.SoundtrackOfMovies).ThenInclude(sof => sof.Movie)
+                .Include(s => s.Writer)
+                .Include(s => s.Performer)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (soundtrack == null)
             {
@@ -49,6 +56,18 @@ namespace MovieApp.Controllers
         // GET: Soundtracks/Create
         public IActionResult Create()
         {
+            ViewBag.WriterId = new SelectList(_context.Official, "Id", "Id");
+            ViewBag.PerformerId = new SelectList(_context.Official, "Id", "Id");
+            IEnumerable<SelectListItem> officialNameSelectList = from o in _context.Official
+                                                                 select new SelectListItem
+                                                                 {
+                                                                     Value = o.Id.ToString(),
+                                                                     Text = o.FirstName + " " + o.LastName
+                                                                 };
+            ViewBag.WriterName = officialNameSelectList;
+            ViewBag.PerformerName = officialNameSelectList;
+            ViewBag.MovieId = new SelectList(_context.Movie, "Id", "Id");
+            ViewBag.MovieName = new SelectList(_context.Movie, "Id", "Name");
             return View();
         }
 
@@ -57,10 +76,18 @@ namespace MovieApp.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Duration,Writer,Performer")] Soundtrack soundtrack)
+        public async Task<IActionResult> Create([Bind("Id,Name,Duration,SoundtrackUrl")] Soundtrack soundtrack, int WriterId, int PerformerId, int[] MovieId)
         {
             if (ModelState.IsValid)
             {
+                soundtrack.Writer = _context.Official.First(o => o.Id == WriterId);
+                soundtrack.Performer = _context.Official.First(o => o.Id == PerformerId);
+                soundtrack.SoundtrackOfMovies = new List<SoundtrackOfMovie>();
+                foreach (var id in MovieId)
+                {
+                    soundtrack.SoundtrackOfMovies.Add(new SoundtrackOfMovie() { MovieId = id, SoundtrackId = soundtrack.Id });
+                }
+
                 _context.Add(soundtrack);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -77,11 +104,45 @@ namespace MovieApp.Controllers
                 return NotFound();
             }
 
-            var soundtrack = await _context.Soundtrack.FindAsync(id);
+            var soundtrack = await _context.Soundtrack
+                .Include(s => s.Writer)
+                .Include(s => s.Performer)
+                .Include(s => s.SoundtrackOfMovies).ThenInclude(som => som.Movie)
+                .FirstOrDefaultAsync(o => o.Id == id);
             if (soundtrack == null)
             {
                 return NotFound();
             }
+
+            IEnumerable<SelectListItem> writerNameSelectList = from o in _context.Official
+                                                                 select new SelectListItem
+                                                                 {
+                                                                     Value = o.Id.ToString(),
+                                                                     Text = o.FirstName + " " + o.LastName,
+                                                                     Selected = o.Id == soundtrack.Writer.Id
+                                                                 };
+            IEnumerable<SelectListItem> performerNameSelectList = from o in _context.Official
+                                                               select new SelectListItem
+                                                               {
+                                                                   Value = o.Id.ToString(),
+                                                                   Text = o.FirstName + " " + o.LastName,
+                                                                   Selected = o.Id == soundtrack.Performer.Id
+                                                               };
+            ViewBag.WriterName = writerNameSelectList;
+            ViewBag.PerformerName = performerNameSelectList;
+
+            List<SelectListItem> movieNameSelectList = new List<SelectListItem>();
+            foreach (var m in _context.Movie)
+            {
+                SelectListItem s = new SelectListItem();
+                s.Value = m.Id.ToString();
+                s.Text = m.Name;
+                s.Selected = soundtrack.SoundtrackOfMovies.Any(som => m.Id == som.MovieId);
+                movieNameSelectList.Add(s);
+            }
+
+            ViewBag.MovieName = movieNameSelectList;
+            
             return View(soundtrack);
         }
 
@@ -91,7 +152,7 @@ namespace MovieApp.Controllers
         [HttpPost]
         [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Duration,Writer,Performer")] Soundtrack soundtrack)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Duration,SoundtrackUrl")] Soundtrack soundtrack, int WriterId, int PerformerId, int[] MovieId)
         {
             if (id != soundtrack.Id)
             {
@@ -102,6 +163,17 @@ namespace MovieApp.Controllers
             {
                 try
                 {
+                    soundtrack.Writer = _context.Official.First(o => o.Id == WriterId);
+                    soundtrack.Performer = _context.Official.First(o => o.Id == PerformerId);
+                    soundtrack.SoundtrackOfMovies = new List<SoundtrackOfMovie>();
+                    foreach (var movieId in MovieId)
+                    {
+                        soundtrack.SoundtrackOfMovies.Add(new SoundtrackOfMovie() { MovieId = movieId, SoundtrackId = soundtrack.Id });
+                    }
+
+                    _context.SoundtrackOfMovie.RemoveRange(_context.SoundtrackOfMovie.Where(som => som.SoundtrackId == soundtrack.Id));
+                    _context.SoundtrackOfMovie.AddRange(soundtrack.SoundtrackOfMovies);
+
                     _context.Update(soundtrack);
                     await _context.SaveChangesAsync();
                 }

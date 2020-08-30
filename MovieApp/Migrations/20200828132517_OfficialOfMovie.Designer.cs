@@ -10,10 +10,10 @@ using MovieApp.Data;
 namespace MovieApp.Migrations
 {
     [DbContext(typeof(MovieAppContext))]
-    [Migration("20200829153619_add-movi-watched")]
-    partial class addmoviwatched
+    [Migration("20200828132517_OfficialOfMovie")]
+    partial class OfficialOfMovie
     {
-        protected  void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -71,9 +71,6 @@ namespace MovieApp.Migrations
                     b.Property<int>("Genre")
                         .HasColumnType("int");
 
-                    b.Property<int?>("Id_Official")
-                        .HasColumnType("int");
-
                     b.Property<string>("ImageUrl")
                         .HasColumnType("nvarchar(max)");
 
@@ -86,8 +83,8 @@ namespace MovieApp.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<float>("Rating")
-                        .HasColumnType("real");
+                    b.Property<double>("Rating")
+                        .HasColumnType("float");
 
                     b.Property<string>("TrailerUrl")
                         .HasColumnType("nvarchar(max)");
@@ -98,8 +95,6 @@ namespace MovieApp.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AccountId");
-
-                    b.HasIndex("Id_Official");
 
                     b.ToTable("Movie");
                 });
@@ -124,8 +119,8 @@ namespace MovieApp.Migrations
                     b.Property<bool>("IsViolent")
                         .HasColumnType("bit");
 
-                    b.Property<int>("Rank")
-                        .HasColumnType("int");
+                    b.Property<double>("Rank")
+                        .HasColumnType("float");
 
                     b.Property<int>("RecommendedAge")
                         .HasColumnType("int");
@@ -177,6 +172,21 @@ namespace MovieApp.Migrations
                     b.ToTable("Official");
                 });
 
+            modelBuilder.Entity("MovieApp.Models.OfficialOfMovie", b =>
+                {
+                    b.Property<int>("MovieId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("OfficialId")
+                        .HasColumnType("int");
+
+                    b.HasKey("MovieId", "OfficialId");
+
+                    b.HasIndex("OfficialId");
+
+                    b.ToTable("OfficialOfMovie");
+                });
+
             modelBuilder.Entity("MovieApp.Models.Soundtrack", b =>
                 {
                     b.Property<int>("Id")
@@ -206,39 +216,11 @@ namespace MovieApp.Migrations
                     b.ToTable("Soundtrack");
                 });
 
-            modelBuilder.Entity("MovieApp.Models.Tweet", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Author")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("MovieId")
-                        .HasColumnType("int");
-
-                    b.Property<long>("TweetId")
-                        .HasColumnType("bigint");
-
-                    b.Property<int>("Type")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Tweet");
-                });
-
             modelBuilder.Entity("MovieApp.Models.Movie", b =>
                 {
                     b.HasOne("MovieApp.Models.Account", null)
                         .WithMany("MovieWatched")
                         .HasForeignKey("AccountId");
-
-                    b.HasOne("MovieApp.Models.Official", "Official")
-                        .WithMany()
-                        .HasForeignKey("Id_Official");
                 });
 
             modelBuilder.Entity("MovieApp.Models.MovieReview", b =>
@@ -246,6 +228,21 @@ namespace MovieApp.Migrations
                     b.HasOne("MovieApp.Models.Movie", "Movie")
                         .WithMany()
                         .HasForeignKey("movie_id");
+                });
+
+            modelBuilder.Entity("MovieApp.Models.OfficialOfMovie", b =>
+                {
+                    b.HasOne("MovieApp.Models.Movie", "Movie")
+                        .WithMany("OfficialOfMovies")
+                        .HasForeignKey("MovieId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MovieApp.Models.Official", "Official")
+                        .WithMany("OfficialOfMovies")
+                        .HasForeignKey("OfficialId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("MovieApp.Models.Soundtrack", b =>

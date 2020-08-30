@@ -8,7 +8,6 @@
 
 
 <div class="card shadow">
-
     <div class="table-responsive">
         <table class="table align-items-center table-flush">
             <thead class="thead-light">
@@ -63,14 +62,8 @@
                             @Html.DisplayFor(modelItem => item.OriginCountry)
                         </td>
                         <td>
-                            @if (User.HasClaim(ClaimTypes.Role, Account.UserType.Admin.ToString()))
-                            {
-                                <a class="btn btn-secondary btn-sm fa fa-trash mr-3" asp-action="Delete" asp-route-id="@item.Id"></a>
-
-                            }
-                            <a class="btn btn-secondary btn-sm fa fa-edit mr-3" asp-action="Edit" asp-route-id="@item.Id"></a>
-
-                            <a class="btn btn-secondary btn-sm fa fa-info-circle mr-3" asp-action="Details" asp-route-id="@item.Id"></a>
+                            <a class="btn btn-outline-primary btn-sm fa fa-info-circle mr-3" asp-action="Details" asp-route-id="@item.Id"></a>
+                            <a class="btn btn-outline-primary btn-sm fa fa-edit mr-3" asp-action="Edit" asp-route-id="@item.Id"></a>
                         </td>
                     </tr>
                 }
@@ -81,5 +74,5 @@
 </div>
 
 <p>
-    <a class="btn btn-danger" asp-action="Create">צור חדש</a>
+    <a class="btn btn-primary" asp-action="Create">צור חדש</a>
 </p>

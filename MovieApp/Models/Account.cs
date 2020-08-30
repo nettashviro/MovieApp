@@ -21,16 +21,17 @@ namespace MovieApp.Models
         public int Id { get; set; }
 
         [Required]
+        [Display(Name = "מייל")]
         public string Email { get; set; }
 
         [Required]
-        [DisplayName("Username")]
+        [DisplayName("שם משתמש")]
         public string Username { get; set; }
 
         [Required]
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
         [DataType(DataType.Password)]
-        [Display(Name = "Password")]
+        [Display(Name = "סיסמה")]
         public string Password { get; set; }
 
         public UserType Type { get; set; }

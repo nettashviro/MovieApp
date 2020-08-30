@@ -43,7 +43,7 @@ namespace MovieApp.Data
                             Name="Amélie",
                             Country="France",
                             Year=2001,
-                            Genre=Movie.MovieGenre.Romance,
+                            Genre=Movie.MovieGenre.רומנטיקה,
                             Duration=130,
                             TrailerUrl="https://www.youtube.com/watch?v=HUECWi5pX7o",
                             Rating=5,
