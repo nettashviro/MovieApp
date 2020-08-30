@@ -3,7 +3,6 @@
 @{
     ViewData["Title"] = "מאגר בעלי התפקידים";
 }
-@{ string userType = @Context.User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Role)?.Value;}
 
 <h1>מאגר בעלי התפקידים</h1>
 
@@ -64,7 +63,7 @@
                             @Html.DisplayFor(modelItem => item.OriginCountry)
                         </td>
                         <td>
-                            @if (userType == Account.UserType.Admin.ToString())
+                            @if (User.HasClaim(ClaimTypes.Role, Account.UserType.Admin.ToString()))
                             {
                                 <a class="btn btn-secondary btn-sm fa fa-trash mr-3" asp-action="Delete" asp-route-id="@item.Id"></a>
 

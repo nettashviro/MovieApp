@@ -37,6 +37,10 @@ namespace MovieApp.Models
 
         public ICollection<Movie> MovieWatched { get; set; }
 
+        public ICollection<Movie> MovieClicked { get; set; }
+
+        public ICollection<Movie>  MovieWatchlist { get; set; }
+
         public string ProfileImageUrl { get; set; }
     }
 }

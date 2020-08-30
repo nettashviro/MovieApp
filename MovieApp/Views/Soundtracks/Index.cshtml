@@ -45,7 +45,7 @@
                     @Html.DisplayFor(modelItem => item.Performer)
                 </td>
                 <td>
-                    @if (userType == Account.UserType.Admin.ToString())
+                    @if (User.HasClaim(ClaimTypes.Role, Account.UserType.Admin.ToString()))
                     {
                         <a class="btn btn-secondary btn-sm fa fa-trash mr-3" asp-action="Delete" asp-route-id="@item.Id"></a>
 

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MovieApp.Data;
 
 namespace MovieApp.Migrations
 {
     [DbContext(typeof(MovieAppContext))]
-    partial class MovieAppContextModelSnapshot : ModelSnapshot
+    [Migration("20200829153619_add-movi-watched")]
+    partial class addmoviwatched
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -60,12 +62,6 @@ namespace MovieApp.Migrations
                     b.Property<int?>("AccountId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("AccountId1")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("AccountId2")
-                        .HasColumnType("int");
-
                     b.Property<string>("Country")
                         .HasColumnType("nvarchar(max)");
 
@@ -102,10 +98,6 @@ namespace MovieApp.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AccountId");
-
-                    b.HasIndex("AccountId1");
-
-                    b.HasIndex("AccountId2");
 
                     b.HasIndex("Id_Official");
 
@@ -241,16 +233,8 @@ namespace MovieApp.Migrations
             modelBuilder.Entity("MovieApp.Models.Movie", b =>
                 {
                     b.HasOne("MovieApp.Models.Account", null)
-                        .WithMany("MovieClicked")
-                        .HasForeignKey("AccountId");
-
-                    b.HasOne("MovieApp.Models.Account", null)
                         .WithMany("MovieWatched")
-                        .HasForeignKey("AccountId1");
-
-                    b.HasOne("MovieApp.Models.Account", null)
-                        .WithMany("MovieWatchlist")
-                        .HasForeignKey("AccountId2");
+                        .HasForeignKey("AccountId");
 
                     b.HasOne("MovieApp.Models.Official", "Official")
                         .WithMany()

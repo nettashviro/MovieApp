@@ -165,7 +165,11 @@ namespace MovieApp.Controllers
                     });
 
                     await tweetFound.DestroyAsync();
+                    _context.Tweet.Remove(tweetItem);
+
                 }
+
+                await _context.SaveChangesAsync();
 
                 return View();
             }

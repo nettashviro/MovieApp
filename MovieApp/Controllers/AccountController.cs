@@ -20,7 +20,6 @@ namespace MovieApp.Controllers
     {
         private readonly MovieAppContext _context;
         private readonly IWebHostEnvironment _hostEnvironment;
-        public Account account;
 
         public AccountController(MovieAppContext context, IWebHostEnvironment hostEnvironment)
         {
@@ -28,10 +27,7 @@ namespace MovieApp.Controllers
             this._hostEnvironment = hostEnvironment;
         }
 
-        public Account GetAccount()
-        {
-            return account;
-        }
+    
 
         [HttpGet]
         [AllowAnonymous]
@@ -51,7 +47,6 @@ namespace MovieApp.Controllers
 
                 if (user != null)
                 {
-                    account = user;
 
                     SignIn(user);
 
@@ -73,7 +68,6 @@ namespace MovieApp.Controllers
         private async void SignIn(Account user)
         {
             HttpContext.Session.SetString("Type", user.Type.ToString());
-
             var claims = new List<Claim>{
                 new Claim(ClaimTypes.Name, user.Username),
                 new Claim(ClaimTypes.Role, user.Type.ToString()),
