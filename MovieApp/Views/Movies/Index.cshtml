@@ -28,10 +28,13 @@
                         <h3 class="card-subtitle text-muted">@Html.DisplayFor(modelItem => item.Genre)</h3>
                         <span class="rating"><strong>@Html.DisplayFor(modelItem => item.Rating)</strong>/10 <i class="fas fa-star rotate"></i></span>
 
-                        <!-- Button trigger modal -->
-                        <a class="btn btn-outline-danger rounded-circle align-middle play-button" data-toggle="modal" data-target="@("#trailer" + item.Id)">
-                            <i class="fas fa-play"></i>
-                        </a>
+                        @if (!String.IsNullOrEmpty(item.TrailerUrl))
+                        {
+                            <!-- Button trigger modal -->
+                            <a class="btn btn-outline-danger rounded-circle align-middle play-button" data-toggle="modal" data-target="@("#trailer" + item.Id)">
+                                <i class="fas fa-play"></i>
+                            </a>
+                        }
                         <div class="movieActions mx-auto">
                             @{var isMovieAlreadyWatched = (account.MovieWatched != null) ? account.MovieWatched.FirstOrDefault(m => m.Id == item.Id) : null;}
                             @{string iconEye = (isMovieAlreadyWatched == null) ? "fa-eye" : "fa-eye-slash"; }
