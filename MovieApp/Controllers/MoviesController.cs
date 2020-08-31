@@ -97,15 +97,7 @@ namespace MovieApp.Controllers
             var account = await _context.Account.Include(x => x.MovieClicked).FirstOrDefaultAsync(m => m.Email == userId);
             if (account == null) return BadRequest("User not found");
 
-            if (account.MovieClicked == null)
-            {
-                List<Movie> movies = new List<Movie>();
-                movies.Add(movie);
-                account.MovieClicked = movies;
-            }
-            else
-            {
-                if (account.MovieClicked.Count == 5)
+               if (account.MovieClicked.Count == 5)
                 {
                     var moviesList = account.MovieClicked.ToList();
                     moviesList.RemoveAt(0);
@@ -113,7 +105,7 @@ namespace MovieApp.Controllers
                 }
 
                 account.MovieClicked.Add(movie);
-            }
+        
 
             await _context.SaveChangesAsync();
 

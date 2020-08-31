@@ -10,8 +10,8 @@ using MovieApp.Data;
 namespace MovieApp.Migrations
 {
     [DbContext(typeof(MovieAppContext))]
-    [Migration("20200822134829_add-profl")]
-    partial class addprofl
+    [Migration("20200831142417_ini")]
+    partial class ini
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -59,9 +59,6 @@ namespace MovieApp.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("AccountId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Country")
                         .HasColumnType("nvarchar(max)");
 
@@ -71,20 +68,30 @@ namespace MovieApp.Migrations
                     b.Property<int>("Genre")
                         .HasColumnType("int");
 
-                    b.Property<int?>("Id_Official")
-                        .HasColumnType("int");
-
                     b.Property<string>("ImageUrl")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Language")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("MovieClickedId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MovieIdInTMDB")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("MovieWatchedId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("MovieWatchlistId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<float>("Rating")
-                        .HasColumnType("real");
+                    b.Property<double>("Rating")
+                        .HasColumnType("float");
 
                     b.Property<string>("TrailerUrl")
                         .HasColumnType("nvarchar(max)");
@@ -94,51 +101,13 @@ namespace MovieApp.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AccountId");
+                    b.HasIndex("MovieClickedId");
 
-                    b.HasIndex("Id_Official");
+                    b.HasIndex("MovieWatchedId");
+
+                    b.HasIndex("MovieWatchlistId");
 
                     b.ToTable("Movie");
-                });
-
-            modelBuilder.Entity("MovieApp.Models.MovieReview", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
-
-                    b.Property<bool>("IsBlackAndWhite")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsHavingSequel")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsViolent")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("Rank")
-                        .HasColumnType("int");
-
-                    b.Property<int>("RecommendedAge")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Title")
-                        .HasColumnType("nvarchar(30)")
-                        .HasMaxLength(30);
-
-                    b.Property<int?>("movie_id")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("movie_id");
-
-                    b.ToTable("MovieReview");
                 });
 
             modelBuilder.Entity("MovieApp.Models.Official", b =>
@@ -174,6 +143,21 @@ namespace MovieApp.Migrations
                     b.ToTable("Official");
                 });
 
+            modelBuilder.Entity("MovieApp.Models.OfficialOfMovie", b =>
+                {
+                    b.Property<int>("MovieId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("OfficialId")
+                        .HasColumnType("int");
+
+                    b.HasKey("MovieId", "OfficialId");
+
+                    b.HasIndex("OfficialId");
+
+                    b.ToTable("OfficialOfMovie");
+                });
+
             modelBuilder.Entity("MovieApp.Models.Soundtrack", b =>
                 {
                     b.Property<int>("Id")
@@ -181,51 +165,123 @@ namespace MovieApp.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("Duration")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("MovieId")
-                        .HasColumnType("int");
+                    b.Property<double>("Duration")
+                        .HasColumnType("float");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Performer")
+                    b.Property<int?>("PerformerId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SoundtrackUrl")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Writer")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("WriterId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("MovieId");
+                    b.HasIndex("PerformerId");
+
+                    b.HasIndex("WriterId");
 
                     b.ToTable("Soundtrack");
+                });
+
+            modelBuilder.Entity("MovieApp.Models.SoundtrackOfMovie", b =>
+                {
+                    b.Property<int>("MovieId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SoundtrackId")
+                        .HasColumnType("int");
+
+                    b.HasKey("MovieId", "SoundtrackId");
+
+                    b.HasIndex("SoundtrackId");
+
+                    b.ToTable("SoundtrackOfMovie");
+                });
+
+            modelBuilder.Entity("MovieApp.Models.Tweet", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Author")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("MovieId")
+                        .HasColumnType("int");
+
+                    b.Property<long>("TweetId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Tweet");
                 });
 
             modelBuilder.Entity("MovieApp.Models.Movie", b =>
                 {
                     b.HasOne("MovieApp.Models.Account", null)
-                        .WithMany("MovieWatched")
-                        .HasForeignKey("AccountId");
+                        .WithMany("MovieClicked")
+                        .HasForeignKey("MovieClickedId");
 
-                    b.HasOne("MovieApp.Models.Official", "Official")
-                        .WithMany()
-                        .HasForeignKey("Id_Official");
+                    b.HasOne("MovieApp.Models.Account", null)
+                        .WithMany("MovieWatched")
+                        .HasForeignKey("MovieWatchedId");
+
+                    b.HasOne("MovieApp.Models.Account", null)
+                        .WithMany("MovieWatchlist")
+                        .HasForeignKey("MovieWatchlistId");
                 });
 
-            modelBuilder.Entity("MovieApp.Models.MovieReview", b =>
+            modelBuilder.Entity("MovieApp.Models.OfficialOfMovie", b =>
                 {
                     b.HasOne("MovieApp.Models.Movie", "Movie")
-                        .WithMany()
-                        .HasForeignKey("movie_id");
+                        .WithMany("OfficialOfMovies")
+                        .HasForeignKey("MovieId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MovieApp.Models.Official", "Official")
+                        .WithMany("OfficialOfMovies")
+                        .HasForeignKey("OfficialId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("MovieApp.Models.Soundtrack", b =>
                 {
-                    b.HasOne("MovieApp.Models.Movie", null)
-                        .WithMany("Soundtracks")
-                        .HasForeignKey("MovieId");
+                    b.HasOne("MovieApp.Models.Official", "Performer")
+                        .WithMany()
+                        .HasForeignKey("PerformerId");
+
+                    b.HasOne("MovieApp.Models.Official", "Writer")
+                        .WithMany()
+                        .HasForeignKey("WriterId");
+                });
+
+            modelBuilder.Entity("MovieApp.Models.SoundtrackOfMovie", b =>
+                {
+                    b.HasOne("MovieApp.Models.Movie", "Movie")
+                        .WithMany("SoundtracksOfMovie")
+                        .HasForeignKey("MovieId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MovieApp.Models.Soundtrack", "Soundtrack")
+                        .WithMany("SoundtrackOfMovies")
+                        .HasForeignKey("SoundtrackId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

@@ -60,7 +60,7 @@ namespace MovieApp.Services
                 Console.WriteLine($"Error in TMDB Service: There was a problem with extracting movie reviews by id. The problem is: {e.Message}");
             }
 
-            string videoUrl = (movieVideo.key != null) ? ("https://www.youtube.com/watch?v=" + movieVideo.key) : null;
+            string videoUrl = (movieVideo != null && movieVideo.key != null) ? ("https://www.youtube.com/watch?v=" + movieVideo.key) : null;
             return videoUrl;
         }
 

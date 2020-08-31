@@ -26,15 +26,24 @@
             </a>
         </li>
 
-    <li class="nav-item">
-        <a class="nav-link" asp-controller="Movies" asp-action="Seen">
-            <i class="fa fa-eye"></i> סרטים שראיתי
-        </a>
-    </li>
+        <li class="nav-item">
+            <a class="nav-link" asp-controller="Movies" asp-action="Seen">
+                <i class="fa fa-eye"></i> סרטים שראיתי
+            </a>
+        </li>
         <li class="nav-item">
             <a class="nav-link" asp-controller="Movies" asp-action="Watchlist">
                 <i class="fa fa-list"></i> רשימת צפייה
             </a>
         </li>
-    </ul>
+
+        @if (User.HasClaim(ClaimTypes.Role, Account.UserType.Admin.ToString()))
+        {
+        <li class="nav-item">
+            <a class="nav-link" asp-controller="Account" asp-action="Index">
+                <i class="fa fa-users-cog"></i> ניהול משתמשים
+            </a>
+        </li>
+        }
+                </ul>
 
