@@ -36,9 +36,13 @@ namespace MovieApp.Models
 
         public UserType Type { get; set; }
 
+        [ForeignKey("MovieWatchedId")]
         public ICollection<Movie> MovieWatched { get; set; }
 
+        [ForeignKey("MovieClickedId")]
         public ICollection<Movie> MovieClicked { get; set; }
+
+        [ForeignKey("MovieWatchlistId")]
 
         public ICollection<Movie>  MovieWatchlist { get; set; }
 
