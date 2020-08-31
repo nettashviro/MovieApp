@@ -1,12 +1,16 @@
 ﻿// svg_id - id of target svg
 var drawBubbleChartSVG = function (svg_id, data) {
+    var originalWidth = $("#" + svg_id)[0].width.baseVal.value;
+    var originalHeight = $("#" + svg_id)[0].height.baseVal.value;
     // set the dimensions and margins of the graph
     var margin = { top: 100, right: 100, bottom: 100, left: 100 },
-        width = 1200 - margin.left - margin.right,
-        height = 500 - margin.top - margin.bottom;
+        width = originalWidth - margin.left - margin.right,
+        height = originalHeight - margin.top - margin.bottom;
 
     // append the svg object to the body of the page
     var svg = d3.select("#" + svg_id)
+        .attr("width", originalWidth)
+        .attr("height", originalHeight)
         .append("g")
         .attr("width", width)
         .attr("height", height)
@@ -113,7 +117,7 @@ $("#showGraph").click(function (data) {
     d3.json("GroupBy").then(function (data) {
         //Here you have data available, an object with the same structure 
         //as the JSON that was send by the server.
-        if (data) {
+        if (data && data.length > 0) {
             drawBubbleChartSVG("svg_panel", data);
         }
     });

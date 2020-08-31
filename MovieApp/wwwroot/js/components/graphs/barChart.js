@@ -1,16 +1,22 @@
 ﻿// svg_id - id of target svg
 // data - array of objects {label, value}
 var drawBarChartSVG = function (svg_id, data, averageOf, averageBy) {
+    var originalWidth = $("#" + svg_id)[0].width.baseVal.value;
+    var originalHeight = $("#" + svg_id)[0].height.baseVal.value;
     var svg = d3.select("#" + svg_id),
         margin = 200,
-        width = svg.attr("width") - margin,
-        height = svg.attr("height") - margin
+        width = originalWidth - margin,
+        height = originalHeight - margin
     $("#" + svg_id)[0].innerHTML = '';
-    svg.append("text")
+    svg
+        .attr("width", originalWidth)
+        .attr("height", originalHeight)
+        .append("text")
         .attr("transform", "translate(100,0)")
         .attr("x", 50)
         .attr("y", 50)
         .attr("font-size", "24px")
+        
 
     var xScale = d3.scaleBand().range([0, width]).padding(0.4),
         yScale = d3.scaleLinear().range([height, 0]);
@@ -25,7 +31,7 @@ var drawBarChartSVG = function (svg_id, data, averageOf, averageBy) {
         .attr("transform", "translate(0," + height + ")")
         .call(d3.axisBottom(xScale))
         .append("text")
-        .attr("y", height - 250)
+        .attr("y", height - 225)
         .attr("x", width)
         .attr("fill", "currentColor")
         .attr("style", "font-weight: bold; font-size: 14px;")
@@ -88,7 +94,7 @@ $("#averageOfMoviesSelect").change(function (data) {
         d3.json("Average/?avgOf=" + convertEnumTextToAttribute(ofText) + "&avgBy=" + convertEnumTextToAttribute(byText) + "&context=" + currentTarget).then(function (data) {
             //Here you have data available, an object with the same structure 
             //as the JSON that was send by the server.
-            if (data) {
+            if (data && data.length > 0) {
                 drawBarChartSVG("svg_panel", data, ofText, byText);
             }
         });
@@ -105,7 +111,7 @@ $("#averageOfOfficialsSelect").change(function (data) {
         d3.json("Average/?avgOf=" + convertEnumTextToAttribute(ofText) + "&avgBy=" + convertEnumTextToAttribute(byText) + "&context=" + currentTarget).then(function (data) {
             //Here you have data available, an object with the same structure 
             //as the JSON that was send by the server.
-            if (data) {
+            if (data && data.length > 0) {
                 drawBarChartSVG("svg_panel", data, ofText, byText);
             }
         });
@@ -122,7 +128,7 @@ $("#averageByMoviesSelect").change(function (data) {
         d3.json("Average/?avgOf=" + convertEnumTextToAttribute(ofText) + "&avgBy=" + convertEnumTextToAttribute(byText) + "&context=" + currentTarget).then(function (data) {
             //Here you have data available, an object with the same structure 
             //as the JSON that was send by the server.
-            if (data) {
+            if (data && data.length > 0) {
                 drawBarChartSVG("svg_panel", data, ofText, byText);
             }
         });
@@ -139,7 +145,7 @@ $("#averageByOfficialsSelect").change(function (data) {
         d3.json("Average/?avgOf=" + convertEnumTextToAttribute(ofText) + "&avgBy=" + convertEnumTextToAttribute(byText) + "&context=" + currentTarget).then(function (data) {
             //Here you have data available, an object with the same structure 
             //as the JSON that was send by the server.
-            if (data) {
+            if (data && data.length > 0) {
                 drawBarChartSVG("svg_panel", data, ofText, byText);
             }
         });
@@ -156,7 +162,7 @@ $("#averageOfSoundtracksSelect").change(function (data) {
         d3.json("Average/?avgOf=" + convertEnumTextToAttribute(ofText) + "&avgBy=" + convertEnumTextToAttribute(byText) + "&context=" + currentTarget).then(function (data) {
             //Here you have data available, an object with the same structure 
             //as the JSON that was send by the server.
-            if (data) {
+            if (data && data.length > 0) {
                 drawBarChartSVG("svg_panel", data, ofText, byText);
             }
         });
@@ -173,7 +179,7 @@ $("#averageBySoundtracksSelect").change(function (data) {
         d3.json("Average/?avgOf=" + convertEnumTextToAttribute(ofText) + "&avgBy=" + convertEnumTextToAttribute(byText) + "&context=" + currentTarget).then(function (data) {
             //Here you have data available, an object with the same structure 
             //as the JSON that was send by the server.
-            if (data) {
+            if (data && data.length > 0) {
                 drawBarChartSVG("svg_panel", data, ofText, byText);
             }
         });

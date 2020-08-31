@@ -1,6 +1,4 @@
-﻿// svg_id - id of target svg
-// data - array of objects {label, value}
-var drawPieChartSVG = function (svg_id, data) {
+﻿var drawPieChartSVG = function (svg_id, data, text) {
     var svg = $("#" + svg_id)[0];
     var svgText = $("#" + svg_id + "_txt")[0];
     svg.innerHTML = '';
@@ -39,7 +37,7 @@ var drawPieChartSVG = function (svg_id, data) {
         .on("mouseover", function (d, i) {
             var txt = document.getElementById(svg_id + "_txt");
             if (txt) {
-                txt.innerHTML = (d.data.key || "ללא") + " (" + d.data.count + ")";
+                txt.innerHTML = text + ": " + (d.data.key || "ללא") + "\n" +  "כמות: " + d.data.count;
             }
         });
 
@@ -81,8 +79,8 @@ $("#spliceByMoviesSelect").change(function (data) {
     d3.json("Count/?splice=" + convertEnumTextToAttribute(text) + "&context=" + currentTarget).then(function (data) {
         //Here you have data available, an object with the same structure 
         //as the JSON that was send by the server.
-        if (data) {
-            drawPieChartSVG("svg_panel", data);
+        if (data && data.length > 0) {
+            drawPieChartSVG("svg_panel", data, text);
         }
     });
 });
@@ -93,8 +91,8 @@ $("#spliceByOfficialsSelect").change(function (data) {
     d3.json("Count/?splice=" + convertEnumTextToAttribute(text) + "&context=" + currentTarget).then(function (data) {
         //Here you have data available, an object with the same structure 
         //as the JSON that was send by the server.
-        if (data) {
-            drawPieChartSVG("svg_panel", data);
+        if (data && data.length > 0) {
+            drawPieChartSVG("svg_panel", data, text);
         }
     });
 });
