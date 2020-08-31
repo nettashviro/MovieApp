@@ -64,10 +64,10 @@
                                 <span asp-validation-for="Duration" class="text-danger"></span>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-6" style="display:none">
                             <div class="form-group">
                                 <label asp-for="TrailerUrl" class="control-label"></label>
-                                <input asp-for="TrailerUrl" class="form-control" />
+                                <input  id="movieTrailerURL" asp-for="TrailerUrl" class="form-control" />
                                 <span asp-validation-for="TrailerUrl" class="text-danger"></span>
                             </div>
                         </div>

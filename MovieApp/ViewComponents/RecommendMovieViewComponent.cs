@@ -27,7 +27,7 @@ namespace MovieApp.ViewComponents
             {
                 foreach (var genre in listGenre)
                 {
-                    var moviesByGenre = _context.Movie.Where(x => x.Genre == genre).ToList();
+                    var moviesByGenre = _context.Movie.Where(x => x.Genre == genre).OrderByDescending(x => x.Rating).ToList();
                     var filter = alreadyWatched.AsQueryable().Concat(_moviesRecommend);
                     var moviesFilter = moviesByGenre.Except(filter);
                     _moviesRecommend.AddRange(moviesFilter);
@@ -53,9 +53,19 @@ namespace MovieApp.ViewComponents
                 .OrderByDescending(x => x.Count)
                 .Select(x => x.Genre);
 
-            GetRecommendList(bothGenre, account.MovieWatched);
+            List<Movie> moviesReccomend; 
+            if (account.MovieWatched.Count == 0 && account.MovieClicked.Count == 0) {
+                moviesReccomend = _context.Movie.OrderByDescending(x => x.Rating).ToList();
 
-            List<Movie> moviesReccomend = _moviesRecommend.Distinct().ToList();
+            }
+            else
+            {
+
+                GetRecommendList(bothGenre, account.MovieWatched);
+                moviesReccomend = _moviesRecommend.Distinct().ToList();
+            }
+
+           
             ViewBag.moviesReccomend = (moviesReccomend.Count > 3) ? moviesReccomend.GetRange(0, 3) : moviesReccomend;
             ViewData["account"] = account;
             ViewBag.path = path;

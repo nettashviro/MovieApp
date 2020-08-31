@@ -29,7 +29,7 @@
     </div>
     <a asp-action="Details" asp-action="Details" asp-route-id="@movie.Id">
         <div class="hover hover-5 text-white rounded">
-            <img src="@("/img/movies/" + movie.ImageUrl)" alt="@movie.Name">
+            <img src="@(movie.ImageUrl)" alt="@movie.Name">
             <div class="hover-overlay"></div>
             <div class="hover-5-content">
                 <h3 class="hover-5-title text-uppercase font-weight-light mb-0">

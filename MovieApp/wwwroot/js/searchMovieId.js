@@ -13,7 +13,7 @@
                         var tableBody = "";
 
                         for (var i = 0; i < result.length; i++) {
-                            tableBody += "<tr onclick='chooseTMDBInfo(" + i + ")'><td>" + result[i].id + "</td><td>" + result[i].title + "</td><td>" + result[i].release_date + "</td></tr>";
+                            tableBody += "<tr onclick='chooseTMDBInfo(" + i + "); getVideoTrailer(" + result[i].id + ");'><td>" + result[i].id + "</td><td>" + result[i].title + "</td><td>" + result[i].release_date + "</td></tr>";
                         }
                         $('#resultTable tbody').html(tableBody);
                         $('#resultMessage').text("");                     
@@ -41,6 +41,18 @@
 });
 
 var resultList;
+
+function getVideoTrailer(id) {
+    $.ajax({
+        url: "/Movies/FindMovieVideos",
+        data: { id: id },
+        success: function (result) {
+            if (result != null) {
+                $('#movieTrailerURL').val(result);
+            }
+        }
+    }); 
+}
 
 function chooseTMDBInfo(i) {
     $('#TmdbId').val(resultList[i].id);

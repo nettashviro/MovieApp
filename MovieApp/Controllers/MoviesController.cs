@@ -82,13 +82,19 @@ namespace MovieApp.Controllers
                 .Include(m => m.SoundtracksOfMovie).ThenInclude(som => som.Soundtrack).ThenInclude(s => s.Performer)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
+            if (movie == null)
+            {
+                return NotFound();
+            }
+
+
             if (!User.Identity.IsAuthenticated) return BadRequest("User not logged in");
 
             var userId = User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Email)?.Value;
             if (userId == null) return BadRequest("User email claim is empty");
 
 
-            var account = await _context.Account.Include(x=> x.MovieClicked).FirstOrDefaultAsync(m => m.Email == userId);
+            var account = await _context.Account.Include(x => x.MovieClicked).FirstOrDefaultAsync(m => m.Email == userId);
             if (account == null) return BadRequest("User not found");
 
             if (account.MovieClicked == null)
@@ -99,28 +105,18 @@ namespace MovieApp.Controllers
             }
             else
             {
-                var isMovieAlreadyClicked = account.MovieClicked.FirstOrDefault(m => m.Id == id);
-
-                if (isMovieAlreadyClicked == null)
+                if (account.MovieClicked.Count == 5)
                 {
-                    if(account.MovieClicked.Count == 5)
-                    {
-                        var moviesList = account.MovieClicked.ToList();
-                        moviesList.RemoveAt(0);
-                        account.MovieClicked = moviesList;
-                    }
-
-                    account.MovieClicked.Add(movie);
+                    var moviesList = account.MovieClicked.ToList();
+                    moviesList.RemoveAt(0);
+                    account.MovieClicked = moviesList;
                 }
+
+                account.MovieClicked.Add(movie);
             }
 
             await _context.SaveChangesAsync();
 
-
-            if (movie == null)
-            {
-                return NotFound();
-            }
 
             return View(movie);
         }
@@ -159,8 +155,6 @@ namespace MovieApp.Controllers
             if (ModelState.IsValid)
             {
                 movie.ImageUrl =  (movie.ImageUrl == null)? "/img/movies/defaultMoviePoster.png": ("http://image.tmdb.org/t/p/w188_and_h282_bestv2" + movie.ImageUrl);
-               
-                movie.Country = CultureHelper.GetCountryByIdentifier(movie.Country);
                 movie.Language = CultureHelper.GetLanguageByIdentifier(movie.Language);
 
                 movie.OfficialOfMovies = new List<OfficialOfMovie>();
@@ -188,9 +182,15 @@ namespace MovieApp.Controllers
                 try
                 {
                     var message = "HOT ALRET: new movie was added: " + movie.Name + " , Don't missed it!!";
-                    string imgPath = (movie.ImageUrl != null) ? movie.ImageUrl : "default-movie.png";
+                    string imagePath;
+                    if (!movie.ImageUrl.StartsWith("http://") && !movie.ImageUrl.StartsWith("https://"))
+                    {
+                        imagePath = Path.Combine(_hostEnvironment.WebRootPath, movie.ImageUrl);
+                    }else
+                    {
+                        imagePath =  movie.ImageUrl;
 
-                    var imagePath = Path.Combine(_hostEnvironment.WebRootPath, "img/movies", imgPath);
+                    }
 
                     await twitter.PublishTweetAsync(userId, movie.Id, message, imagePath, Tweet.TweetType.MovieAdded);
                 }
@@ -217,6 +217,15 @@ namespace MovieApp.Controllers
             List<MovieReviewsResult> movieResult = TMDBService.GetMovieReviewsById(id);
             return movieResult;
         }
+
+
+        // GET: Movies/FindMovieVideos
+        public async Task<string> FindMovieVideos(string id)
+        {
+            string movieResult =  TMDBService.GetMovieTrailerById(id);
+            return movieResult;
+        }
+
 
         // GET: Movies/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -453,11 +462,9 @@ namespace MovieApp.Controllers
             try
             {
                 var message = "User " + account.Username + " marked the movie " + movie.Name + " as watched! Go see it if you haven't seen it already! Rating: " + movie.Rating + " stars";
-                string imgPath = (movie.ImageUrl != null) ? movie.ImageUrl : "default-movie.png";
-
-                var imagePath = Path.Combine(_hostEnvironment.WebRootPath, "img/movies", imgPath);
+                string imgPath = (movie.ImageUrl != null) ? movie.ImageUrl : Path.Combine(_hostEnvironment.WebRootPath, "/img/movies/defaultMoviePoster.png");
                 
-                await twitter.PublishTweetAsync(userId, movie.Id, message, imagePath, Tweet.TweetType.MovieWatched);
+                await twitter.PublishTweetAsync(userId, movie.Id, message, imgPath, Tweet.TweetType.MovieWatched);
             }
             catch (WebException)
             { }
