@@ -1,0 +1,27 @@
+﻿.hoverOverlay {
+    opacity: 0;
+    border-bottom: 0px solid #f5365c;
+}
+
+.hoverOverlay:hover {
+    opacity: 0.9;
+    border-bottom: 10px solid #f5365c;
+    transition: border 0.3s ease-in-out;
+}
+
+.hoverOverlay:hover .rotate {
+    transform: rotate(360deg);
+    transition: transform 1s;
+}
+
+.card-link{
+    color: white;
+}
+
+.card-link:hover {
+    color: #f5365c;
+}
+
+.rating {
+    color: #f5365c;
+}
