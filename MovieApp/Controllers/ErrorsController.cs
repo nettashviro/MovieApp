@@ -23,5 +23,9 @@ namespace MovieApp.Controllers
             return View();
         }
 
+        public IActionResult BadRequest()
+        {
+            return View();
+        }
     }
 }

@@ -4,7 +4,6 @@
     ViewData["Title"] = "פרטי סרט";
 }
 
-@{ string userType = @Context.User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Role)?.Value;}
 
 <div class="row" style="margin-bottom: 50px">
     <div class="col-xl-8 order-xl-1">
@@ -68,7 +67,7 @@
                             @Html.DisplayNameFor(model => model.Image)
                         </dt>
                         <dd class="col-sm-10">
-                            <img src="@("/img/movies/"+ Model.ImageUrl)" width="200" height="200">
+                            <img src="@(Model.ImageUrl)" width="200" height="200">
                         </dd>
                         <dt class="col-sm-3">
                             @Html.DisplayNameFor(model => model.OfficialOfMovies)
@@ -147,7 +146,7 @@
                     <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary"><i class="fa fa-edit"></i> ערוך</a>
                     <a asp-action="CountriesMapped" class="btn btn-primary"><i class="fa fa-map-marked-alt"></i> הצג על המפה</a>
 
-                    @if (userType == Account.UserType.Admin.ToString())
+                     @if (User.HasClaim(ClaimTypes.Role, Account.UserType.Admin.ToString()))
                     {
                         <form asp-action="Delete" style="display: inline-block;">
                             <input type="hidden" asp-for="Id" />

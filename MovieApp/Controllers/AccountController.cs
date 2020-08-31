@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
-using System.Text;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using MovieApp.Data;
@@ -13,10 +11,9 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using System.Linq;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 
 namespace MovieApp.Controllers
 {
@@ -25,12 +22,116 @@ namespace MovieApp.Controllers
         private readonly MovieAppContext _context;
         private readonly IWebHostEnvironment _hostEnvironment;
 
-
         public AccountController(MovieAppContext context, IWebHostEnvironment hostEnvironment)
         {
             _context = context;
             this._hostEnvironment = hostEnvironment;
         }
+
+        // GET: Movies
+        [Authorize]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Index()
+        {
+            return View(await _context.Account.ToListAsync());
+        }
+
+        [Authorize]
+        [Authorize(Roles = "Admin")]
+
+        // GET: Customers/Edit/5
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            if (id == 1)
+            {
+                return RedirectToAction("AccessDenied", "Errors");
+            }
+
+            var account = await _context.Account.FindAsync(id);
+            if (account == null)
+            {
+                return NotFound();
+            }
+            return View(account);
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Email,Username,Password,Type,ProfileImageUrl")]  Account account)
+        {
+            
+
+            if (id != account.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(account);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!AccountExists(account.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return View(account);
+        }
+
+        // GET: Products/Delete/5
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var account = await _context.Account
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (account == null)
+            {
+                return NotFound();
+            }
+
+            return View(account);
+        }
+
+        // POST: Products/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "Admin")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var account = await _context.Account.FindAsync(id);
+            _context.Account.Remove(account);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+
+        private bool AccountExists(int id)
+        {
+            return _context.Account.Any(e => e.Id == id);
+        }
+
 
         [HttpGet]
         [AllowAnonymous]
@@ -50,6 +151,7 @@ namespace MovieApp.Controllers
 
                 if (user != null)
                 {
+
                     SignIn(user);
 
                     // Handle ReturnUrl
@@ -59,7 +161,6 @@ namespace MovieApp.Controllers
                         redirect = Request.Cookies["ReturnUrl"];
                         Response.Cookies.Delete("ReturnUrl");
                     }
-
                     return Redirect(redirect);
                 }
 
@@ -71,7 +172,6 @@ namespace MovieApp.Controllers
         private async void SignIn(Account user)
         {
             HttpContext.Session.SetString("Type", user.Type.ToString());
-
             var claims = new List<Claim>{
                 new Claim(ClaimTypes.Name, user.Username),
                 new Claim(ClaimTypes.Role, user.Type.ToString()),

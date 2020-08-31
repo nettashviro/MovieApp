@@ -1,0 +1,147 @@
+﻿
+@model IEnumerable<MovieApp.Models.Movie>
+
+@{ var account = ViewData["account"] as Account;}
+
+<div class="jumbotron">
+    <h1 class="display-4" dir="rtl">רשימת צפייה:</h1>
+    <hr class="my-4">
+
+   @if (account.MovieWatchlist != null && account.MovieWatchlist.Count > 0)
+
+    {
+<div class="row row-cols-1 row-cols-md-3">
+
+   @foreach (var movie in account.MovieWatchlist)
+    {
+<div class="image col mb-4">
+    <div class="actions">
+        @{var isMovieAlreadyInWatchlist = (account.MovieWatchlist != null) ? account.MovieWatchlist.FirstOrDefault(m => m.Id == movie.Id) : null;}
+        @{string iconPlus = (isMovieAlreadyInWatchlist == null) ? "fa-plus" : "fa-minus"; }
+        <form asp-action="@((isMovieAlreadyInWatchlist == null)? "AddMovieWatchlist": "DeleteMovieWatchlist")" asp-route-id="@movie.Id" asp-route-path="Watchlist" method="post">
+            <button type="submit" class="btn btn-light pull-right">
+
+                <span><i class="fa @iconPlus"></i></span>
+            </button>        
+        </form>
+        
+
+    </div>
+    <a asp-action="Details" asp-action="Details" asp-route-id="@movie.Id">
+        <div class="hover hover-5 text-white rounded">
+            <img src="@(movie.ImageUrl)" alt="@movie.Name">
+            <div class="hover-overlay"></div>
+            <div class="hover-5-content">
+                <h3 class="hover-5-title text-uppercase font-weight-light mb-0">
+                    <strong class="font-weight-bold text-white">@movie.Name </strong>
+                    <span><strong>@movie.Rating</strong>/10 <i class="fas fa-star"></i></span><p />
+                </h3>
+
+            </div>
+        </div>
+    </a>
+</div>}
+</div> }
+            else
+            {
+<p dir="rtl">אין סרטים ברשימת צפייה...</p>
+@await Component.InvokeAsync("RecommendMovie", "Watchlist") 
+
+}
+</div>
+
+<style>
+
+    .image {
+        position: relative;
+    }
+
+        .image .actions {
+            z-index: 100;
+            display: block;
+            position: absolute;
+        }
+
+            .image .actions form {
+                display: inline-block;
+            }
+
+    .hover {
+        overflow: hidden;
+        position: relative;
+        padding-bottom: 60%;
+    }
+
+    .hover-overlay {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 90;
+        transition: all 0.4s;
+    }
+
+    .hover img {
+        width: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        transition: all 0.3s;
+    }
+
+    .hover-content {
+        position: relative;
+        z-index: 99;
+    }
+
+
+    .hover-5::after {
+        content: '';
+        width: 100%;
+        height: 10px;
+        background: #f5365c;
+        position: absolute;
+        bottom: -10px;
+        left: 0;
+        display: block;
+        transition: all 0.3s;
+        z-index: 999;
+    }
+
+    .hover-5 .hover-overlay {
+        background: rgba(0, 0, 0, 0.4);
+    }
+
+    .hover-5-title {
+        position: absolute;
+        bottom: 1rem;
+        left: 0;
+        transition: all 0.3s;
+        padding: 2rem 3rem;
+        z-index: 99;
+    }
+
+        .hover-5-title span {
+            transition: all 0.4s;
+            opacity: 0;
+            color: #f5365c;
+        }
+
+    .hover-5:hover .hover-overlay {
+        background: rgba(0, 0, 0, 0.8);
+    }
+
+    .hover-5:hover .hover-5-title {
+        bottom: 0;
+    }
+
+        .hover-5:hover .hover-5-title span {
+            opacity: 1;
+        }
+
+    .hover-5:hover::after {
+        bottom: 0;
+    }
+</style>
+

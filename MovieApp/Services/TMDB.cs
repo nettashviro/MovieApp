@@ -43,6 +43,28 @@ namespace MovieApp.Services
             return movieResult;
         }
 
+        public string GetMovieTrailerById(string id)
+        {
+            List<MovieVideosResult> movieVideosResult = new List<MovieVideosResult>();
+            MovieVideosResult movieVideo = null;
+            string currentUrl = $"{url}movie/{id}/videos?api_key={apiKey}";
+            try
+            {
+                JObject jsonResult = Get(currentUrl);
+                movieVideosResult = JsonConvert.DeserializeObject<List<MovieVideosResult>>(jsonResult["results"].ToString());
+                movieVideo = movieVideosResult.Where(x => (x.type == MovieVideosResult.TYPE_VIDEO.Trailer ||
+                x.type == MovieVideosResult.TYPE_VIDEO.Teaser) && (x.site == "YouTube")).FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Error in TMDB Service: There was a problem with extracting movie reviews by id. The problem is: {e.Message}");
+            }
+
+            string videoUrl = (movieVideo != null && movieVideo.key != null) ? ("https://www.youtube.com/watch?v=" + movieVideo.key) : null;
+            return videoUrl;
+        }
+
+
         public List<MovieSearchResult> GetMovieIdByName(string name)
         {
             //int movieId = 0;
