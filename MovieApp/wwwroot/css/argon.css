@@ -29996,3 +29996,7 @@ input.datetimepicker[data-color='yellow'] + .bootstrap-datetimepicker-widget.dro
 #sidenav-main {
     z-index: 5;
 }
+
+.twitter-timeline {
+    width: 100vw !important;
+}
