@@ -2,46 +2,10 @@
 
 namespace MovieApp.Migrations
 {
-    public partial class foringkey : Migration
+    public partial class FIXKEY : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_Movie_Account_AccountId",
-                table: "Movie");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_Movie_Account_AccountId1",
-                table: "Movie");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_Movie_Account_AccountId2",
-                table: "Movie");
-
-            migrationBuilder.DropIndex(
-                name: "IX_Movie_AccountId",
-                table: "Movie");
-
-            migrationBuilder.DropIndex(
-                name: "IX_Movie_AccountId1",
-                table: "Movie");
-
-            migrationBuilder.DropIndex(
-                name: "IX_Movie_AccountId2",
-                table: "Movie");
-
-            migrationBuilder.DropColumn(
-                name: "AccountId",
-                table: "Movie");
-
-            migrationBuilder.DropColumn(
-                name: "AccountId1",
-                table: "Movie");
-
-            migrationBuilder.DropColumn(
-                name: "AccountId2",
-                table: "Movie");
-
             migrationBuilder.AddColumn<int>(
                 name: "MovieClickedId",
                 table: "Movie",
@@ -134,63 +98,6 @@ namespace MovieApp.Migrations
             migrationBuilder.DropColumn(
                 name: "MovieWatchlistId",
                 table: "Movie");
-
-            migrationBuilder.AddColumn<int>(
-                name: "AccountId",
-                table: "Movie",
-                type: "int",
-                nullable: true);
-
-            migrationBuilder.AddColumn<int>(
-                name: "AccountId1",
-                table: "Movie",
-                type: "int",
-                nullable: true);
-
-            migrationBuilder.AddColumn<int>(
-                name: "AccountId2",
-                table: "Movie",
-                type: "int",
-                nullable: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Movie_AccountId",
-                table: "Movie",
-                column: "AccountId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Movie_AccountId1",
-                table: "Movie",
-                column: "AccountId1");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Movie_AccountId2",
-                table: "Movie",
-                column: "AccountId2");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Movie_Account_AccountId",
-                table: "Movie",
-                column: "AccountId",
-                principalTable: "Account",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Restrict);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Movie_Account_AccountId1",
-                table: "Movie",
-                column: "AccountId1",
-                principalTable: "Account",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Restrict);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Movie_Account_AccountId2",
-                table: "Movie",
-                column: "AccountId2",
-                principalTable: "Account",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Restrict);
         }
     }
 }

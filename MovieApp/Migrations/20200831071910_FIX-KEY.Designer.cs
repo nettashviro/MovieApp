@@ -10,8 +10,8 @@ using MovieApp.Data;
 namespace MovieApp.Migrations
 {
     [DbContext(typeof(MovieAppContext))]
-    [Migration("20200831064435_foringkey")]
-    partial class foringkey
+    [Migration("20200831071910_FIX-KEY")]
+    partial class FIXKEY
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

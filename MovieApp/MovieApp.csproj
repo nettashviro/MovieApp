@@ -6,6 +6,8 @@
 
   <ItemGroup>
     <Compile Remove="Controllers\Official.cs" />
+    <Compile Remove="Migrations\20200831070403_test.cs" />
+    <Compile Remove="Migrations\20200831070403_test.Designer.cs" />
     <Compile Remove="Models\OfficialController.cs" />
   </ItemGroup>
 
