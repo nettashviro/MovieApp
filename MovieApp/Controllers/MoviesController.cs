@@ -305,14 +305,17 @@ namespace MovieApp.Controllers
                 try
                 {
                     var original_data = _context.Movie.AsNoTracking().Where(m => m.Id == id).FirstOrDefault();
-
+                    
                     if (movie.ImageUrl == null)
                     {
                         movie.ImageUrl = "/img/movies/defaultMoviePoster.png";
                     }
                     else
                     {
-                        movie.ImageUrl = "http://image.tmdb.org/t/p/w188_and_h282_bestv2" + movie.ImageUrl;
+                        if (!movie.ImageUrl.Contains("http://image.tmdb.org"))
+                        {
+                            movie.ImageUrl = "http://image.tmdb.org/t/p/w188_and_h282_bestv2" + movie.ImageUrl;
+                        }
                     }
 
                     movie.Country = CultureHelper.GetCountryByIdentifier(movie.Country);
