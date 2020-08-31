@@ -1,4 +1,5 @@
-﻿@model IEnumerable<MovieApp.Models.Movie>
+﻿@using X.PagedList.Mvc.Core;
+@model X.PagedList.IPagedList<MovieApp.Models.Movie>
 
 @{ ViewData["Title"] = "מאגר הסרטים"; }
 
@@ -31,6 +32,9 @@
                 </div>
             }
         </div>
+    </div>
+    <div class="pagination-container">
+        @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
     </div>
 </div>
 
