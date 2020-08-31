@@ -2,13 +2,159 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Home Page</h1>
+
+<div class="row">
+    <div class="col-xl-3 col-lg-6">
+        <div class="card card-stats mb-4 mb-xl-0">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <h5 class="card-title text-uppercase text-muted mb-0">סרטים במאגר</h5>
+                        <span class="h2 font-weight-bold mb-0">@(ViewBag.MovieCount)</span>
+                    </div>
+                    <div class="col-auto">
+                        <div class="icon icon-shape bg-danger text-white rounded-circle shadow">
+                            <i class="fa fa-film"></i>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-lg-6">
+        <div class="card card-stats mb-4 mb-xl-0">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <h5 class="card-title text-uppercase text-muted mb-0">בעלי תפקידים</h5>
+                        <span class="h2 font-weight-bold mb-0">@(ViewBag.OfficialCount)</span>
+                    </div>
+                    <div class="col-auto">
+                        <div class="icon icon-shape bg-warning text-white rounded-circle shadow">
+                            <i class="fa fa-person-booth"></i>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-lg-6">
+        <div class="card card-stats mb-4 mb-xl-0">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <h5 class="card-title text-uppercase text-muted mb-0">פסקולים</h5>
+                        <span class="h2 font-weight-bold mb-0">@(ViewBag.SoundtrackCount)</span>
+                    </div>
+                    <div class="col-auto">
+                        <div class="icon icon-shape bg-yellow text-white rounded-circle shadow">
+                            <i class="fa fa-play-circle"></i>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-lg-6">
+        <div class="card card-stats mb-4 mb-xl-0">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <h5 class="card-title text-uppercase text-muted mb-0">משתמשים</h5>
+                        <span class="h2 font-weight-bold mb-0">@(ViewBag.UsersCount)</span>
+                    </div>
+                    <div class="col-auto">
+                        <div class="icon icon-shape bg-info text-white rounded-circle shadow">
+                            <i class="fa fa-users"></i>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
 </div>
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-    <a class="twitter-timeline" data-lang="he" data-width="300" data-height="300" data-theme="light" href="https://twitter.com/actionT14800076?ref_src=twsrc%5Etfw">Tweets by actionT14800076</a>
-    <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<div class="row" style="margin-top: 20px;">
+    @*<div class="col-xl-4 order-xl-2 mb-5 mb-xl-0">
+        <div class="card card-profile shadow">
+            <div class="card-header text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4">
+                <div class="d-flex justify-content-between">
+                    <a href="#" class="btn btn-sm btn-info mr-4">Connect</a>
+                    <a href="#" class="btn btn-sm btn-default float-right">Message</a>
+                </div>
+
+                <div class="row justify-content-center">
+                    <div class="col-lg-3 order-lg-2">
+                        <div class="card-profile-image">
+                            <a href="#">
+                                <img src="/img/theme/team-4-800x800.jpg" class="rounded-circle">
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body pt-0 pt-md-4">
+                <div class="row">
+                    <div class="col">
+                        <div class="card-profile-stats d-flex justify-content-center mt-md-5">
+                            <div>
+                                <span class="heading">22</span>
+                                <span class="description">Friends</span>
+                            </div>
+                            <div>
+                                <span class="heading">10</span>
+                                <span class="description">Photos</span>
+                            </div>
+                            <div>
+                                <span class="heading">89</span>
+                                <span class="description">Comments</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <h3>
+                        mirkosxcsdsgdf                        <span class="font-weight-light">, 27</span>
+                    </h3>
+                    <div class="h5 font-weight-300">
+                        <i class="ni location_pin mr-2"></i>Bucharest, Romania
+                    </div>
+                    <div class="h5 mt-4">
+                        <i class="ni business_briefcase-24 mr-2"></i>Solution Manager - Creative Tim Officer
+                    </div>
+                    <div>
+                        <i class="ni education_hat mr-2"></i>University of Computer Science
+                    </div>
+                    <hr class="my-4">
+                    <p>Ryan — the name taken by Melbourne-raised, Brooklyn-based Nick Murphy — writes, performs and records all of his own music.</p>
+                    <a href="#">Show more</a>
+                </div>
+            </div>
+        </div>
+    </div>*@
+    <div class="col-xl-4 order-xl-1">
+        <div class="card bg-secondary shadow">
+            <form method="POST" action="/profile">
+                <div class="pl-lg-4">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <a class="twitter-timeline" @*data-tweet-limit="5"*@ data-lang="he" data-width="500" data-height="700" data-theme="light" href="https://twitter.com/actionT14800076?ref_src=twsrc%5Etfw">Tweets by actionT14800076</a>
+                        </div>
+                    </div>
+                </div>
+                <input name="__RequestVerificationToken" type="hidden" value="CfDJ8DIUkc8ixA9IlF27GQXYfB5rdRLACDcQi7zGuxZoKplHiTVWmOFxfBX6WbXafth-x_Decc3A-2LOS3MgJPujNCgx97KEtztQDM3LYYbNSIbGuf5OxFLlMsLmOzoO5n6yHnT9oY42YpoHD1hjryp77Z7KTb8L5FwBh6DgdVlOGh1keAUM379yBA-c1_-CRbC2Zw">
+            </form>
+        </div>
+    </div>
 </div>
+
+
+
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using MovieApp.Data;
 using MovieApp.Models;
 
 namespace MovieApp.Controllers
@@ -14,9 +15,11 @@ namespace MovieApp.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly MovieAppContext _context;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(MovieAppContext context, ILogger<HomeController> logger)
         {
+            _context = context;
             _logger = logger;
         }
 
@@ -32,6 +35,12 @@ namespace MovieApp.Controllers
             {
                 return RedirectToAction("Login", "Account");
             }
+
+            ViewBag.MovieCount = _context.Movie.Count();
+            ViewBag.OfficialCount = _context.Official.Count();
+            ViewBag.SoundtrackCount = _context.Soundtrack.Count();
+            ViewBag.UsersCount = _context.Account.Count();
+            //ViewBag.SeenCount = (from Movie in _context.Movie where moviewat select Movie.Id  ).Count();
 
             return View();
         }
