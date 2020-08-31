@@ -63,3 +63,11 @@
     -ms-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
 }
+
+.movieActions {
+    margin: 0;
+    position: absolute;
+    bottom: 15px;
+
+    display: flex;
+}

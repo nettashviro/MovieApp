@@ -32,6 +32,18 @@
                         <a class="btn btn-outline-danger rounded-circle align-middle play-button" data-toggle="modal" data-target="@("#trailer" + item.Id)">
                             <i class="fas fa-play"></i>
                         </a>
+                        <div class="movieActions mx-auto">
+                            @{var isMovieAlreadyWatched = (account.MovieWatched != null) ? account.MovieWatched.FirstOrDefault(m => m.Id == item.Id) : null;}
+                            @{string iconEye = (isMovieAlreadyWatched == null) ? "fa-eye" : "fa-eye-slash"; }
+                            <form asp-action="@((isMovieAlreadyWatched == null)? "AddMovieWatched": "DeleteMovieWatched")" asp-route-id="@item.Id" asp-route-path="Index" method="post">
+                                <button type="submit" class="btn btn-outline-light btn-sm fa @iconEye"></button>
+                            </form>
+                            @{var isMovieAlreadyInWatchlist = (account.MovieWatchlist != null) ? account.MovieWatchlist.FirstOrDefault(m => m.Id == item.Id) : null;}
+                            @{string iconPlus = (isMovieAlreadyInWatchlist == null) ? "fa-plus" : "fa-minus"; }
+                            <form asp-action="@((isMovieAlreadyInWatchlist == null)? "AddMovieWatchlist": "DeleteMovieWatchlist")" asp-route-id="@item.Id" asp-route-path="Index" method="post">
+                                <button type="submit" class="btn btn-outline-light btn-sm fa @iconPlus"></button>
+                            </form>
+                        </div>
                     </div>
                 </div>
 
