@@ -32,7 +32,7 @@ var drawBubbleChartSVG = function (svg_id, data) {
 
     // Add Y axis
     var y = d3.scaleLinear()
-        .domain([0, 5])
+        .domain([0, 10])
         .range([height, 0]);
     svg.append("g")
         .call(d3.axisLeft(y))
