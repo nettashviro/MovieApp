@@ -70,13 +70,20 @@
                                 <select name="MovieId" class="form-control" asp-items="ViewBag.MovieName" multiple></select>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label asp-for="Image" class="control-label"></label>
-                                <input asp-for="Image" accept="image/*" />
-                                <span asp-validation-for="Image" class="text-danger"></span>
+                  
+                            <div class="post-image empty">
+                                <div class="upload-section">
+                                    <input asp-for="Image" class="form-control upload-img" accept="image/*" />
+                                    <label class="icon-camera" for="Image">
+
+                                        <img src=@("/img/icons/cameraPlus.png") />
+                                    </label>
+                                    <p>תמונה</p>
+                                </div>
+                                <div class="preview-section"></div>
+
                             </div>
-                        </div>
+                   
 
                     </div>
                 </div>
@@ -84,6 +91,13 @@
                     <div class="form-group">
                         <a asp-action="Index" class="btn btn-primary">בחזרה לרשימה</a>
                         <input type="submit" value="שמירה" class="btn btn-primary" />
+                        @if (User.HasClaim(ClaimTypes.Role, Account.UserType.Admin.ToString()))
+                {
+                    <form asp-action="Delete" style="display: inline-block;">
+                        <input type="hidden" asp-for="Id" />
+                        <input type="submit" value="מחק" class="btn btn-primary" />
+                    </form>
+                }
                     </div>
                 </div>
             </form>

@@ -17,7 +17,7 @@
 
                     for (i = 0; i < result.length; i++) {
                         tableBody += "<div class='card shadow'><div class='card-header'><h5 class='card-title'>" + result[i].author + "</h5></div>";
-                        tableBody += "<div class='card-body'><p class='card-text'>" + result[i].content + "</p>"
+                        tableBody += "<div class='card-body'><p class='card-text splitcol'>" + result[i].content + "</p>"
                         tableBody += "<a target='_blank' href ='" + result[i].url + "' class='btn btn-primary'> קישור לביקורת</a></div></div> ";
                     }
 
