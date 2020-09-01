@@ -40,6 +40,18 @@ namespace MovieApp.Models
 
         [Display(Name = "סרטים שבהם משתתף")]
         public ICollection<OfficialOfMovie> OfficialOfMovies { get; set; }
+
+        [Display(Name = "שם מלא")]
+        public virtual string FullName { get { return FirstName + " " + LastName; } }
+
+        [Display(Name = "גיל")]
+        public virtual int Age { get
+            {
+                DateTime now = DateTime.Today;
+                int age = now.Year - Birthdate.Year;
+                if (Birthdate > now.AddYears(-age)) age--;
+                return age;
+            } }
     }
 
     public enum Gender
@@ -62,3 +74,4 @@ namespace MovieApp.Models
         פזמונאי
     }
 }
+
