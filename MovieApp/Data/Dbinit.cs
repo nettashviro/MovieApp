@@ -48,7 +48,7 @@ namespace MovieApp.Data
                             TrailerUrl="https://www.youtube.com/watch?v=HUECWi5pX7o",
                             Rating=5,
                             Language="French",
-                            ImageUrl="MV5BNDg4NjM1YjMtYmNhZC00MjM0LWFiZmYtNGY1YjA3MzZmODc5XkEyXkFqcGdeQXVyNDk3NzU2MTQ@._V1_UY1200_CR85,0,630,1200_AL_203544119.jpg",
+                            ImageUrl="http://image.tmdb.org/t/p/w188_and_h282_bestv2/ai02P32DZxXDqhrt2XoVkauS7T.jpg",
                             MovieIdInTMDB=194
                        },
                      
