@@ -1,0 +1,21 @@
+﻿@{
+    ViewData["Title"] = "גרפים";
+}
+
+<div class="text-center">
+    <h1 class="display-4">חיפוש על פי שלושה פרמטרים</h1>
+</div>
+
+<div class="text-center row col-md-8" style="margin: auto">
+    <h3 class="display-4  col-md-10">הצגת כמות משתתפים בהפקה לפי אורך הסרט והדירוג</h3>
+    <input type="button" id="showGraph" class="col-md-2 btn btn-primary" value="הצג גרף" />
+</div>
+
+<div id="svg_wrapper">
+    <svg id="svg_panel" width="100%" height="55vh"></svg>
+</div>
+
+@section scripts {
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script type="text/javascript" src="@Url.Content("/js/components/graphs/bubbleChart.js")"></script>
+}

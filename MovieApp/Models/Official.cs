@@ -20,10 +20,10 @@ namespace MovieApp.Models
         public string LastName { get; set; }
 
         [Display(Name = "תפקיד")]
-        public Role Role { get; set; }
+        public OfficialRole Role { get; set; }
 
         [Display(Name = "מגדר")]
-        public Gender Gender { get; set; }
+        public OfficialGender Gender { get; set; }
 
         [Display(Name = "תאריך לידה")]
         [DataType(DataType.Date)]
@@ -52,26 +52,50 @@ namespace MovieApp.Models
                 if (Birthdate > now.AddYears(-age)) age--;
                 return age;
             } }
-    }
 
-    public enum Gender
-    {
-        זכר,
-        נקבה,
-        אחר
-    }
+        public enum OfficialGender
+        {
+            זכר,
+            נקבה,
+            אחר
+        }
 
-    public enum Role
-    {
-        מפיק,
-        במאי,
-        תסריטאי,
-        צלם,
-        שחקן,
-        עורך,
-        סאונדמן,
-        זמר,
-        פזמונאי
+        public enum OfficialRole
+        {
+            מפיק,
+            במאי,
+            תסריטאי,
+            צלם,
+            שחקן,
+            עורך,
+            סאונדמן,
+            זמר,
+            פזמונאי
+        }
+
+        public enum OfficialSpliceOptions
+        {
+            [Display(Name = "תפקיד")]
+            Role,
+            [Display(Name = "מגדר")]
+            Gender,
+            [Display(Name = "מדינת מוצא")]
+            OriginCountry
+        }
+
+        public enum OfficialAverageOfOptions
+        {
+            [Display(Name = "גיל")]
+            Age
+        }
+
+        public enum OfficialAverageByOptions
+        {
+            [Display(Name = "תפקיד")]
+            Role,
+            [Display(Name = "מדינת מוצא")]
+            OriginCountry
+        }
     }
 }
 

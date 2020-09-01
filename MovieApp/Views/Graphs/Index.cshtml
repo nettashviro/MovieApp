@@ -1,0 +1,47 @@
+﻿@{
+    ViewData["Title"] = "גרפים";
+}
+
+<div class="text-center">
+    <h1 class="display-4">גרפים</h1>
+</div>
+
+<div class="album">
+    <div class="container">
+        <div class="row">
+
+            <a class="col-md-4" asp-action="Screen" asp-route-demantion="1">
+                    <div class="card mb-4 shadow-sm">
+                        <img class="col-md-12" src="img/graphs/pie.gif">
+                        <div class="card-body">
+                            <p class="card-text">
+                                גרף עוגה על פי פרמטר אחד בטבלאות סרטים ובעלי תפקידים
+                            </p>
+                        </div>
+                    </div>
+            </a>
+
+            <a class="col-md-4" asp-action="Screen" asp-route-demantion="2">
+                    <div class="card mb-4 shadow-sm">
+                        <img class="col-md-12" src="img/graphs/bar.gif">
+                        <div class="card-body">
+                            <p class="card-text">
+                                 גרף עמודות על פי שני פרמטרים בטבלאות סרטים, בעלי תפקידים ופסקולים
+                            </p>
+                        </div>
+                    </div>
+            </a>
+
+            <a class="col-md-4" asp-action="Screen" asp-route-demantion="3">
+                    <div class="card mb-4 shadow-sm">
+                        <img class="col-md-12" src="img/graphs/bubble.gif">
+                        <div class="card-body">
+                            <p class="card-text">
+                                גרף בועות על פי שלושה פרמטרים בטבלאות סרטים ובעלי תפקידים
+                            </p>
+                        </div>
+                    </div>
+            </a>
+        </div>
+    </div>
+</div>

@@ -279,6 +279,8 @@ namespace MovieApp.Controllers
                 }
             }
 
+            _context.Soundtrack.RemoveRange(_context.Soundtrack.Where(s => s.Writer.Id == official.Id || s.Performer.Id == official.Id));
+
             _context.Official.Remove(official);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
