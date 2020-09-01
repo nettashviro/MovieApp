@@ -50,6 +50,9 @@ function getVideoTrailer(id) {
             if (result != null) {
                 $('#movieTrailerURL').val(result);
             }
+            else {
+                $('#movieTrailerURL').val(null);
+            }
         }
     }); 
 }

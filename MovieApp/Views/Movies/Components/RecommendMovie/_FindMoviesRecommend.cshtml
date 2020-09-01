@@ -2,7 +2,7 @@
 @{ var movies = ViewBag.moviesReccomend;}
 @{ var dataMsg = ViewData["message"];}
 @{ var account = ViewData["account"] as Account;}
-@{string path = (ViewBag.path != null) ? ViewBag.path: "Index";}
+@{string path = (ViewBag.path != null) ? ViewBag.path : "Index";}
 <div class="jumbotron">
     <h1 class="display-4" dir="rtl">המלצות בשבילך:</h1>
     <hr class="my-4">
@@ -26,7 +26,7 @@
         
 
     </div>
-    <a asp-action="Details" asp-action="Details" asp-route-id="@movie.Id">
+    <a asp-action="Details" asp-route-id="@movie.Id">
         <div class="hover hover-5 text-white rounded">
             <img src="@(movie.ImageUrl)" alt="@movie.Name">
             <div class="hover-overlay"></div>
