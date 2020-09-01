@@ -80,8 +80,8 @@ namespace MovieApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                soundtrack.Writer = _context.Official.First(o => o.Id == WriterId);
-                soundtrack.Performer = _context.Official.First(o => o.Id == PerformerId);
+                soundtrack.Writer = _context.Official.FirstOrDefault(o => o.Id == WriterId);
+                soundtrack.Performer = _context.Official.FirstOrDefault(o => o.Id == PerformerId);
                 soundtrack.SoundtrackOfMovies = new List<SoundtrackOfMovie>();
                 foreach (var id in MovieId)
                 {
