@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MovieApp.Data;
 using MovieApp.Models;
+using X.PagedList;
 
 namespace MovieApp.Controllers
 {
@@ -22,13 +23,33 @@ namespace MovieApp.Controllers
         }
 
         // GET: Soundtracks
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string nameFilter, string currentNameFilter, int? page)
         {
             var soundtracks = await _context.Soundtrack
                 .Include(s => s.Writer)
                 .Include(s => s.Performer)
                 .ToListAsync();
-            return View(soundtracks);
+
+            if (nameFilter != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                nameFilter = currentNameFilter;
+            }
+
+            ViewBag.CurrentNameFilter = nameFilter;
+
+            if (!String.IsNullOrEmpty(nameFilter))
+            {
+                soundtracks = soundtracks.Where(s => s.Name.ToLower().Contains(nameFilter.ToLower())).ToList();
+            }
+
+            int pageSize = 25;
+            int pageNumber = page ?? 1;
+
+            return View(soundtracks.ToPagedList(pageNumber, pageSize));
         }
 
         // GET: Soundtracks/Details/5
