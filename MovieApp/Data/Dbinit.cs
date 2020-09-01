@@ -34,8 +34,6 @@ namespace MovieApp.Data
               );
             }
 
-       
-
             _context.SaveChanges();
         }
     }

@@ -39,14 +39,44 @@ namespace MovieApp.Controllers
         }
 
         // GET: Movies
-        public async Task<IActionResult> Index(int? page)
+        public async Task<IActionResult> Index(string nameFilter, string currentNameFilter, Movie.MovieGenre? genreFilter, Movie.MovieGenre? currentGenreFilter, string languageFilter, string currentLanguageFilter, int? page)
         {
             var userId = User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Email)?.Value;
 
             Account account = await _context.Account.FirstOrDefaultAsync(m => m.Email == userId);
             ViewData["account"] = account;
 
+            if (nameFilter != null || genreFilter != null || languageFilter != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                nameFilter = currentNameFilter;
+                genreFilter = currentGenreFilter;
+                languageFilter = currentLanguageFilter;
+            }
+
+            ViewBag.CurrentNameFilter = nameFilter;
+            ViewBag.CurrentLanguageFilter = languageFilter;
+
+            var languages = new SelectList(CultureHelper.LanguageList(), "Key", "Value");
+            ViewBag.Languages = languages.OrderBy(p => p.Text).ToList();
+
             var movies = await _context.Movie.ToListAsync();
+            if (!String.IsNullOrEmpty(nameFilter))
+            {
+                movies = movies.Where(m => m.Name.ToLower().Contains(nameFilter.ToLower())).ToList();
+            }
+            if (genreFilter != null)
+            {
+                ViewBag.CurrentGenreFilter = (int)genreFilter;
+                movies = movies.Where(m => m.Genre == genreFilter).ToList();
+            }
+            if (languageFilter != null)
+            {
+                movies = movies.Where(m => m.Language == CultureHelper.GetLanguageByIdentifier(languageFilter)).ToList();
+            }
 
             int pageSize = 25;
             int pageNumber = page ?? 1;
