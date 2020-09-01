@@ -34,7 +34,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label asp-for="Role" class="control-label"></label>
-                                <select asp-for="Role" asp-items="Html.GetEnumSelectList<Role>()" class="form-control">
+                                <select asp-for="Role" asp-items="Html.GetEnumSelectList<Official.OfficialRole>()" class="form-control">
                                     <option></option>
                                 </select>
                                 <span asp-validation-for="Role" class="text-danger"></span>
@@ -43,7 +43,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label asp-for="Gender" class="control-label"></label>
-                                <select asp-for="Gender" asp-items="Html.GetEnumSelectList<Gender>()" class="form-control">
+                                <select asp-for="Gender" asp-items="Html.GetEnumSelectList<Official.OfficialGender>()" class="form-control">
                                     <option></option>
                                 </select>
                                 <span asp-validation-for="Gender" class="text-danger"></span>
