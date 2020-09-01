@@ -30000,3 +30000,9 @@ input.datetimepicker[data-color='yellow'] + .bootstrap-datetimepicker-widget.dro
 .twitter-timeline {
     width: 100vw !important;
 }
+
+.splitcol {
+    column-count: 2;
+    direction: ltr;
+    text-align: left;
+}
