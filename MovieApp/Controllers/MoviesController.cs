@@ -182,6 +182,7 @@ namespace MovieApp.Controllers
             if (ModelState.IsValid)
             {
                 movie.ImageUrl =  (movie.ImageUrl == null)? "/img/movies/defaultMoviePoster.png": ("http://image.tmdb.org/t/p/w188_and_h282_bestv2" + movie.ImageUrl);
+                movie.Country = CultureHelper.GetCountryByIdentifier(movie.Country);
                 movie.Language = CultureHelper.GetLanguageByIdentifier(movie.Language);
 
                 movie.OfficialOfMovies = new List<OfficialOfMovie>();
