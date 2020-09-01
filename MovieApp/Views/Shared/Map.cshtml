@@ -32,12 +32,13 @@
         let geocoder = new google.maps.Geocoder();
 
         for (var locationId in locationsToPlace) {
-            geocoder.geocode({ 'address': locationsToPlace[locationId].country }, geocodeEncapsulation(locationId));
+            geocodeEncapsulation(locationId);
+            
         }
-    }
+   
 
     function geocodeEncapsulation(locationId) {
-        return (function (results, status) {
+        geocoder.geocode({ 'address': locationsToPlace[locationId].country }, function(results, status) {
 
             var contentString = '<div style="display:flex; flex-direction:column;  padding: 10px;">' +
                 '<div>' +
@@ -73,9 +74,18 @@
                 })(marker, contentString, infowindow));
 
             } else {
-                alert("Could not find location: " + locationsToPlace[locationId].country);
+                if (status == google.maps.GeocoderStatus.OVER_QUERY_LIMIT) {
+                    console.log("TIMEOUT: " + locationsToPlace[locationId].country);
+
+                    setTimeout(function() {
+                        geocodeEncapsulation(locationId);
+                    }, 300);
+                } else {
+                     console.log("Could not find location: " + locationsToPlace[locationId].country);
+                }   
             }
         });
+        }
     }
 </script>
 
