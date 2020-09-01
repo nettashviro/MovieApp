@@ -8,16 +8,21 @@
 <!-- CSS -->
 <link type="text/css" href="~/css/moviesIndex.css?v=1.2.0" rel="stylesheet" asp-append-version="true">
 
-<h1>מאגר הסרטים</h1>
+<div class="jumbotron">
+     <h1 class="display-4" dir="rtl"> 
+    מאגר הסרטים
+    <a class="btn btn-primary float-left" asp-action="Create">צור חדש</a>
 
+    </h1>
 
-<div class="card shadow">
+    <hr class="my-4">
+
     <div class="container">
         <div class="row row-cols-4">
             @foreach (var item in Model)
             {
             <div class="col mb-4">
-                <div class="card h-100">
+                <div id="card-movie" class="card h-100">
                     <img class="embed-responsive-item rounded-top" src="@(item.ImageUrl)" alt="movie poster">
                     <div class="card-img-overlay hoverOverlay bg-dark text-white rounded">
                         <h2 class="card-title">
@@ -78,9 +83,12 @@
 </div>
 
 
-<p>
-    <a class="btn btn-primary" asp-action="Create">צור חדש</a>
-</p>
 
 
 @await Component.InvokeAsync("RecommendMovie")
+
+<style>
+#card-movie {
+    margin-bottom: 0px;
+}
+</style>
