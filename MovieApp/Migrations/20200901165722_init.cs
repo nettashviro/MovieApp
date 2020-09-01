@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace MovieApp.Migrations
 {
-    public partial class ini : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -73,7 +73,7 @@ namespace MovieApp.Migrations
                     Duration = table.Column<int>(nullable: false),
                     TrailerUrl = table.Column<string>(nullable: true),
                     Rating = table.Column<double>(nullable: false),
-                    ImageUrl = table.Column<string>(nullable: false),
+                    ImageUrl = table.Column<string>(nullable: true),
                     MovieIdInTMDB = table.Column<int>(nullable: false),
                     MovieClickedId = table.Column<int>(nullable: true),
                     MovieWatchedId = table.Column<int>(nullable: true),

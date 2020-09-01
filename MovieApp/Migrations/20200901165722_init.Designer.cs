@@ -10,8 +10,8 @@ using MovieApp.Data;
 namespace MovieApp.Migrations
 {
     [DbContext(typeof(MovieAppContext))]
-    [Migration("20200831212510_change-img-url-no-required")]
-    partial class changeimgurlnorequired
+    [Migration("20200901165722_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
