@@ -34,7 +34,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label asp-for="Role" class="control-label"></label>
-                                <select asp-for="Role" asp-items="Html.GetEnumSelectList<Role>()" class="form-control">
+                                <select asp-for="Role" asp-items="Html.GetEnumSelectList<Official.OfficialRole>()" class="form-control">
                                     <option></option>
                                 </select>
                                 <span asp-validation-for="Role" class="text-danger"></span>
@@ -43,7 +43,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label asp-for="Gender" class="control-label"></label>
-                                <select asp-for="Gender" asp-items="Html.GetEnumSelectList<Gender>()" class="form-control">
+                                <select asp-for="Gender" asp-items="Html.GetEnumSelectList<Official.OfficialGender>()" class="form-control">
                                     <option></option>
                                 </select>
                                 <span asp-validation-for="Gender" class="text-danger"></span>
@@ -71,13 +71,20 @@
                                 <select name="MovieId" class="form-control" asp-items="ViewBag.MovieName" multiple></select>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label asp-for="Image" class="control-label"></label>
-                                <input asp-for="Image" accept="image/*" />
-                                <span asp-validation-for="Image" class="text-danger"></span>
+
+                        <div class="post-image empty">
+                            <div class="upload-section">
+                                <input asp-for="Image" class="form-control upload-img" accept="image/*" />
+                                <label class="icon-camera" for="Image">
+
+                                    <img src=@("/img/icons/cameraPlus.png") />
+                                </label>
+                                <p>תמונה</p>
                             </div>
+                            <div class="preview-section"></div>
+
                         </div>
+
                         <div class="col-md-6">
                             <div class="form-group">
                                 <input type="submit" value="יצירה" class="btn btn-primary" />

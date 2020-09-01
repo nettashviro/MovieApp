@@ -36,6 +36,11 @@
                 <i class="fa fa-list"></i> רשימת צפייה
             </a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link" asp-controller="Graphs" asp-action="Index">
+                <i class="fa fa-chart-pie"></i> גרפים
+            </a>
+        </li>
 
         @if (User.HasClaim(ClaimTypes.Role, Account.UserType.Admin.ToString()))
         {
@@ -45,5 +50,5 @@
             </a>
         </li>
         }
-                </ul>
+    </ul>
 

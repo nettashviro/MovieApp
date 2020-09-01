@@ -1,0 +1,62 @@
+.hoverOverlay {
+  opacity: 0;
+  border-bottom: 0px solid #f5365c;
+}
+
+.hoverOverlay:hover {
+  opacity: 0.9;
+  border-bottom: 10px solid #f5365c;
+  transition: border 0.3s ease-in-out;
+}
+
+.card-link {
+  color: white;
+}
+
+.card-link:hover {
+  color: #f5365c;
+}
+
+#card-official {
+  margin-bottom: 0px;
+  flex-direction: row;
+}
+
+#img-official {
+  width: 100%;
+}
+.pagination > li > a {
+  color: black;
+  float: left;
+  padding: 8px 16px;
+  border-radius: 5px;
+  text-decoration: none;
+}
+
+.pagination > li > span {
+  color: white;
+  float: left;
+  padding: 8px 16px;
+  text-decoration: none;
+}
+
+.pagination > li > a:hover:not(active) {
+  background-color: white;
+  color: #f5365c;
+  border-radius: 5px;
+  border-color: #f5365c;
+}
+
+.pagination > .active > span {
+  background-color: #f5365c;
+  color: white;
+  border-radius: 5px;
+}
+
+.officialActions {
+  margin: 0;
+  position: absolute;
+  bottom: 15px;
+
+  display: flex;
+}

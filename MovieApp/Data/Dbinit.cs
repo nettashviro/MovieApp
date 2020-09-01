@@ -34,29 +34,6 @@ namespace MovieApp.Data
               );
             }
 
-            if (!_context.Movie.Any())
-            {
-                _context.Movie.AddRange(
-                  new List<Movie>() {
-                        new Movie
-                        {
-                            Name="Amélie",
-                            Country="France",
-                            Year=2001,
-                            Genre=Movie.MovieGenre.רומנטיקה,
-                            Duration=130,
-                            TrailerUrl="https://www.youtube.com/watch?v=HUECWi5pX7o",
-                            Rating=5,
-                            Language="French",
-                            ImageUrl="http://image.tmdb.org/t/p/w188_and_h282_bestv2/ai02P32DZxXDqhrt2XoVkauS7T.jpg",
-                            MovieIdInTMDB=194
-                       },
-                     
-                   }
-              );
-            }
-            // TODO: ADD MOVIES / Officials / SOUNDTRACKS STARTER DATA
-
             _context.SaveChanges();
         }
     }

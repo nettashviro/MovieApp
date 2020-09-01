@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MovieApp.Data;
 using MovieApp.Models;
+using MovieApp.Models.TMDB;
+using X.PagedList;
 
 namespace MovieApp.Controllers
 {
@@ -27,9 +29,30 @@ namespace MovieApp.Controllers
         }
 
         // GET: Officials
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string nameFilter, string currentNameFilter, int? page)
         {
-            return View(await _context.Official.ToListAsync());
+            var officials = await _context.Official.ToListAsync();
+
+            if (nameFilter != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                nameFilter = currentNameFilter;
+            }
+
+            ViewBag.CurrentNameFilter = nameFilter;
+
+            if (!String.IsNullOrEmpty(nameFilter))
+            {
+                officials = officials.Where(o => o.FirstName.ToLower().Contains(nameFilter.ToLower()) || o.LastName.ToLower().Contains(nameFilter.ToLower())).ToList();
+            }
+
+            int pageSize = 25;
+            int pageNumber = page ?? 1;
+
+            return View(officials.ToPagedList(pageNumber, pageSize));
         }
 
         // GET: Officials/Details/5
@@ -82,12 +105,17 @@ namespace MovieApp.Controllers
                         await official.Image.CopyToAsync(fileStream);
                     }
                 }
+                else
+                {
+                    official.ImageUrl = "default-preson.jpg";
+                }
 
                 official.OriginCountry = CultureHelper.GetCountryByIdentifier(official.OriginCountry);
                 official.OfficialOfMovies = new List<OfficialOfMovie>();
-                foreach ( var id in MovieId) {
+                foreach (var id in MovieId)
+                {
                     official.OfficialOfMovies.Add(new OfficialOfMovie() { MovieId = id, OfficialId = official.Id });
-                }                
+                }
 
                 _context.Add(official);
                 await _context.SaveChangesAsync();
@@ -251,6 +279,8 @@ namespace MovieApp.Controllers
                 }
             }
 
+            _context.Soundtrack.RemoveRange(_context.Soundtrack.Where(s => s.Writer.Id == official.Id || s.Performer.Id == official.Id));
+
             _context.Official.Remove(official);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
@@ -260,5 +290,7 @@ namespace MovieApp.Controllers
         {
             return _context.Official.Any(e => e.Id == id);
         }
+
+
     }
 }

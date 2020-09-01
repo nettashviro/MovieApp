@@ -20,10 +20,10 @@ namespace MovieApp.Models
         public string LastName { get; set; }
 
         [Display(Name = "תפקיד")]
-        public Role Role { get; set; }
+        public OfficialRole Role { get; set; }
 
         [Display(Name = "מגדר")]
-        public Gender Gender { get; set; }
+        public OfficialGender Gender { get; set; }
 
         [Display(Name = "תאריך לידה")]
         [DataType(DataType.Date)]
@@ -40,25 +40,62 @@ namespace MovieApp.Models
 
         [Display(Name = "סרטים שבהם משתתף")]
         public ICollection<OfficialOfMovie> OfficialOfMovies { get; set; }
-    }
 
-    public enum Gender
-    {
-        זכר,
-        נקבה,
-        אחר
-    }
+        [Display(Name = "שם מלא")]
+        public virtual string FullName { get { return FirstName + " " + LastName; } }
 
-    public enum Role
-    {
-        מפיק,
-        במאי,
-        תסריטאי,
-        צלם,
-        שחקן,
-        עורך,
-        סאונדמן,
-        זמר,
-        פזמונאי
+        [Display(Name = "גיל")]
+        public virtual int Age { get
+            {
+                DateTime now = DateTime.Today;
+                int age = now.Year - Birthdate.Year;
+                if (Birthdate > now.AddYears(-age)) age--;
+                return age;
+            } }
+
+        public enum OfficialGender
+        {
+            זכר,
+            נקבה,
+            אחר
+        }
+
+        public enum OfficialRole
+        {
+            מפיק,
+            במאי,
+            תסריטאי,
+            צלם,
+            שחקן,
+            עורך,
+            סאונדמן,
+            זמר,
+            פזמונאי
+        }
+
+        public enum OfficialSpliceOptions
+        {
+            [Display(Name = "תפקיד")]
+            Role,
+            [Display(Name = "מגדר")]
+            Gender,
+            [Display(Name = "מדינת מוצא")]
+            OriginCountry
+        }
+
+        public enum OfficialAverageOfOptions
+        {
+            [Display(Name = "גיל")]
+            Age
+        }
+
+        public enum OfficialAverageByOptions
+        {
+            [Display(Name = "תפקיד")]
+            Role,
+            [Display(Name = "מדינת מוצא")]
+            OriginCountry
+        }
     }
 }
+
