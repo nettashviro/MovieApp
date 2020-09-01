@@ -29,9 +29,25 @@ namespace MovieApp.Controllers
         }
 
         // GET: Officials
-        public async Task<IActionResult> Index(int? page)
+        public async Task<IActionResult> Index(string nameFilter, string currentNameFilter, int? page)
         {
             var officials = await _context.Official.ToListAsync();
+
+            if (nameFilter != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                nameFilter = currentNameFilter;
+            }
+
+            ViewBag.CurrentNameFilter = nameFilter;
+
+            if (!String.IsNullOrEmpty(nameFilter))
+            {
+                officials = officials.Where(o => o.FirstName.ToLower().Contains(nameFilter.ToLower()) || o.LastName.ToLower().Contains(nameFilter.ToLower())).ToList();
+            }
 
             int pageSize = 25;
             int pageNumber = page ?? 1;
