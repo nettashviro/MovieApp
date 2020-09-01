@@ -1,123 +1,94 @@
-﻿@model IEnumerable<MovieApp.Models.Movie>
+﻿@using X.PagedList.Mvc.Core;
+@model X.PagedList.IPagedList<MovieApp.Models.Movie>
 
 @{ ViewData["Title"] = "מאגר הסרטים"; }
 
 @{ var account = ViewData["account"] as Account;}
 
-<h1>מאגר הסרטים</h1>
+<!-- CSS -->
+<link type="text/css" href="~/css/moviesIndex.css?v=1.2.0" rel="stylesheet" asp-append-version="true">
 
+<div class="jumbotron">
+     <h1 class="display-4" dir="rtl"> 
+    מאגר הסרטים
+    <a class="btn btn-primary float-left" asp-action="Create">צור חדש</a>
 
-<div class="card shadow">
-    <div class="table-responsive">
-        <table class="table align-items-center table-flush">
-            <thead class="thead-light">
-                <tr>
-                    <th>
-                    </th>
-                    <th>
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Image)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Name)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Country)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Language)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Year)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Genre)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Duration)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.TrailerUrl)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Rating)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.MovieIdInTMDB)
-                    </th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
-                <tr>
-                    <td>
-                        @{var isMovieAlreadyWatched = (account.MovieWatched != null) ? account.MovieWatched.FirstOrDefault(m => m.Id == item.Id) : null;}
-                        @{string iconEye = (isMovieAlreadyWatched == null) ? "fa-eye" : "fa-eye-slash"; }
-                        <form asp-action="@((isMovieAlreadyWatched == null)? "AddMovieWatched": "DeleteMovieWatched")" asp-route-id="@item.Id" asp-route-path="Index" method="post">
-                            <button type="submit" class="btn btn-secondary btn-sm fa @iconEye mr-3"></button>
-                        </form>
-                    </td>
-                    <td>
-                        @{var isMovieAlreadyInWatchlist = (account.MovieWatchlist != null) ? account.MovieWatchlist.FirstOrDefault(m => m.Id == item.Id) : null;}
-                        @{string iconPlus = (isMovieAlreadyInWatchlist == null) ? "fa-plus" : "fa-minus"; }
-                        <form asp-action="@((isMovieAlreadyInWatchlist == null)? "AddMovieWatchlist": "DeleteMovieWatchlist")" asp-route-id="@item.Id" asp-route-path="Index" method="post">
-                            <button type="submit" class="btn btn-secondary btn-sm fa @iconPlus mr-3"></button>
-                        </form>
-                    </td>
-                    <td>
-                        <img src="@(item.ImageUrl)" width="30" height="30">
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Country)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Language)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Year)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Genre)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Duration)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.TrailerUrl)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Rating)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.MovieIdInTMDB)
-                    </td>
-                   <td>
-                            <a class="btn btn-outline-primary btn-sm fa fa-info-circle mr-3" asp-action="Details" asp-route-id="@item.Id"></a>
-                            <a class="btn btn-outline-primary btn-sm fa fa-edit mr-3" asp-action="Edit" asp-route-id="@item.Id"></a>
-                    </td>
-                </tr>
-                }
-            </tbody>
-        </table>
+    </h1>
+
+    <hr class="my-4">
+
+    <div class="container">
+        <div class="row row-cols-4">
+            @foreach (var item in Model)
+            {
+            <div class="col mb-4">
+                <div id="card-movie" class="card h-100">
+                    <img class="embed-responsive-item rounded-top" src="@(item.ImageUrl)" alt="movie poster">
+                    <div class="card-img-overlay hoverOverlay bg-dark text-white rounded">
+                        <h2 class="card-title">
+                            <a asp-action="Details" asp-route-id="@item.Id" class="card-link">
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </a>
+                        </h2>
+                        <h3 class="card-subtitle text-muted">@Html.DisplayFor(modelItem => item.Genre)</h3>
+                        <span class="rating"><strong>@Html.DisplayFor(modelItem => item.Rating)</strong>/10 <i class="fas fa-star rotate"></i></span>
+
+                        @if (!String.IsNullOrEmpty(item.TrailerUrl))
+                        {
+                            <!-- Button trigger modal -->
+                            <a class="btn btn-outline-danger rounded-circle align-middle play-button" data-toggle="modal" data-target="@("#trailer" + item.Id)">
+                                <i class="fas fa-play"></i>
+                            </a>
+                        }
+                        <div class="movieActions mx-auto">
+                            @{var isMovieAlreadyWatched = (account.MovieWatched != null) ? account.MovieWatched.FirstOrDefault(m => m.Id == item.Id) : null;}
+                            @{string iconEye = (isMovieAlreadyWatched == null) ? "fa-eye" : "fa-eye-slash"; }
+                            <form asp-action="@((isMovieAlreadyWatched == null)? "AddMovieWatched": "DeleteMovieWatched")" asp-route-id="@item.Id" asp-route-path="Index" method="post">
+                                <button type="submit" class="btn btn-outline-light btn-sm fa @iconEye"></button>
+                            </form>
+                            @{var isMovieAlreadyInWatchlist = (account.MovieWatchlist != null) ? account.MovieWatchlist.FirstOrDefault(m => m.Id == item.Id) : null;}
+                            @{string iconPlus = (isMovieAlreadyInWatchlist == null) ? "fa-plus" : "fa-minus"; }
+                            <form asp-action="@((isMovieAlreadyInWatchlist == null)? "AddMovieWatchlist": "DeleteMovieWatchlist")" asp-route-id="@item.Id" asp-route-path="Index" method="post">
+                                <button type="submit" class="btn btn-outline-light btn-sm fa @iconPlus"></button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal -->
+                <div class="modal fade" id="@("trailer" + item.Id)" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content bg-dark">
+                            <div class="modal-header">
+                                <button type="button" class="btn btn-outline-light" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <iframe width="420" height="315"
+                                        src="@(item.TrailerUrl.Replace("watch?v=", "embed/"))">
+                                </iframe>
+                            </div>]
+                        </div>
+                    </div>
+                </div>
+            </div>
+            }
+        </div>
     </div>
-
+    <div class="pagination-container">
+        @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
+    </div>
 
 </div>
 
 
-<p>
-    <a class="btn btn-primary" asp-action="Create">צור חדש</a>
-</p>
 
 
-@await Component.InvokeAsync("RecommendMovie") 
+@await Component.InvokeAsync("RecommendMovie")
 
-
-
-
+<style>
+#card-movie {
+    margin-bottom: 0px;
+}
+</style>

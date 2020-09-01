@@ -18,6 +18,7 @@ using MovieApp.Data;
 using MovieApp.Models;
 using MovieApp.Models.TMDB;
 using MovieApp.Services;
+using X.PagedList;
 
 namespace MovieApp.Controllers
 {
@@ -38,13 +39,19 @@ namespace MovieApp.Controllers
         }
 
         // GET: Movies
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? page)
         {
             var userId = User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Email)?.Value;
 
             Account account = await _context.Account.FirstOrDefaultAsync(m => m.Email == userId);
             ViewData["account"] = account;
-            return View(await _context.Movie.ToListAsync());
+
+            var movies = await _context.Movie.ToListAsync();
+
+            int pageSize = 25;
+            int pageNumber = page ?? 1;
+
+            return View(movies.ToPagedList(pageNumber, pageSize));
         }
 
         // GET: Movies/Seen
@@ -66,8 +73,6 @@ namespace MovieApp.Controllers
             ViewData["account"] = account;
             return View();
         }
-
-
 
         // GET: Movies/Details/5
         public async Task<IActionResult> Details(int? id)
