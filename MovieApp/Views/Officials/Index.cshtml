@@ -1,78 +1,45 @@
-﻿@model IEnumerable<MovieApp.Models.Official>
+﻿@using X.PagedList.Mvc.Core;
+@model X.PagedList.IPagedList<MovieApp.Models.Official>
 
-@{
-    ViewData["Title"] = "מאגר בעלי התפקידים";
-}
+@{ ViewData["Title"] = "מאגר בעלי התפקידים"; }
+<!-- CSS -->
+<link type="text/css" href="~/css/officialsIndex.css?v=1.2.0" rel="stylesheet" asp-append-version="true">
 
-<h1>מאגר בעלי התפקידים</h1>
+<div class="jumbotron">
+     <h1 class="display-4" dir="rtl"> 
+    מאגר בעלי התפקידים
+    <a class="btn btn-primary float-left" asp-action="Create">צור חדש</a>
 
+    </h1>
 
-<div class="card shadow">
-    <div class="table-responsive">
-        <table class="table align-items-center table-flush">
-            <thead class="thead-light">
-                <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Image)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.FirstName)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.LastName)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Role)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Gender)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Birthdate)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.OriginCountry)
-                    </th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
-                    <tr>
-                        <td>
-                            <img src="@("/img/officials/"+ item.ImageUrl)" width="30" height="30">
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.FirstName)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.LastName)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Role)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Gender)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Birthdate)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.OriginCountry)
-                        </td>
-                        <td>
-                            <a class="btn btn-outline-primary btn-sm fa fa-info-circle mr-3" asp-action="Details" asp-route-id="@item.Id"></a>
-                            <a class="btn btn-outline-primary btn-sm fa fa-edit mr-3" asp-action="Edit" asp-route-id="@item.Id"></a>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+    <hr class="my-4">
+
+    <div class="container">
+        <div class="row row-cols-md-4">
+            @foreach (var item in Model) 
+            {
+                <div class="col mb-4">
+                 <div id="card-official" class="card h-100">
+                     <img id="img-official" class="embed-responsive-item rounded-top" src="@("/img/officials/"+ item.ImageUrl)" alt="official">
+                     <div class="card-img-overlay hoverOverlay bg-dark text-white rounded">
+                        <h2 class="card-title">
+                            <a asp-action="Details" asp-route-id="@item.Id" class="card-link">
+                                @Html.DisplayFor(modelItem => item.FullName)
+                            </a>
+                        </h2>
+                        <h3 class="card-subtitle text-muted">(@Html.DisplayFor(modelItem => item.Age))</h3>
+                             
+                        <div class="officialActions mx-auto">
+                             <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-light btn-sm fa fa-edit"></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            }
+        </div>
     </div>
 
+    <div class="pagination-container">
+        @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
+    </div>
 </div>
-
-<p>
-    <a class="btn btn-primary" asp-action="Create">צור חדש</a>
-</p>

@@ -34,7 +34,7 @@ namespace MovieApp.Data
               );
             }
 
-            if (!_context.Movie.Any())
+          /*  if (!_context.Movie.Any())
             {
                 _context.Movie.AddRange(
                   new List<Movie>() {
@@ -54,7 +54,7 @@ namespace MovieApp.Data
                      
                    }
               );
-            }
+            }*/
             // TODO: ADD MOVIES / Officials / SOUNDTRACKS STARTER DATA
 
             _context.SaveChanges();

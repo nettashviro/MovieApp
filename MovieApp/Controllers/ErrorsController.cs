@@ -27,5 +27,10 @@ namespace MovieApp.Controllers
         {
             return View();
         }
+
+        public IActionResult InternalError()
+        {
+            return View();
+        }
     }
 }

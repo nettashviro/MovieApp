@@ -71,8 +71,14 @@ namespace MovieApp
                     context.Request.Path = "/Errors/BadRequest";
                     await next();
                 }
+                if (context.Response.StatusCode == 500)//Bad request
+                {
+                    context.Request.Path = "/Errors/InternalError";
+                    await next();
+                }
 
-             });
+
+            });
 
 
             app.UseHttpsRedirection();
