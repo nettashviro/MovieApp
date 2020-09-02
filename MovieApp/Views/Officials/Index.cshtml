@@ -42,12 +42,12 @@
     <hr class="my-4">
 
     <div class="container">
-        <div class="row row-cols-md-4">
+        <div class="row row-cols-md-4 row-cols-sm-1 row-cols-xs-1">
             @foreach (var item in Model) 
             {
                 <div class="col mb-4">
                  <div id="card-official" class="card h-100">
-                     <img id="img-official" class="embed-responsive-item rounded-top" src="@("/img/officials/"+ item.ImageUrl)" alt="official">
+                     <img class="embed-responsive .embed-responsive-16by9 rounded-top" src="@("/img/officials/"+ item.ImageUrl)" alt="official">
                      <div class="card-img-overlay hoverOverlay bg-dark text-white rounded">
                         <h2 class="card-title">
                             <a asp-action="Details" asp-route-id="@item.Id" class="card-link">

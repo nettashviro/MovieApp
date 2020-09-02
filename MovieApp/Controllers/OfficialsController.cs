@@ -49,7 +49,7 @@ namespace MovieApp.Controllers
                 officials = officials.Where(o => o.FirstName.ToLower().Contains(nameFilter.ToLower()) || o.LastName.ToLower().Contains(nameFilter.ToLower())).ToList();
             }
 
-            int pageSize = 25;
+            int pageSize = 8;
             int pageNumber = page ?? 1;
 
             return View(officials.ToPagedList(pageNumber, pageSize));

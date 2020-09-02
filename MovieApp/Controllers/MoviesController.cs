@@ -78,7 +78,7 @@ namespace MovieApp.Controllers
                 movies = movies.Where(m => m.Language == CultureHelper.GetLanguageByIdentifier(languageFilter)).ToList();
             }
 
-            int pageSize = 25;
+            int pageSize = 8;
             int pageNumber = page ?? 1;
 
             return View(movies.ToPagedList(pageNumber, pageSize));
@@ -132,15 +132,15 @@ namespace MovieApp.Controllers
             var account = await _context.Account.Include(x => x.MovieClicked).FirstOrDefaultAsync(m => m.Email == userId);
             if (account == null) return BadRequest("User not found");
 
-               if (account.MovieClicked.Count == 5)
-                {
-                    var moviesList = account.MovieClicked.ToList();
-                    moviesList.RemoveAt(0);
-                    account.MovieClicked = moviesList;
-                }
+            if (account.MovieClicked.Count == 5)
+            {
+                var moviesList = account.MovieClicked.ToList();
+                moviesList.RemoveAt(0);
+                account.MovieClicked = moviesList;
+            }
 
-                account.MovieClicked.Add(movie);
-        
+            account.MovieClicked.Add(movie);
+
 
             await _context.SaveChangesAsync();
 
@@ -159,11 +159,11 @@ namespace MovieApp.Controllers
 
             ViewBag.OfficialId = new SelectList(_context.Official, "Id", "Id");
             IEnumerable<SelectListItem> officialNameSelectList = from o in _context.Official
-                                                     select new SelectListItem
-                                                     {
-                                                         Value = o.Id.ToString(),
-                                                         Text = o.FirstName +  " " + o.LastName
-                                                     };
+                                                                 select new SelectListItem
+                                                                 {
+                                                                     Value = o.Id.ToString(),
+                                                                     Text = o.FirstName + " " + o.LastName
+                                                                 };
             ViewBag.OfficialName = officialNameSelectList;
 
             ViewBag.SoundtrackId = new SelectList(_context.Soundtrack, "Id", "Id");
@@ -181,7 +181,7 @@ namespace MovieApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                movie.ImageUrl =  (movie.ImageUrl == null)? "/img/movies/defaultMoviePoster.png": ("http://image.tmdb.org/t/p/w188_and_h282_bestv2" + movie.ImageUrl);
+                movie.ImageUrl = (movie.ImageUrl == null) ? "/img/movies/defaultMoviePoster.png" : ("http://image.tmdb.org/t/p/w188_and_h282_bestv2" + movie.ImageUrl);
                 movie.Country = CultureHelper.GetCountryByIdentifier(movie.Country);
                 movie.Language = CultureHelper.GetLanguageByIdentifier(movie.Language);
 
@@ -214,9 +214,10 @@ namespace MovieApp.Controllers
                     if (!movie.ImageUrl.StartsWith("http://") && !movie.ImageUrl.StartsWith("https://"))
                     {
                         imagePath = Path.Combine(_hostEnvironment.WebRootPath, movie.ImageUrl);
-                    }else
+                    }
+                    else
                     {
-                        imagePath =  movie.ImageUrl;
+                        imagePath = movie.ImageUrl;
 
                     }
 
@@ -250,7 +251,7 @@ namespace MovieApp.Controllers
         // GET: Movies/FindMovieVideos
         public async Task<string> FindMovieVideos(string id)
         {
-            string movieResult =  TMDBService.GetMovieTrailerById(id);
+            string movieResult = TMDBService.GetMovieTrailerById(id);
             return movieResult;
         }
 
@@ -274,11 +275,11 @@ namespace MovieApp.Controllers
 
             IEnumerable<SelectListItem> countriesSelectList = from c in CultureHelper.CountryList()
                                                               select new SelectListItem
-                                                                 {
-                                                                     Value = c.Key,
-                                                                     Text = c.Value,
-                                                                     Selected = CultureHelper.GetCountryByIdentifier(c.Key) == movie.Country
-                                                                 };
+                                                              {
+                                                                  Value = c.Key,
+                                                                  Text = c.Value,
+                                                                  Selected = CultureHelper.GetCountryByIdentifier(c.Key) == movie.Country
+                                                              };
             ViewBag.Countries = countriesSelectList.OrderBy(p => p.Text).ToList();
 
             IEnumerable<SelectListItem> languagesSelectList = from c in CultureHelper.LanguageList()
@@ -292,7 +293,7 @@ namespace MovieApp.Controllers
             ViewBag.Languages = languagesSelectList.OrderBy(p => p.Text).ToList();
 
             List<SelectListItem> officialNameSelectList = new List<SelectListItem>();
-            foreach(var o in _context.Official)
+            foreach (var o in _context.Official)
             {
                 SelectListItem s = new SelectListItem();
                 s.Value = o.Id.ToString();
@@ -333,7 +334,7 @@ namespace MovieApp.Controllers
                 try
                 {
                     var original_data = _context.Movie.AsNoTracking().Where(m => m.Id == id).FirstOrDefault();
-                    
+
                     if (movie.ImageUrl == null)
                     {
                         movie.ImageUrl = "/img/movies/defaultMoviePoster.png";
@@ -456,19 +457,19 @@ namespace MovieApp.Controllers
         public async Task<IActionResult> AddMovieWatched(int id, string path = "Index")
         {
             if (!User.Identity.IsAuthenticated) return BadRequest("User not logged in");
-            
+
 
             var userId = User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Email)?.Value;
             if (userId == null) return BadRequest("User email claim is empty");
-       
+
 
             Account account = await _context.Account.Include(a => a.MovieWatched).FirstOrDefaultAsync(m => m.Email == userId);
             if (account == null) return BadRequest("User not found");
-         
+
 
             var movie = await _context.Movie.FirstOrDefaultAsync(m => m.Id == id);
             if (movie == null) return NotFound("movie not found");
-        
+
 
             if (account.MovieWatched == null)
             {
@@ -494,7 +495,7 @@ namespace MovieApp.Controllers
             {
                 var message = "User " + account.Username + " marked the movie " + movie.Name + " as watched! Go see it if you haven't seen it already! Rating: " + movie.Rating + " stars";
                 string imgPath = (movie.ImageUrl != null) ? movie.ImageUrl : Path.Combine(_hostEnvironment.WebRootPath, "/img/movies/defaultMoviePoster.png");
-                
+
                 await twitter.PublishTweetAsync(userId, movie.Id, message, imgPath, Tweet.TweetType.MovieWatched);
             }
             catch (WebException)

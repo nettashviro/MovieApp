@@ -19,12 +19,14 @@
 
 #card-official {
   margin-bottom: 0px;
-  flex-direction: row;
+  max-height: 16rem;
+  /* flex-direction: row; */
 }
 
-#img-official {
+/* #img-official {
+
   width: 100%;
-}
+} */
 .pagination > li > a {
   color: black;
   float: left;
